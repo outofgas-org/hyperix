@@ -1,6 +1,7 @@
 import { BackgroundOrbs } from "./components/background-orbs";
 import { Footer } from "./components/footer";
 import { OrderbookDemo } from "./components/orderbook-demo";
+import { UserFillsDemo } from "./components/user-fills-demo";
 
 export function App() {
   return (
@@ -9,6 +10,7 @@ export function App() {
         <h1 className="text-4xl font-bold">Hyperix</h1>
 
         <OrderbookDemo />
+        <UserFillsDemo />
 
         <Footer technologies={["Bun", "React", "TypeScript", "Tailwind"]} />
       </div>
