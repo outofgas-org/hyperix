@@ -1,7 +1,7 @@
 import Decimal from "decimal.js";
 import { useMemo } from "react";
-import { useSymbolConverter } from "./use-symbol-converter";
-import { type UserFill, useUserFills, type UseUserFillsOptions } from "./use-user-fills";
+import { useSymbolConverter } from "./use-symbol-converter.js";
+import { type UserFill, useUserFills, type UseUserFillsOptions } from "./use-user-fills.js";
 
 export type TradeHistory = UserFill & {
   displayCoin: string;

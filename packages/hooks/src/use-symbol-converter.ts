@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { SymbolConverter } from "./lib/symbol-converter";
-import { transport } from "./config/hl";
+import { SymbolConverter } from "./lib/symbol-converter.js";
+import { transport } from "./config/hl.js";
 
 let converterPromise: Promise<SymbolConverter> | null = null;
 

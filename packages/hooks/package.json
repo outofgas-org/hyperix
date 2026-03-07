@@ -9,9 +9,9 @@
     "README.md"
   ],
   "scripts": {
-    "build": "tsup src/index.ts --dts --format esm --clean",
+    "build": "tsc -p tsconfig.build.json",
     "test": "bun test --preload ./src/test-setup.ts src/*.test.ts",
-    "typecheck": "bun x tsc -p tsconfig.json --noEmit"
+    "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
     "@nktkas/hyperliquid": "^0.32.1",

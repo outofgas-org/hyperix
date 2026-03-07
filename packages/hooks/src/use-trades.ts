@@ -1,6 +1,6 @@
 import { useSubscribe, type UseSubscribeState } from "@outofgas/react-stream";
 import type { TradesEvent } from "@nktkas/hyperliquid/api/subscription";
-import { wsClient } from "./config/hl";
+import { wsClient } from "./config/hl.js";
 
 export type Trade = TradesEvent[number];
 
