@@ -1,5 +1,5 @@
 import Decimal from "decimal.js";
-import { type UserFill, useUserFills } from "@hyperix/hooks";
+import { type TradeHistory, useTradeHistory } from "@hyperix/hooks";
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Input } from "./ui/input";
@@ -33,23 +33,29 @@ function formatSignedValue(value: string) {
   return `${prefix}${VALUE_FORMATTER.format(numericValue)}`;
 }
 
-function FillRow({ fill }: { fill: UserFill }) {
+function FillRow({ fill }: { fill: TradeHistory }) {
   const tradeValue = new Decimal(fill.px).mul(fill.sz).toNumber();
-  const pnl = new Decimal(fill.closedPnl).minus(fill.fee).toNumber();
+  const pnl = Number(fill.netPnlInQuote);
 
   return (
-    <div className="grid grid-cols-7 gap-2 rounded-xl px-2 py-1 even:bg-gray-50">
-      <span className={fill.side === "B" ? "text-emerald-600" : "text-rose-600"}>
-        {fill.coin}
-      </span>
+    <div className="grid grid-cols-8 gap-2 rounded-xl px-2 py-1 even:bg-gray-50">
+      <div className="min-w-0">
+        <div className={fill.side === "B" ? "text-emerald-600" : "text-rose-600"}>
+          {fill.displayCoin}
+        </div>
+        <div className="truncate text-[11px] text-gray-400">
+          {fill.baseCoin}/{fill.quoteCoin}
+        </div>
+      </div>
       <span className="text-right text-gray-700">{NUMBER_FORMATTER.format(Number(fill.sz))}</span>
       <span className="text-right text-gray-700">{NUMBER_FORMATTER.format(Number(fill.px))}</span>
       <span className="text-right text-gray-700">{VALUE_FORMATTER.format(tradeValue)}</span>
+      <span className="text-right text-gray-700">{fill.side === "B" ? "Buy" : "Sell"}</span>
       <span className="text-right text-gray-700">
-        {formatSignedValue(fill.fee)} {fill.feeToken}
+        {formatSignedValue(fill.feeInQuote)} {fill.pnlCurrency}
       </span>
       <span className={`text-right ${pnl >= 0 ? "text-emerald-600" : "text-rose-600"}`}>
-        {formatSignedValue(String(pnl))}
+        {formatSignedValue(fill.netPnlInQuote)} {fill.pnlCurrency}
       </span>
       <span className="text-right text-gray-500">
         {TIME_FORMATTER.format(new Date(fill.time))}
@@ -60,21 +66,17 @@ function FillRow({ fill }: { fill: UserFill }) {
 
 export function UserFillsDemo() {
   const [input, setInput] = useState(DEFAULT_ADDRESS);
-  const [events, setEvents] = useState<UserFill[]>([]);
   const address = isAddress(input) ? input : undefined;
-  const { data, loading, error, ready } = useUserFills(address ?? DEFAULT_ADDRESS, {
+  const { data, loading, error, ready } = useTradeHistory(address ?? DEFAULT_ADDRESS, {
     enabled: Boolean(address),
-    onUpdate: (event) => {
-      setEvents((current) => [...event.fills, ...current].slice(0, 12));
-    },
   });
 
   return (
     <section className="space-y-4">
       <div className="space-y-1">
-        <h2 className="text-xl font-semibold">User Fills</h2>
+        <h2 className="text-xl font-semibold">Trade History</h2>
         <p className="text-sm text-gray-500">
-          Live fills with caller-side event handling through <code>onUpdate</code>.
+          Normalized trade history built on top of <code>useUserFills</code>.
         </p>
       </div>
 
@@ -86,7 +88,6 @@ export function UserFillsDemo() {
               className="font-mono text-sm"
               onChange={(event) => {
                 setInput(event.target.value);
-                setEvents([]);
               }}
               placeholder="0x..."
               value={input}
@@ -99,73 +100,45 @@ export function UserFillsDemo() {
           </div>
         </CardHeader>
 
-        <CardContent className="grid gap-6 lg:grid-cols-2">
-          <div className="space-y-2 font-mono text-xs">
-            <div className="flex items-center justify-between">
-              <h3 className="font-semibold text-gray-700">Snapshot</h3>
-              <span className="text-gray-500">
-                {ready ? `${data?.fills.length ?? 0} fills` : loading ? "Loading..." : "Idle"}
-              </span>
-            </div>
-            <div className="grid grid-cols-7 gap-2 text-gray-500">
-              <span>Coin</span>
-              <span className="text-right">Size</span>
-              <span className="text-right">Price</span>
-              <span className="text-right">Value</span>
-              <span className="text-right">Fee</span>
-              <span className="text-right">Net PnL</span>
-              <span className="text-right">Time</span>
-            </div>
-            {error ? (
-              <div className="rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-rose-700">
-                {error}
-              </div>
-            ) : !address || (!ready && !data) ? (
-              <div className="space-y-1">
-                <Skeleton />
-                <Skeleton />
-                <Skeleton />
-              </div>
-            ) : (data?.fills.length ?? 0) === 0 ? (
-              <div className="rounded-xl bg-gray-50 px-3 py-2 text-gray-500">No fills yet.</div>
-            ) : (
-              <div className="h-72 space-y-1 overflow-y-auto">
-                {(data?.fills ?? []).slice().reverse().map((fill) => (
-                  <FillRow
-                    key={`${fill.hash}-${fill.tid}-${fill.time}-${fill.startPosition}`}
-                    fill={fill}
-                  />
-                ))}
-              </div>
-            )}
+        <CardContent className="space-y-2 font-mono text-xs">
+          <div className="flex items-center justify-between">
+            <h3 className="font-semibold text-gray-700">History</h3>
+            <span className="text-gray-500">
+              {ready ? `${data?.fills.length ?? 0} trades` : loading ? "Loading..." : "Idle"}
+            </span>
           </div>
-
-          <div className="space-y-2 font-mono text-xs">
-            <div className="flex items-center justify-between">
-              <h3 className="font-semibold text-gray-700">Recent onUpdate Events</h3>
-              <span className="text-gray-500">{events.length} buffered</span>
-            </div>
-            <div className="grid grid-cols-7 gap-2 text-gray-500">
-              <span>Coin</span>
-              <span className="text-right">Size</span>
-              <span className="text-right">Price</span>
-              <span className="text-right">Value</span>
-              <span className="text-right">Fee</span>
-              <span className="text-right">Net PnL</span>
-              <span className="text-right">Time</span>
-            </div>
-            {events.length === 0 ? (
-              <div className="rounded-xl bg-gray-50 px-3 py-2 text-gray-500">
-                New fills received through <code>onUpdate</code> will appear here.
-              </div>
-            ) : (
-              <div className="h-72 space-y-1 overflow-y-auto">
-                {events.map((fill) => (
-                  <FillRow key={`event-${fill.hash}-${fill.tid}-${fill.time}`} fill={fill} />
-                ))}
-              </div>
-            )}
+          <div className="grid grid-cols-8 gap-2 text-gray-500">
+            <span>Market</span>
+            <span className="text-right">Size</span>
+            <span className="text-right">Price</span>
+            <span className="text-right">Value</span>
+            <span className="text-right">Side</span>
+            <span className="text-right">Fee (Quote)</span>
+            <span className="text-right">Net PnL (Quote)</span>
+            <span className="text-right">Time</span>
           </div>
+          {error ? (
+            <div className="rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-rose-700">
+              {error}
+            </div>
+          ) : !address || (!ready && !data) ? (
+            <div className="space-y-1">
+              <Skeleton />
+              <Skeleton />
+              <Skeleton />
+            </div>
+          ) : (data?.fills.length ?? 0) === 0 ? (
+            <div className="rounded-xl bg-gray-50 px-3 py-2 text-gray-500">No trades yet.</div>
+          ) : (
+            <div className="h-72 space-y-1 overflow-y-auto">
+              {(data?.fills ?? []).map((fill) => (
+                <FillRow
+                  key={`${fill.hash}-${fill.tid}-${fill.time}-${fill.startPosition}`}
+                  fill={fill}
+                />
+              ))}
+            </div>
+          )}
         </CardContent>
       </Card>
     </section>

@@ -1,4 +1,6 @@
-import { SubscriptionClient, WebSocketTransport } from "@nktkas/hyperliquid";
+import {HttpTransport, SubscriptionClient, WebSocketTransport} from "@nktkas/hyperliquid";
+
+export const transport = new HttpTransport();
 
 export const wsTransport = new WebSocketTransport();
 
