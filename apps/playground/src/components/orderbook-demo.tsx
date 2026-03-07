@@ -1,10 +1,17 @@
-import { useL2Book } from "@hyperix/hooks";
+import { useL2Book, useTrades } from "@hyperix/hooks";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Skeleton } from "./ui/skeleton";
 import { useState } from "react";
 
 const NUMBER_FORMATTER = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 8,
+});
+
+const TIME_FORMATTER = new Intl.DateTimeFormat("en-US", {
+  hour: "2-digit",
+  minute: "2-digit",
+  second: "2-digit",
+  hour12: false,
 });
 
 const PERCENT_FORMATTER = new Intl.NumberFormat("en-US", {
@@ -160,9 +167,60 @@ function OrderbookCard({ coin }: OrderbookCardProps) {
   );
 }
 
+type TradesCardProps = {
+  coin: string;
+};
+
+function TradesCard({ coin }: TradesCardProps) {
+  const { data: trades } = useTrades(coin, { limit: 60 });
+
+  return (
+    <Card className="bg-white border border-gray-200 shadow-sm">
+      <CardHeader className="pb-4">
+        <CardTitle className="text-sm">{coin}-USDC Trades</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-2 font-mono text-xs">
+        <div className="grid grid-cols-3 gap-2 text-gray-500">
+          <span>Price</span>
+          <span className="text-right">Size</span>
+          <span className="text-right">Time</span>
+        </div>
+        {(trades ?? []).length === 0 ? (
+          <div className="h-64 overflow-y-scroll">
+            <div className="grid grid-cols-3 gap-2">
+              <Skeleton />
+              <Skeleton />
+              <Skeleton />
+            </div>
+          </div>
+        ) : (
+          <div className="h-64 overflow-y-scroll space-y-1">
+            {(trades ?? []).map((trade) => (
+              <div
+                key={trade.tid}
+                className="grid grid-cols-3 gap-2 rounded-xl px-2 py-1 even:bg-gray-50"
+              >
+                <span className={trade.side === "B" ? "text-emerald-600" : "text-rose-600"}>
+                  {NUMBER_FORMATTER.format(Number(trade.px))}
+                </span>
+                <span className="text-right text-gray-700">
+                  {NUMBER_FORMATTER.format(Number(trade.sz))}
+                </span>
+                <span className="text-right text-gray-500">
+                  {TIME_FORMATTER.format(new Date(trade.time))}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
 export function OrderbookDemo() {
   return (
-    <section className="space-y-2">
+    <section className="space-y-10">
       <h2 className="text-xl font-semibold">L2Book</h2>
 
       <div className="grid gap-6 lg:grid-cols-4 sm:grid-cols-3">
@@ -170,6 +228,16 @@ export function OrderbookDemo() {
         <OrderbookCard coin="BTC" />
         <OrderbookCard coin="ETH" />
         <OrderbookCard coin="@107" />
+      </div>
+
+      <div className="space-y-2">
+        <h2 className="text-xl font-semibold">Trades</h2>
+        <div className="grid gap-6 lg:grid-cols-4 sm:grid-cols-3">
+          <TradesCard coin="HYPE" />
+          <TradesCard coin="BTC" />
+          <TradesCard coin="ETH" />
+          <TradesCard coin="@107" />
+        </div>
       </div>
     </section>
   );
