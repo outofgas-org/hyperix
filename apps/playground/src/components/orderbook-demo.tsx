@@ -2,16 +2,10 @@ import { useL2Book, useTrades } from "@hyperix/hooks";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Skeleton } from "./ui/skeleton";
 import { useState } from "react";
+import { formatDate } from "../lib/format-date";
 
 const NUMBER_FORMATTER = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 8,
-});
-
-const TIME_FORMATTER = new Intl.DateTimeFormat("en-US", {
-  hour: "2-digit",
-  minute: "2-digit",
-  second: "2-digit",
-  hour12: false,
 });
 
 const PERCENT_FORMATTER = new Intl.NumberFormat("en-US", {
@@ -207,7 +201,7 @@ function TradesCard({ coin }: TradesCardProps) {
                   {NUMBER_FORMATTER.format(Number(trade.sz))}
                 </span>
                 <span className="text-right text-gray-500">
-                  {TIME_FORMATTER.format(new Date(trade.time))}
+                  {formatDate(trade.time)}
                 </span>
               </div>
             ))}

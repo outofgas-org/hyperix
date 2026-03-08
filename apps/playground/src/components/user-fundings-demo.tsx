@@ -1,5 +1,4 @@
-import Decimal from "decimal.js";
-import { type TradeHistory, useTradeHistory } from "@hyperix/hooks";
+import { useUserFundings, type UserFunding } from "@hyperix/hooks";
 import { useState } from "react";
 import { formatDate } from "../lib/format-date";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
@@ -27,50 +26,53 @@ function formatSignedValue(value: string) {
   return `${prefix}${VALUE_FORMATTER.format(numericValue)}`;
 }
 
-function FillRow({ fill }: { fill: TradeHistory }) {
-  const tradeValue = new Decimal(fill.px).mul(fill.sz).toNumber();
-  const pnl = Number(fill.netPnlInQuote);
+function FundingRow({ funding }: { funding: UserFunding }) {
+  const fundingValue = Number(funding.usdc);
+  const positionSize = Number(funding.szi);
 
   return (
-    <div className="grid grid-cols-8 gap-2 rounded-xl px-2 py-1 even:bg-gray-50">
+    <div className="grid grid-cols-6 gap-2 rounded-xl px-2 py-1 even:bg-gray-50">
       <div className="min-w-0">
-        <div className={fill.side === "B" ? "text-emerald-600" : "text-rose-600"}>
-          {fill.displayCoin}
+        <div className={fundingValue >= 0 ? "text-emerald-600" : "text-rose-600"}>
+          {funding.coin}
         </div>
         <div className="truncate text-[11px] text-gray-400">
-          {fill.baseCoin}/{fill.quoteCoin}
+          {funding.nSamples === null ? "Live update" : `${funding.nSamples} samples`}
         </div>
       </div>
-      <span className="text-right text-gray-700">{NUMBER_FORMATTER.format(Number(fill.sz))}</span>
-      <span className="text-right text-gray-700">{NUMBER_FORMATTER.format(Number(fill.px))}</span>
-      <span className="text-right text-gray-700">{VALUE_FORMATTER.format(tradeValue)}</span>
-      <span className="text-right text-gray-700">{fill.side === "B" ? "Buy" : "Sell"}</span>
-      <span className="text-right text-gray-700">
-        {formatSignedValue(fill.feeInQuote)} {fill.pnlCurrency}
+      <span className={`text-right ${fundingValue >= 0 ? "text-emerald-600" : "text-rose-600"}`}>
+        {formatSignedValue(funding.usdc)} USDC
       </span>
-      <span className={`text-right ${pnl >= 0 ? "text-emerald-600" : "text-rose-600"}`}>
-        {formatSignedValue(fill.netPnlInQuote)} {fill.pnlCurrency}
+      <span className="text-right text-gray-700">
+        {NUMBER_FORMATTER.format(positionSize)}
+      </span>
+      <span className="text-right text-gray-700">
+        {VALUE_FORMATTER.format(Number(funding.fundingRate))}
+      </span>
+      <span className="text-right text-gray-700">
+        {funding.nSamples === null ? "Realtime" : funding.nSamples}
       </span>
       <span className="text-right text-gray-500">
-        {formatDate(fill.time)}
+        {formatDate(funding.time)}
       </span>
     </div>
   );
 }
 
-export function UserFillsDemo() {
+export function UserFundingsDemo() {
   const [input, setInput] = useState(DEFAULT_ADDRESS);
   const address = isAddress(input) ? input : undefined;
-  const { data, loading, error, ready } = useTradeHistory(address ?? DEFAULT_ADDRESS, {
+  const { data, loading, error } = useUserFundings(address ?? DEFAULT_ADDRESS, {
     enabled: Boolean(address),
   });
+  const fundings = data?.fundings ?? [];
 
   return (
     <section className="space-y-4">
       <div className="space-y-1">
-        <h2 className="text-xl font-semibold">Trade History</h2>
+        <h2 className="text-xl font-semibold">User Fundings</h2>
         <p className="text-sm text-gray-500">
-          Normalized trade history built on top of <code>useUserFills</code>.
+          Funding payment ledger streamed from <code>useUserFundings</code>.
         </p>
       </div>
 
@@ -96,39 +98,39 @@ export function UserFillsDemo() {
 
         <CardContent className="space-y-2 font-mono text-xs">
           <div className="flex items-center justify-between">
-            <h3 className="font-semibold text-gray-700">History</h3>
+            <h3 className="font-semibold text-gray-700">Ledger</h3>
             <span className="text-gray-500">
-              {ready ? `${data?.fills.length ?? 0} trades` : loading ? "Loading..." : "Idle"}
+              {data ? `${fundings.length} entries` : loading ? "Loading..." : "Idle"}
             </span>
           </div>
-          <div className="grid grid-cols-8 gap-2 text-gray-500">
+          <div className="grid grid-cols-6 gap-2 text-gray-500">
             <span>Market</span>
-            <span className="text-right">Size</span>
-            <span className="text-right">Price</span>
-            <span className="text-right">Value</span>
-            <span className="text-right">Side</span>
-            <span className="text-right">Fee (Quote)</span>
-            <span className="text-right">Net PnL (Quote)</span>
+            <span className="text-right">USDC</span>
+            <span className="text-right">Position</span>
+            <span className="text-right">Funding Rate</span>
+            <span className="text-right">Samples</span>
             <span className="text-right">Time</span>
           </div>
           {error ? (
             <div className="rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-rose-700">
               {error}
             </div>
-          ) : !address || (!ready && !data) ? (
+          ) : !address || (!data && loading) ? (
             <div className="space-y-1">
               <Skeleton />
               <Skeleton />
               <Skeleton />
             </div>
-          ) : (data?.fills.length ?? 0) === 0 ? (
-            <div className="rounded-xl bg-gray-50 px-3 py-2 text-gray-500">No trades yet.</div>
+          ) : fundings.length === 0 ? (
+            <div className="rounded-xl bg-gray-50 px-3 py-2 text-gray-500">
+              No funding entries yet.
+            </div>
           ) : (
             <div className="h-72 space-y-1 overflow-y-auto">
-              {(data?.fills ?? []).map((fill) => (
-                <FillRow
-                  key={`${fill.hash}-${fill.tid}-${fill.time}-${fill.startPosition}`}
-                  fill={fill}
+              {fundings.map((funding) => (
+                <FundingRow
+                  key={`${funding.time}-${funding.coin}-${funding.usdc}-${funding.fundingRate}`}
+                  funding={funding}
                 />
               ))}
             </div>
