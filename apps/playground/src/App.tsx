@@ -1,3 +1,4 @@
+import { HistoricalOrdersDemo } from "./components/historical-orders-demo";
 import { BackgroundOrbs } from "./components/background-orbs";
 import { Footer } from "./components/footer";
 import { OrderbookDemo } from "./components/orderbook-demo";
@@ -13,6 +14,7 @@ export function App() {
         <OrderbookDemo />
         <UserFundingsDemo />
         <UserFillsDemo />
+        <HistoricalOrdersDemo />
 
         <Footer technologies={["Bun", "React", "TypeScript", "Tailwind"]} />
       </div>
