@@ -3,6 +3,7 @@ import { BackgroundOrbs } from "./components/background-orbs";
 import { Footer } from "./components/footer";
 import { OpenOrdersDemo } from "./components/open-orders-demo";
 import { OrderbookDemo } from "./components/orderbook-demo";
+import { PositionsDemo } from "./components/positions-demo";
 import { UserFundingsDemo } from "./components/user-fundings-demo";
 import { UserFillsDemo } from "./components/user-fills-demo";
 import { UserNonFundingLedgerUpdatesDemo } from "./components/user-non-funding-ledger-updates-demo";
@@ -15,6 +16,7 @@ export function App() {
 
         <OrderbookDemo />
         <UserFundingsDemo />
+        <PositionsDemo />
         <UserNonFundingLedgerUpdatesDemo />
         <UserFillsDemo />
         <OpenOrdersDemo />

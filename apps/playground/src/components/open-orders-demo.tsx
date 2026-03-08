@@ -127,7 +127,6 @@ export function OpenOrdersDemo() {
       enabled: Boolean(address),
     }
   );
-  console.log(data);
   const orders = data?.orders ?? [];
 
   return (
