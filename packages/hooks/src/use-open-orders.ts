@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { useSubscribe, type UseSubscribeState } from "@outofgas/react-stream";
 import type { OpenOrdersEvent } from "@nktkas/hyperliquid/api/subscription";
 import { wsClient } from "./config/hl.js";
@@ -31,6 +32,12 @@ export type UseOpenOrdersOptions = {
   dex?: string;
   enabled?: boolean;
   onUpdate?: (event: OpenOrdersEvent) => void;
+};
+
+type RawOpenOrdersData = {
+  dex: string;
+  user: `0x${string}`;
+  orders: RawOpenOrder[];
 };
 
 const DEFAULT_DEX = "ALL_DEXS";
@@ -68,13 +75,13 @@ function formatOpenOrder(
 }
 
 function formatOpenOrders(
-  event: OpenOrdersEvent,
+  data: RawOpenOrdersData,
   symbolConverter?: SymbolConverter | null,
 ): OpenOrdersData {
   return {
-    dex: event.dex,
-    user: event.user,
-    orders: [...event.orders]
+    dex: data.dex,
+    user: data.user,
+    orders: [...data.orders]
       .map((order) => {
         const displayCoin = symbolConverter?.getSpotByPairId(order.coin);
         return formatOpenOrder(
@@ -94,15 +101,18 @@ export function useOpenOrders(
   const { dex = DEFAULT_DEX, enabled: enabledOverride, onUpdate } = options;
   const enabled = enabledOverride ?? Boolean(user);
   const symbolConverter = useSymbolConverter();
-
-  return useSubscribe<OpenOrdersData>({
+  const openOrdersState = useSubscribe<RawOpenOrdersData>({
     key: ["open-orders", user, dex ?? ""],
     enabled,
     subscribe: async ({ onData, onError }) => {
       const subscription = await wsClient.openOrders({ user, dex }, (event) => {
         try {
           onUpdate?.(event);
-          onData(formatOpenOrders(event, symbolConverter));
+          onData({
+            dex: event.dex,
+            user: event.user,
+            orders: event.orders,
+          });
         } catch (error) {
           onError(
             error instanceof Error
@@ -117,4 +127,17 @@ export function useOpenOrders(
       };
     },
   });
+
+  const data = useMemo<OpenOrdersData | undefined>(() => {
+    if (!openOrdersState.data) {
+      return undefined;
+    }
+
+    return formatOpenOrders(openOrdersState.data, symbolConverter);
+  }, [openOrdersState.data, symbolConverter]);
+
+  return {
+    ...openOrdersState,
+    data,
+  };
 }

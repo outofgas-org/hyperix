@@ -22,6 +22,7 @@ const DEFAULT_ADDRESS = "0x0000000000000000000000000000000000000000";
 
 const HEADERS = [
   "Coin",
+  "Asset ID",
   "Side",
   "Type",
   "Size",
@@ -67,7 +68,9 @@ function formatValue(order: OpenOrder) {
 }
 
 function formatTrigger(order: OpenOrder) {
-  return order.isTrigger && Number(order.triggerPx) > 0 ? formatAmount(order.triggerPx) : "--";
+  return order.isTrigger && Number(order.triggerPx) > 0
+    ? formatAmount(order.triggerPx)
+    : "--";
 }
 
 function OpenOrderRow({ order }: { order: OpenOrder }) {
@@ -75,10 +78,17 @@ function OpenOrderRow({ order }: { order: OpenOrder }) {
 
   return (
     <tr className="border-b border-[#edf3f7] last:border-b-0 odd:bg-white even:bg-[#fbfdff]">
-      <td className={`px-4 py-3 font-semibold ${isBuy ? "text-[#27d3b2]" : "text-[#ff6b8f]"}`}>
+      <td
+        className={`px-4 py-3 font-semibold ${
+          isBuy ? "text-[#27d3b2]" : "text-[#ff6b8f]"
+        }`}
+      >
         {order.coin}
       </td>
-      <td className={`px-4 py-3 ${isBuy ? "text-[#27d3b2]" : "text-[#ff6b8f]"}`}>
+      <td className="px-4 py-3 text-[#183242]">{order.assetId ?? "--"}</td>
+      <td
+        className={`px-4 py-3 ${isBuy ? "text-[#27d3b2]" : "text-[#ff6b8f]"}`}
+      >
         {formatDirection(order)}
       </td>
       <td className="px-4 py-3 text-[#183242]">{order.orderType}</td>
@@ -87,9 +97,13 @@ function OpenOrderRow({ order }: { order: OpenOrder }) {
       <td className="px-4 py-3 text-[#183242]">{formatPrice(order)}</td>
       <td className="px-4 py-3 text-[#183242]">{formatValue(order)}</td>
       <td className="px-4 py-3 text-[#183242]">{formatTrigger(order)}</td>
-      <td className="px-4 py-3 text-[#183242]">{order.reduceOnly ? "Yes" : "No"}</td>
+      <td className="px-4 py-3 text-[#183242]">
+        {order.reduceOnly ? "Yes" : "No"}
+      </td>
       <td className="px-4 py-3 text-[#183242]">{order.oid}</td>
-      <td className="px-4 py-3 text-[#183242]">{formatDate(order.timestamp)}</td>
+      <td className="px-4 py-3 text-[#183242]">
+        {formatDate(order.timestamp)}
+      </td>
     </tr>
   );
 }
@@ -107,9 +121,13 @@ function TableSkeleton() {
 export function OpenOrdersDemo() {
   const [input, setInput] = useState(DEFAULT_ADDRESS);
   const address = isAddress(input) ? input : undefined;
-  const { data, loading, error, ready } = useOpenOrders(address ?? DEFAULT_ADDRESS, {
-    enabled: Boolean(address),
-  });
+  const { data, loading, error, ready } = useOpenOrders(
+    address ?? DEFAULT_ADDRESS,
+    {
+      enabled: Boolean(address),
+    }
+  );
+  console.log(data);
   const orders = data?.orders ?? [];
 
   return (
@@ -117,7 +135,8 @@ export function OpenOrdersDemo() {
       <div className="space-y-1">
         <h2 className="text-xl font-semibold">Open Orders</h2>
         <p className="text-sm text-gray-500">
-          Table demo for <code>useOpenOrders</code>. The hook defaults to <code>ALL_DEXS</code>
+          Table demo for <code>useOpenOrders</code>. The hook defaults to{" "}
+          <code>ALL_DEXS</code>
           and returns orders sorted by newest timestamp first.
         </p>
       </div>
@@ -145,7 +164,13 @@ export function OpenOrdersDemo() {
                 ? `Subscribed to ${address} across ALL_DEXS`
                 : "Enter a valid 42-character hex wallet address to start the subscription."}
             </span>
-            <span>{ready ? `${orders.length} orders` : loading ? "Loading..." : "Idle"}</span>
+            <span>
+              {ready
+                ? `${orders.length} orders`
+                : loading
+                ? "Loading..."
+                : "Idle"}
+            </span>
           </div>
         </CardHeader>
 
@@ -162,11 +187,14 @@ export function OpenOrdersDemo() {
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="min-w-[1180px] table-auto border-separate border-spacing-0">
+              <table className="min-w-[1260px] table-auto border-separate border-spacing-0">
                 <thead className="sticky top-0 z-10 bg-[#f8fbfd]">
                   <tr className="border-b border-[#edf3f7] text-left text-[11px] uppercase tracking-[0.12em] text-[#6f8797]">
                     {HEADERS.map((header) => (
-                      <th key={header} className="px-4 py-3 font-medium whitespace-nowrap">
+                      <th
+                        key={header}
+                        className="px-4 py-3 font-medium whitespace-nowrap"
+                      >
                         {header}
                       </th>
                     ))}
@@ -174,7 +202,10 @@ export function OpenOrdersDemo() {
                 </thead>
                 <tbody>
                   {orders.map((order) => (
-                    <OpenOrderRow key={`${order.coin}-${order.oid}-${order.timestamp}`} order={order} />
+                    <OpenOrderRow
+                      key={`${order.coin}-${order.oid}-${order.timestamp}`}
+                      order={order}
+                    />
                   ))}
                 </tbody>
               </table>
