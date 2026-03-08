@@ -4,6 +4,7 @@ import { Footer } from "./components/footer";
 import { OrderbookDemo } from "./components/orderbook-demo";
 import { UserFundingsDemo } from "./components/user-fundings-demo";
 import { UserFillsDemo } from "./components/user-fills-demo";
+import { UserNonFundingLedgerUpdatesDemo } from "./components/user-non-funding-ledger-updates-demo";
 
 export function App() {
   return (
@@ -13,6 +14,7 @@ export function App() {
 
         <OrderbookDemo />
         <UserFundingsDemo />
+        <UserNonFundingLedgerUpdatesDemo />
         <UserFillsDemo />
         <HistoricalOrdersDemo />
 

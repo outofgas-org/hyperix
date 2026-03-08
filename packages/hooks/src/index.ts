@@ -5,3 +5,5 @@ export * from "./use-trades.js";
 export * from "./use-order-history.js";
 export * from "./use-user-fundings.js";
 export * from "./use-user-fills.js";
+export * from "./use-user-non-funding-ledger-updates.js";
+export * from "./use-user-account-activity.js";
