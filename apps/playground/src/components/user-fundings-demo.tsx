@@ -1,6 +1,13 @@
 import { useUserFundings, type UserFunding } from "@hyperix/hooks";
 import { useState } from "react";
 import { formatDate } from "../lib/format-date";
+import {
+  DEMO_CARD_CLASS_NAME,
+  DEMO_CARD_HEADER_CLASS_NAME,
+  DEMO_CARD_INPUT_CLASS_NAME,
+  DEMO_CARD_STATUS_CLASS_NAME,
+  DEMO_CARD_TITLE_CLASS_NAME,
+} from "./demo-card-styles";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Input } from "./ui/input";
 import { Skeleton } from "./ui/skeleton";
@@ -76,12 +83,12 @@ export function UserFundingsDemo() {
         </p>
       </div>
 
-      <Card className="border border-gray-200 bg-white shadow-sm">
-        <CardHeader className="space-y-4">
+      <Card className={DEMO_CARD_CLASS_NAME}>
+        <CardHeader className={DEMO_CARD_HEADER_CLASS_NAME}>
           <div className="space-y-2">
-            <CardTitle className="text-sm">Tracked Wallet</CardTitle>
+            <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>Tracked Wallet</CardTitle>
             <Input
-              className="font-mono text-sm"
+              className={DEMO_CARD_INPUT_CLASS_NAME}
               onChange={(event) => {
                 setInput(event.target.value);
               }}
@@ -89,14 +96,14 @@ export function UserFundingsDemo() {
               value={input}
             />
           </div>
-          <div className="rounded-xl bg-gray-50 px-3 py-2 text-xs text-gray-500">
+          <div className={DEMO_CARD_STATUS_CLASS_NAME}>
             {address
               ? `Subscribed to ${address}`
               : "Enter a valid 42-character hex wallet address to start the subscription."}
           </div>
         </CardHeader>
 
-        <CardContent className="space-y-2 font-mono text-xs">
+        <CardContent className="space-y-2 p-6 font-mono text-xs">
           <div className="flex items-center justify-between">
             <h3 className="font-semibold text-gray-700">Ledger</h3>
             <span className="text-gray-500">

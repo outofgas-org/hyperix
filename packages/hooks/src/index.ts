@@ -1,5 +1,6 @@
 export * from "./use-l2-book.js";
 export * from "./use-historical-orders.js";
+export * from "./use-open-orders.js";
 export * from "./use-trade-history.js";
 export * from "./use-trades.js";
 export * from "./use-order-history.js";

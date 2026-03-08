@@ -1,5 +1,9 @@
 import { Button } from "./ui/button";
 import {
+  DEMO_CARD_CLASS_NAME,
+  DEMO_CARD_HEADER_CLASS_NAME,
+} from "./demo-card-styles";
+import {
   Card,
   CardContent,
   CardDescription,
@@ -21,8 +25,8 @@ export function ToggleDemo({
   onSetOff,
 }: ToggleDemoProps) {
   return (
-    <Card className="bg-white border border-gray-200 shadow-sm hover:shadow-md transition-shadow duration-200">
-      <CardHeader className="pb-4">
+    <Card className={DEMO_CARD_CLASS_NAME}>
+      <CardHeader className={DEMO_CARD_HEADER_CLASS_NAME}>
         <CardTitle className="text-2xl font-semibold text-gray-900 tracking-tight">
           useToggle
         </CardTitle>
@@ -31,7 +35,7 @@ export function ToggleDemo({
         </CardDescription>
       </CardHeader>
 
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-6 p-6">
         {/* State Display */}
         <div className="flex items-center justify-between p-6 bg-gray-50 rounded-2xl">
           <div className="space-y-1">

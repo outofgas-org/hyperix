@@ -14,8 +14,30 @@ export type UseHistoricalOrdersOptions = {
   onUpdate?: (event: UserHistoricalOrdersEvent) => void;
 };
 
+function getHistoricalOrderStatusRank(status: HistoricalOrder["status"]): number {
+  if (status === "filled") return 0;
+  if (status === "open") return 1;
+  return 2;
+}
+
 function sortHistoricalOrders(orderHistory: HistoricalOrder[]): HistoricalOrder[] {
-  return [...orderHistory].sort((a, b) => b.statusTimestamp - a.statusTimestamp);
+  return [...orderHistory].sort((a, b) => {
+    if (a.statusTimestamp !== b.statusTimestamp) {
+      return b.statusTimestamp - a.statusTimestamp;
+    }
+
+    const statusRankDelta =
+      getHistoricalOrderStatusRank(a.status) - getHistoricalOrderStatusRank(b.status);
+    if (statusRankDelta !== 0) {
+      return statusRankDelta;
+    }
+
+    if (a.order.timestamp !== b.order.timestamp) {
+      return b.order.timestamp - a.order.timestamp;
+    }
+
+    return b.order.oid - a.order.oid;
+  });
 }
 
 function mergeHistoricalOrders(

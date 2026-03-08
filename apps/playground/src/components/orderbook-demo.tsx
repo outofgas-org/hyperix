@@ -3,6 +3,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Skeleton } from "./ui/skeleton";
 import { useState } from "react";
 import { formatDate } from "../lib/format-date";
+import {
+  DEMO_CARD_CLASS_NAME,
+  DEMO_CARD_HEADER_CLASS_NAME,
+  DEMO_CARD_TITLE_CLASS_NAME,
+} from "./demo-card-styles";
 
 const NUMBER_FORMATTER = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 8,
@@ -104,9 +109,9 @@ function OrderbookCard({ coin }: OrderbookCardProps) {
   const { bids, asks, maxCumulativeSize, spread, spreadPercent } = data;
 
   return (
-    <Card className="bg-white border border-gray-200 shadow-sm">
-      <CardHeader className="pb-4">
-        <CardTitle className="flex items-center justify-between text-sm">
+    <Card className={DEMO_CARD_CLASS_NAME}>
+      <CardHeader className={DEMO_CARD_HEADER_CLASS_NAME}>
+        <CardTitle className={`${DEMO_CARD_TITLE_CLASS_NAME} flex items-center justify-between`}>
           {coin}-USDC
         </CardTitle>
         <div className="flex justify-end">
@@ -115,7 +120,7 @@ function OrderbookCard({ coin }: OrderbookCardProps) {
           </label>
           <select
             id={`${coin}-tick-size`}
-            className="rounded-md border border-gray-200 bg-white px-2 py-1 text-xs text-gray-600"
+            className="h-10 rounded-2xl border border-stone-300 bg-white px-3 py-2 text-xs text-stone-600"
             onChange={(event) => setTick(event.target.value)}
             value={selectedTick}
           >
@@ -132,7 +137,7 @@ function OrderbookCard({ coin }: OrderbookCardProps) {
         </div>
       </CardHeader>
 
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-6 p-6">
         <OrderbookSide
           label="Asks"
           levels={asks.slice(0, 12).reverse()}
@@ -169,11 +174,11 @@ function TradesCard({ coin }: TradesCardProps) {
   const { data: trades } = useTrades(coin, { limit: 60 });
 
   return (
-    <Card className="bg-white border border-gray-200 shadow-sm">
-      <CardHeader className="pb-4">
-        <CardTitle className="text-sm">{coin}-USDC Trades</CardTitle>
+    <Card className={DEMO_CARD_CLASS_NAME}>
+      <CardHeader className={DEMO_CARD_HEADER_CLASS_NAME}>
+        <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>{coin}-USDC Trades</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-2 font-mono text-xs">
+      <CardContent className="space-y-2 p-6 font-mono text-xs">
         <div className="grid grid-cols-3 gap-2 text-gray-500">
           <span>Price</span>
           <span className="text-right">Size</span>

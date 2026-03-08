@@ -2,6 +2,13 @@ import Decimal from "decimal.js";
 import { type OrderHistory, useOrderHistory } from "@hyperix/hooks";
 import { useState } from "react";
 import { formatDate } from "../lib/format-date";
+import {
+  DEMO_CARD_CLASS_NAME,
+  DEMO_CARD_HEADER_CLASS_NAME,
+  DEMO_CARD_INPUT_CLASS_NAME,
+  DEMO_CARD_STATUS_CLASS_NAME,
+  DEMO_CARD_TITLE_CLASS_NAME,
+} from "./demo-card-styles";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Input } from "./ui/input";
 import { Skeleton } from "./ui/skeleton";
@@ -154,14 +161,14 @@ export function HistoricalOrdersDemo() {
         </p>
       </div>
 
-      <Card className="overflow-hidden border-[#d7e3ec] bg-white text-[#183242] shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
-        <CardHeader className="space-y-4 border-b border-[#edf3f7] bg-[linear-gradient(180deg,#ffffff,#f8fbfd)]">
+      <Card className={`${DEMO_CARD_CLASS_NAME} text-[#183242]`}>
+        <CardHeader className={DEMO_CARD_HEADER_CLASS_NAME}>
           <div className="space-y-2">
-            <CardTitle className="text-sm font-medium tracking-[0.14em] text-[#6f8797] uppercase">
+            <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>
               Tracked Wallet
             </CardTitle>
             <Input
-              className="border-[#d6e1e9] bg-[#fbfdff] font-mono text-sm text-[#183242] placeholder:text-[#8aa0ae]"
+              className={DEMO_CARD_INPUT_CLASS_NAME}
               onChange={(event) => {
                 setInput(event.target.value);
               }}
@@ -169,7 +176,9 @@ export function HistoricalOrdersDemo() {
               value={input}
             />
           </div>
-          <div className="flex items-center justify-between gap-4 rounded-xl border border-[#e8eef3] bg-[#f8fbfd] px-3 py-2 text-xs text-[#6f8797]">
+          <div
+            className={`${DEMO_CARD_STATUS_CLASS_NAME} flex items-center justify-between gap-4`}
+          >
             <span>
               {address
                 ? `Subscribed to ${address}`

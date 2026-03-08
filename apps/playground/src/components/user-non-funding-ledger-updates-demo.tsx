@@ -5,6 +5,13 @@ import {
 import { ExternalLink } from "lucide-react";
 import { useState } from "react";
 import { formatDate } from "../lib/format-date";
+import {
+  DEMO_CARD_CLASS_NAME,
+  DEMO_CARD_HEADER_CLASS_NAME,
+  DEMO_CARD_INPUT_CLASS_NAME,
+  DEMO_CARD_STATUS_CLASS_NAME,
+  DEMO_CARD_TITLE_CLASS_NAME,
+} from "./demo-card-styles";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Input } from "./ui/input";
 import { Skeleton } from "./ui/skeleton";
@@ -119,14 +126,14 @@ export function UserNonFundingLedgerUpdatesDemo() {
         </p>
       </div>
 
-      <Card className="overflow-hidden rounded-[28px] border-stone-200 bg-white shadow-[0_18px_70px_-40px_rgba(20,24,12,0.35)]">
-        <CardHeader className="gap-4 border-b border-stone-200 bg-[linear-gradient(180deg,#fdfdf7_0%,#f7f7ef_100%)] pb-5">
+      <Card className={DEMO_CARD_CLASS_NAME}>
+        <CardHeader className={DEMO_CARD_HEADER_CLASS_NAME}>
           <div className="space-y-2">
-            <CardTitle className="text-sm font-medium uppercase tracking-[0.18em] text-stone-500">
+            <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>
               Tracked Wallet
             </CardTitle>
             <Input
-              className="h-12 rounded-2xl border-stone-300 bg-white font-mono text-sm text-stone-900 placeholder:text-stone-400"
+              className={DEMO_CARD_INPUT_CLASS_NAME}
               onChange={(event) => {
                 setInput(event.target.value);
               }}
@@ -134,7 +141,7 @@ export function UserNonFundingLedgerUpdatesDemo() {
               value={input}
             />
           </div>
-          <div className="rounded-2xl border border-lime-200 bg-lime-50 px-4 py-3 text-xs text-stone-600">
+          <div className={DEMO_CARD_STATUS_CLASS_NAME}>
             {address
               ? `Subscribed to ${address}`
               : "Enter a valid 42-character hex wallet address to start the subscription."}
