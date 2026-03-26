@@ -2,7 +2,10 @@
   "name": "hyperkit",
   "private": true,
   "type": "module",
-  "workspaces": ["apps/*", "packages/*"],
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
     "dev": "bun run --cwd apps/playground dev",
     "clean": "find . -type d \\( -name dist -o -name coverage -o -name node_modules \\) -prune -exec rm -rf '{}' + && find . -type f -name '*.tsbuildinfo' -delete",
@@ -23,5 +26,6 @@
     "@types/bun": "latest",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3"
-  }
+  },
+  "version": "0.0.1"
 }
