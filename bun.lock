@@ -41,13 +41,16 @@
     "packages/core": {
       "name": "@bunstack/core",
       "version": "0.1.0",
+      "dependencies": {
+        "@nktkas/hyperliquid": "^0.32.1",
+      },
       "peerDependencies": {
         "typescript": "^5",
       },
     },
     "packages/hooks": {
       "name": "@hyperix/hooks",
-      "version": "0.1.7",
+      "version": "0.1.14",
       "dependencies": {
         "@nktkas/hyperliquid": "^0.32.1",
         "@outofgas/react-stream": "0.1.3",
