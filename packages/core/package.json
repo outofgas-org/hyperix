@@ -1,5 +1,5 @@
 {
-  "name": "@bunstack/core",
+  "name": "@hyperix/core",
   "version": "0.1.0",
   "description": "Shared core helpers for the starter workspace.",
   "type": "module",
