@@ -1,3 +1,4 @@
+import { AllMidsDemo } from "./components/all-mids-demo";
 import { HistoricalOrdersDemo } from "./components/historical-orders-demo";
 import { BackgroundOrbs } from "./components/background-orbs";
 import { Footer } from "./components/footer";
@@ -15,6 +16,7 @@ export function App() {
         <h1 className="text-4xl font-bold">Hyperix</h1>
 
         <OrderbookDemo />
+        <AllMidsDemo />
         <UserFundingsDemo />
         <PositionsDemo />
         <UserNonFundingLedgerUpdatesDemo />
