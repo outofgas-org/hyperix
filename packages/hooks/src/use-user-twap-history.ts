@@ -15,7 +15,7 @@ export type UseUserTwapHistoryOptions = {
 
 export function useUserTwapHistory(
   user: `0x${string}`,
-  options: UseUserTwapHistoryOptions = {},
+  options: UseUserTwapHistoryOptions = {}
 ): UseSubscribeState<UserTwapHistoryData> {
   const { enabled: enabledOverride, onUpdate } = options;
   const enabled = enabledOverride ?? Boolean(user);
@@ -31,7 +31,7 @@ export function useUserTwapHistory(
           onError(
             error instanceof Error
               ? error
-              : new Error("Failed to process user twap history event"),
+              : new Error("Failed to process user twap history event")
           );
         }
       });
@@ -50,30 +50,36 @@ export function useUserTwapHistory(
       return;
     }
 
-    if (!rawState.data) {
+    const nextEvent = rawState.data;
+
+    if (!nextEvent) {
       return;
     }
 
     setData((previous) => {
-      if (rawState.data?.isSnapshot || !previous || previous.user !== rawState.data.user) {
+      if (
+        nextEvent.isSnapshot ||
+        !previous ||
+        previous.user !== nextEvent.user
+      ) {
         return {
-          user: rawState.data.user,
-          history: rawState.data.history,
+          user: nextEvent.user,
+          history: nextEvent.history,
         };
       }
 
       return {
-        user: rawState.data.user,
-        history: [...previous.history, ...rawState.data.history],
+        user: nextEvent.user,
+        history: [...previous.history, ...nextEvent.history],
       };
     });
-  }, [enabled, rawState.data, user]);
+  }, [enabled, rawState.data]);
 
   return useMemo(
     () => ({
       ...rawState,
       data,
     }),
-    [data, rawState],
+    [data, rawState]
   );
 }
