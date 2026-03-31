@@ -1,5 +1,6 @@
 {
   "lockfileVersion": 1,
+  "configVersion": 0,
   "workspaces": {
     "": {
       "name": "hyperkit",
@@ -50,10 +51,10 @@
     },
     "packages/hooks": {
       "name": "@hyperix/hooks",
-      "version": "0.1.14",
+      "version": "0.1.17",
       "dependencies": {
         "@nktkas/hyperliquid": "^0.32.1",
-        "@outofgas/react-stream": "0.1.3",
+        "@outofgas/react-stream": "^0.1.4",
         "react": "^19.1.1",
       },
       "devDependencies": {
@@ -272,7 +273,7 @@
 
     "@nodelib/fs.walk": ["@nodelib/fs.walk@1.2.8", "", { "dependencies": { "@nodelib/fs.scandir": "2.1.5", "fastq": "^1.6.0" } }, "sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg=="],
 
-    "@outofgas/react-stream": ["@outofgas/react-stream@0.1.3", "", { "dependencies": { "react": "^19.1.1" }, "peerDependencies": { "typescript": "^5.9.3" } }, "sha512-/yze4rED9Xtu5uVzCclORx/eWjvos6pytfRnlxqyb0gZxU8Ov6II2zrIhb0P74l3QhuP6TcJ0w5QTIFH5tSAiw=="],
+    "@outofgas/react-stream": ["@outofgas/react-stream@0.1.4", "", { "dependencies": { "react": "^19.1.1" }, "peerDependencies": { "typescript": "^5.9.3" } }, "sha512-gWeAT6yM1cjMRJoaumpWAU/8NviWx/ZYoe0vNqLW4p11A6LUVd5GBmxMfojmMtUfonqd6FCWxkrL7I0GyR5zMA=="],
 
     "@rolldown/pluginutils": ["@rolldown/pluginutils@1.0.0-rc.3", "", {}, "sha512-eybk3TjzzzV97Dlj5c+XrBFW57eTNhzod66y9HrBlzJ6NsCrWCp/2kaPS3K9wJmurBC0Tdw4yPjXKZqlznim3Q=="],
 
