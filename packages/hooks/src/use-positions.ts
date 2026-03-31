@@ -17,8 +17,7 @@ export function usePositions(
 
   const data = useMemo<Position[] | undefined>(() => {
     return positionsState.data?.clearinghouseStates
-      .map(([, state]) => state.assetPositions)
-      .flatMap((positions) => positions)
+      .flatMap(([, state]) => state.assetPositions)
       .sort((left, right) =>
         Number(left.position.positionValue) < Number(right.position.positionValue) ? 1 : -1,
       );
