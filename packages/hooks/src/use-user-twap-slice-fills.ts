@@ -15,7 +15,7 @@ export type UseUserTwapSliceFillsOptions = {
 
 export function useUserTwapSliceFills(
   user: `0x${string}`,
-  options: UseUserTwapSliceFillsOptions = {},
+  options: UseUserTwapSliceFillsOptions = {}
 ): UseSubscribeState<UserTwapSliceFillsData> {
   const { enabled: enabledOverride, onUpdate } = options;
   const enabled = enabledOverride ?? Boolean(user);
@@ -23,18 +23,21 @@ export function useUserTwapSliceFills(
     key: ["user-twap-slice-fills", user],
     enabled,
     subscribe: async ({ onData, onError }) => {
-      const subscription = await wsClient.userTwapSliceFills({ user }, (event) => {
-        try {
-          onUpdate?.(event);
-          onData(event);
-        } catch (error) {
-          onError(
-            error instanceof Error
-              ? error
-              : new Error("Failed to process user twap slice fills event"),
-          );
+      const subscription = await wsClient.userTwapSliceFills(
+        { user },
+        (event) => {
+          try {
+            onUpdate?.(event);
+            onData(event);
+          } catch (error) {
+            onError(
+              error instanceof Error
+                ? error
+                : new Error("Failed to process user twap slice fills event")
+            );
+          }
         }
-      });
+      );
 
       return {
         unsubscribe: () => subscription.unsubscribe(),
@@ -42,7 +45,9 @@ export function useUserTwapSliceFills(
     },
   });
 
-  const [data, setData] = useState<UserTwapSliceFillsData | undefined>(undefined);
+  const [data, setData] = useState<UserTwapSliceFillsData | undefined>(
+    undefined
+  );
 
   useEffect(() => {
     if (!enabled) {
@@ -50,30 +55,39 @@ export function useUserTwapSliceFills(
       return;
     }
 
-    if (!rawState.data) {
+    const nextEvent = rawState.data;
+
+    if (!nextEvent) {
       return;
     }
 
     setData((previous) => {
-      if (rawState.data?.isSnapshot || !previous || previous.user !== rawState.data.user) {
+      if (
+        nextEvent.isSnapshot ||
+        !previous ||
+        previous.user !== nextEvent.user
+      ) {
         return {
-          user: rawState.data.user,
-          twapSliceFills: rawState.data.twapSliceFills,
+          user: nextEvent.user,
+          twapSliceFills: nextEvent.twapSliceFills,
         };
       }
 
       return {
-        user: rawState.data.user,
-        twapSliceFills: [...previous.twapSliceFills, ...rawState.data.twapSliceFills],
+        user: nextEvent.user,
+        twapSliceFills: [
+          ...previous.twapSliceFills,
+          ...nextEvent.twapSliceFills,
+        ],
       };
     });
-  }, [enabled, rawState.data, user]);
+  }, [enabled, rawState.data]);
 
   return useMemo(
     () => ({
       ...rawState,
       data,
     }),
-    [data, rawState],
+    [data, rawState]
   );
 }
