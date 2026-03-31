@@ -13,6 +13,7 @@ export * from "./use-order-history.js";
 export * from "./use-perp-market.js";
 export * from "./use-perp-markets.js";
 export * from "./use-perp-meta.js";
+export * from "./use-portfolio.js";
 export * from "./use-positions.js";
 export * from "./use-spot-meta.js";
 export * from "./use-symbol-converter.js";

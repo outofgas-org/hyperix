@@ -5,6 +5,7 @@ import { AllDexsAssetCtxsDemo } from "./components/all-dexs-asset-ctxs-demo";
 import { AllMidsDemo } from "./components/all-mids-demo";
 import { HistoricalOrdersDemo } from "./components/historical-orders-demo";
 import { MetaDemo } from "./components/meta-demo";
+import { PortfolioDemo } from "./components/portfolio-demo";
 import { PerpMarketsDemo } from "./components/perp-markets-demo";
 import { Footer } from "./components/footer";
 import { MidDemo } from "./components/mid-demo";
@@ -51,6 +52,12 @@ const DEMOS = [
     label: "Perp Markets",
     description: "Frontend-friendly perp list with live context merged in.",
     component: PerpMarketsDemo,
+  },
+  {
+    id: "portfolio",
+    label: "Portfolio",
+    description: "Portfolio snapshots grouped by total and perp time windows.",
+    component: PortfolioDemo,
   },
   {
     id: "active-asset",
