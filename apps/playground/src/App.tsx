@@ -18,6 +18,7 @@ import { TwapStatesDemo } from "./components/twap-states-demo";
 import { UserFundingsDemo } from "./components/user-fundings-demo";
 import { UserFillsDemo } from "./components/user-fills-demo";
 import { UserTwapHistoryDemo } from "./components/user-twap-history-demo";
+import { UserTwapSliceFillsDemo } from "./components/user-twap-slice-fills-demo";
 import { UserNonFundingLedgerUpdatesDemo } from "./components/user-non-funding-ledger-updates-demo";
 
 const DEMOS = [
@@ -122,6 +123,12 @@ const DEMOS = [
     label: "User TWAP History",
     description: "Merged TWAP history stream for a tracked wallet.",
     component: UserTwapHistoryDemo,
+  },
+  {
+    id: "user-twap-slice-fills",
+    label: "User TWAP Slice Fills",
+    description: "Merged TWAP slice fill stream for a tracked wallet.",
+    component: UserTwapSliceFillsDemo,
   },
   {
     id: "open-orders",
