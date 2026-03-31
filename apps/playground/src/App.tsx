@@ -1,3 +1,4 @@
+import { ActiveAssetDataDemo } from "./components/active-asset-data-demo";
 import { AllDexsAssetCtxsDemo } from "./components/all-dexs-asset-ctxs-demo";
 import { AllMidsDemo } from "./components/all-mids-demo";
 import { HistoricalOrdersDemo } from "./components/historical-orders-demo";
@@ -20,6 +21,7 @@ export function App() {
         <OrderbookDemo />
         <AllMidsDemo />
         <AllDexsAssetCtxsDemo />
+        <ActiveAssetDataDemo />
         <MidDemo />
         <UserFundingsDemo />
         <PositionsDemo />
