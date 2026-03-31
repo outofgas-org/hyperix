@@ -1,7 +1,9 @@
+import { AllDexsAssetCtxsDemo } from "./components/all-dexs-asset-ctxs-demo";
 import { AllMidsDemo } from "./components/all-mids-demo";
 import { HistoricalOrdersDemo } from "./components/historical-orders-demo";
 import { BackgroundOrbs } from "./components/background-orbs";
 import { Footer } from "./components/footer";
+import { MidDemo } from "./components/mid-demo";
 import { OpenOrdersDemo } from "./components/open-orders-demo";
 import { OrderbookDemo } from "./components/orderbook-demo";
 import { PositionsDemo } from "./components/positions-demo";
@@ -17,6 +19,8 @@ export function App() {
 
         <OrderbookDemo />
         <AllMidsDemo />
+        <AllDexsAssetCtxsDemo />
+        <MidDemo />
         <UserFundingsDemo />
         <PositionsDemo />
         <UserNonFundingLedgerUpdatesDemo />
