@@ -1,4 +1,5 @@
 export * from "./use-all-mids.js";
+export * from "./use-all-perp-metas.js";
 export * from "./use-active-asset-data.js";
 export * from "./use-all-dexs-asset-ctxs.js";
 export * from "./use-l2-book.js";
@@ -9,7 +10,9 @@ export * from "./use-open-orders.js";
 export * from "./use-trade-history.js";
 export * from "./use-trades.js";
 export * from "./use-order-history.js";
+export * from "./use-perp-markets.js";
 export * from "./use-positions.js";
+export * from "./use-spot-meta.js";
 export * from "./use-symbol-converter.js";
 export * from "./use-user-fundings.js";
 export * from "./use-user-fills.js";

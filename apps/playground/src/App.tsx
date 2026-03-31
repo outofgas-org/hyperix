@@ -4,6 +4,8 @@ import { AllDexsClearingHouseStateDemo } from "./components/all-dexs-clearing-ho
 import { AllDexsAssetCtxsDemo } from "./components/all-dexs-asset-ctxs-demo";
 import { AllMidsDemo } from "./components/all-mids-demo";
 import { HistoricalOrdersDemo } from "./components/historical-orders-demo";
+import { MetaDemo } from "./components/meta-demo";
+import { PerpMarketsDemo } from "./components/perp-markets-demo";
 import { Footer } from "./components/footer";
 import { MidDemo } from "./components/mid-demo";
 import { OpenOrdersDemo } from "./components/open-orders-demo";
@@ -37,6 +39,18 @@ const DEMOS = [
     label: "Clearing House State",
     description: "Account state rollups across all DEXs.",
     component: AllDexsClearingHouseStateDemo,
+  },
+  {
+    id: "market-meta",
+    label: "Market Metadata",
+    description: "Perp and spot metadata snapshots from info endpoints.",
+    component: MetaDemo,
+  },
+  {
+    id: "perp-markets",
+    label: "Perp Markets",
+    description: "Frontend-friendly perp list with live context merged in.",
+    component: PerpMarketsDemo,
   },
   {
     id: "active-asset",
