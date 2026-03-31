@@ -14,6 +14,7 @@ import { OpenOrdersDemo } from "./components/open-orders-demo";
 import { OrderbookDemo } from "./components/orderbook-demo";
 import { PositionsDemo } from "./components/positions-demo";
 import { SpotAssetCtxsDemo } from "./components/spot-asset-ctxs-demo";
+import { SpotMarketsDemo } from "./components/spot-markets-demo";
 import { SpotMetaAndAssetCtxsDemo } from "./components/spot-meta-and-asset-ctxs-demo";
 import { SpotStateDemo } from "./components/spot-state-demo";
 import { TwapStatesDemo } from "./components/twap-states-demo";
@@ -70,7 +71,8 @@ const DEMOS = [
     label: "Perp Markets",
     description: "Frontend-friendly perp list with live context merged in.",
     component: PerpMarketsDemo,
-    category: "info",
+    category: "subscription",
+    streamType: "perps",
   },
   {
     id: "portfolio",
@@ -131,6 +133,14 @@ const DEMOS = [
     component: PositionsDemo,
     category: "subscription",
     streamType: "perps",
+  },
+  {
+    id: "spot-markets",
+    label: "Spot Markets",
+    description: "Frontend-friendly spot list with live context merged in.",
+    component: SpotMarketsDemo,
+    category: "subscription",
+    streamType: "spot",
   },
   {
     id: "spot-asset-ctxs",

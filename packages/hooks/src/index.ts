@@ -17,6 +17,7 @@ export * from "./use-perp-meta.js";
 export * from "./use-portfolio.js";
 export * from "./use-positions.js";
 export * from "./use-spot-asset-ctxs.js";
+export * from "./use-spot-markets.js";
 export * from "./use-spot-meta-and-asset-ctxs.js";
 export * from "./use-spot-meta.js";
 export * from "./use-spot-state.js";
