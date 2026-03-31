@@ -14,8 +14,10 @@ import { OpenOrdersDemo } from "./components/open-orders-demo";
 import { OrderbookDemo } from "./components/orderbook-demo";
 import { PositionsDemo } from "./components/positions-demo";
 import { SpotAssetCtxsDemo } from "./components/spot-asset-ctxs-demo";
+import { TwapStatesDemo } from "./components/twap-states-demo";
 import { UserFundingsDemo } from "./components/user-fundings-demo";
 import { UserFillsDemo } from "./components/user-fills-demo";
+import { UserTwapHistoryDemo } from "./components/user-twap-history-demo";
 import { UserNonFundingLedgerUpdatesDemo } from "./components/user-non-funding-ledger-updates-demo";
 
 const DEMOS = [
@@ -98,6 +100,12 @@ const DEMOS = [
     component: SpotAssetCtxsDemo,
   },
   {
+    id: "twap-states",
+    label: "TWAP States",
+    description: "Live TWAP execution state for a tracked wallet.",
+    component: TwapStatesDemo,
+  },
+  {
     id: "ledger-updates",
     label: "Ledger Updates",
     description: "Non-funding balance and ledger changes.",
@@ -108,6 +116,12 @@ const DEMOS = [
     label: "User Fills",
     description: "Latest execution stream for a wallet.",
     component: UserFillsDemo,
+  },
+  {
+    id: "user-twap-history",
+    label: "User TWAP History",
+    description: "Merged TWAP history stream for a tracked wallet.",
+    component: UserTwapHistoryDemo,
   },
   {
     id: "open-orders",
