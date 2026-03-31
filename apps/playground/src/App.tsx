@@ -17,9 +17,11 @@ import { SpotAssetCtxsDemo } from "./components/spot-asset-ctxs-demo";
 import { TwapStatesDemo } from "./components/twap-states-demo";
 import { UserFundingsDemo } from "./components/user-fundings-demo";
 import { UserFillsDemo } from "./components/user-fills-demo";
+import { UserDelegatorSummaryDemo } from "./components/user-delegator-summary-demo";
 import { UserTwapHistoryDemo } from "./components/user-twap-history-demo";
 import { UserTwapSliceFillsDemo } from "./components/user-twap-slice-fills-demo";
 import { UserNonFundingLedgerUpdatesDemo } from "./components/user-non-funding-ledger-updates-demo";
+import { UserVaultEquitiesDemo } from "./components/user-vault-equities-demo";
 
 const DEMOS = [
   {
@@ -87,6 +89,18 @@ const DEMOS = [
     label: "User Fundings",
     description: "Funding ledger updates for a wallet.",
     component: UserFundingsDemo,
+  },
+  {
+    id: "user-delegator-summary",
+    label: "User Delegator Summary",
+    description: "Staking balances and pending withdrawal totals for a wallet.",
+    component: UserDelegatorSummaryDemo,
+  },
+  {
+    id: "user-vault-equities",
+    label: "User Vault Equities",
+    description: "Vault deposit balances and lock status for a wallet.",
+    component: UserVaultEquitiesDemo,
   },
   {
     id: "positions",
