@@ -18,6 +18,7 @@ export * from "./use-portfolio.js";
 export * from "./use-positions.js";
 export * from "./use-spot-asset-ctxs.js";
 export * from "./use-spot-meta.js";
+export * from "./use-spot-state.js";
 export * from "./use-symbol-converter.js";
 export * from "./use-twap-states.js";
 export * from "./use-user-fundings.js";

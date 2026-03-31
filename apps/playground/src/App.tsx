@@ -14,6 +14,7 @@ import { OpenOrdersDemo } from "./components/open-orders-demo";
 import { OrderbookDemo } from "./components/orderbook-demo";
 import { PositionsDemo } from "./components/positions-demo";
 import { SpotAssetCtxsDemo } from "./components/spot-asset-ctxs-demo";
+import { SpotStateDemo } from "./components/spot-state-demo";
 import { TwapStatesDemo } from "./components/twap-states-demo";
 import { UserFundingsDemo } from "./components/user-fundings-demo";
 import { UserFillsDemo } from "./components/user-fills-demo";
@@ -113,6 +114,12 @@ const DEMOS = [
     label: "Spot Asset Ctxs",
     description: "Realtime spot market context snapshots across all spot assets.",
     component: SpotAssetCtxsDemo,
+  },
+  {
+    id: "spot-state",
+    label: "Spot State",
+    description: "Wallet spot balances and escrow state as a live websocket stream.",
+    component: SpotStateDemo,
   },
   {
     id: "twap-states",
