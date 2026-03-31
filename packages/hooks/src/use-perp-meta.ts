@@ -10,13 +10,13 @@ export type PerpMeta = AllPerpMetasData[number]["universe"][number];
 export function usePerpMeta(coin: string, options: UseAllPerpMetasOptions = {}) {
   const allPerpMetasState = useAllPerpMetas(options);
 
-  const meta = useMemo<PerpMeta | undefined>(() => {
+  const data = useMemo<PerpMeta | undefined>(() => {
     const universes = allPerpMetasState.data?.flatMap((perpMeta) => perpMeta.universe) ?? [];
     return universes.find((universe) => universe.name === coin);
   }, [coin, allPerpMetasState.data]);
 
   return {
-    isPending: allPerpMetasState.isPending,
-    meta,
+    ...allPerpMetasState,
+    data,
   };
 }
