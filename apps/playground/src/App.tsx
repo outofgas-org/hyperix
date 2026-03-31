@@ -4,6 +4,7 @@ import { AllDexsClearingHouseStateDemo } from "./components/all-dexs-clearing-ho
 import { AllDexsAssetCtxsDemo } from "./components/all-dexs-asset-ctxs-demo";
 import { AllMidsDemo } from "./components/all-mids-demo";
 import { HistoricalOrdersDemo } from "./components/historical-orders-demo";
+import { MaxBuilderFeeDemo } from "./components/max-builder-fee-demo";
 import { MetaDemo } from "./components/meta-demo";
 import { PortfolioDemo } from "./components/portfolio-demo";
 import { PerpMarketsDemo } from "./components/perp-markets-demo";
@@ -12,6 +13,7 @@ import { MidDemo } from "./components/mid-demo";
 import { OpenOrdersDemo } from "./components/open-orders-demo";
 import { OrderbookDemo } from "./components/orderbook-demo";
 import { PositionsDemo } from "./components/positions-demo";
+import { SpotAssetCtxsDemo } from "./components/spot-asset-ctxs-demo";
 import { UserFundingsDemo } from "./components/user-fundings-demo";
 import { UserFillsDemo } from "./components/user-fills-demo";
 import { UserNonFundingLedgerUpdatesDemo } from "./components/user-non-funding-ledger-updates-demo";
@@ -60,6 +62,12 @@ const DEMOS = [
     component: PortfolioDemo,
   },
   {
+    id: "max-builder-fee",
+    label: "Max Builder Fee",
+    description: "Check the approved max builder fee for a user and builder pair.",
+    component: MaxBuilderFeeDemo,
+  },
+  {
     id: "active-asset",
     label: "Active Asset Data",
     description: "Focused stream for a single active asset.",
@@ -82,6 +90,12 @@ const DEMOS = [
     label: "Positions",
     description: "Open positions aggregated across DEXs.",
     component: PositionsDemo,
+  },
+  {
+    id: "spot-asset-ctxs",
+    label: "Spot Asset Ctxs",
+    description: "Realtime spot market context snapshots across all spot assets.",
+    component: SpotAssetCtxsDemo,
   },
   {
     id: "ledger-updates",
