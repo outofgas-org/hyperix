@@ -69,12 +69,13 @@ export type GetHyperliquidActiveAssetDataOptions = HyperliquidUserOptions & {
 
 export type HyperliquidBalance = {
     asset: string;
-    type: "spot" | "perp";
-    total: number;
-    available: number;
-    value: number;
+    type: "spot" | "perp" | "all";
+    total: string;
+    available: string;
+    value: string;
     contract: string;
-    pnl?: number;
+    entryNtl?: string;
+    pnl?: string;
     dex?: string;
 };
 

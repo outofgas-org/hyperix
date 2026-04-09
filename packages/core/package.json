@@ -24,6 +24,7 @@
     "typescript": "^5"
   },
   "dependencies": {
-    "@nktkas/hyperliquid": "^0.32.1"
+    "@nktkas/hyperliquid": "^0.32.1",
+    "decimal.js": "^10.6.0"
   }
 }
