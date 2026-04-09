@@ -13,4 +13,5 @@ export * from "./getOrderbook";
 export * from "./getPositions";
 export * from "./getTicker";
 export * from "./getTransfers";
+export * from "./getUserFills";
 export * from "./shared"

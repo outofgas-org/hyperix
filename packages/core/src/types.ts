@@ -47,6 +47,8 @@ export type GetHyperliquidFillsOptions = HyperliquidUserOptions & {
     twapFills?: boolean;
 };
 
+export type GetHyperliquidUserFillsOptions = Omit<GetHyperliquidFillsOptions, "twapFills">;
+
 export type GetHyperliquidTickerOptions = {
     coin: string;
     marketType: HyperliquidMarketType;
