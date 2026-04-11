@@ -1,10 +1,9 @@
-import { getDefaultInfoClient } from "./config/hl";
+import { infoClient } from "./config/hl";
 import type { GetHyperliquidOrderbookOptions, L2Book } from "./types";
 
 export async function getOrderbook(
   options: GetHyperliquidOrderbookOptions,
 ): Promise<L2Book | null> {
-  const infoClient = getDefaultInfoClient();
   const orderbook = await infoClient.l2Book({
     coin: options.coin,
     nSigFigs: options.nSigFigs,

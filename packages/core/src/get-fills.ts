@@ -1,4 +1,4 @@
-import { getDefaultInfoClient, getMetadataCache } from "./config/hl";
+import { getMetadataCache, infoClient } from "./config/hl";
 import { normalizeMarketCoin, toOrderSide } from "./shared";
 import type {
   GetHyperliquidFillsOptions,
@@ -9,7 +9,6 @@ import type {
 export async function getFills(
   options: GetHyperliquidFillsOptions,
 ): Promise<Array<HyperliquidFill | HyperliquidTwapFill>> {
-  const infoClient = getDefaultInfoClient();
   const aggregateByTime = options.aggregateByTime ?? true;
   const twapFills = options.twapFills ?? false;
 

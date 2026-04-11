@@ -1,4 +1,4 @@
-import { getDefaultInfoClient, getTransport } from "../config/hl";
+import { getTransport, infoClient } from "../config/hl";
 import type { AllPerpMetas, SpotMeta } from "../types";
 import { SymbolConverter } from "./symbol-converter";
 
@@ -39,7 +39,7 @@ export class DefaultHyperliquidMetadataCache
       return this.spotMetaEntry.data;
     }
 
-    const [spotMeta] = await getDefaultInfoClient().spotMetaAndAssetCtxs();
+    const [spotMeta] = await infoClient.spotMetaAndAssetCtxs();
     this.spotMetaEntry = {
       data: spotMeta,
       expiresAt: now + this.ttlMs,
@@ -54,7 +54,7 @@ export class DefaultHyperliquidMetadataCache
       return this.allPerpMetasEntry.data;
     }
 
-    const allPerpMetas = await getDefaultInfoClient().allPerpMetas();
+    const allPerpMetas = await infoClient.allPerpMetas();
     this.allPerpMetasEntry = {
       data: allPerpMetas,
       expiresAt: now + this.ttlMs,

@@ -4,10 +4,10 @@ import {
   DefaultHyperliquidMetadataCache,
   type HyperliquidMetadataCache,
   type HyperliquidMetadataCacheOptions,
-} from "../lib/metadataInfo";
+} from "../lib/metadata-info";
 
 let transport: IRequestTransport = new HttpTransport();
-let infoClient = new InfoClient({ transport });
+export let infoClient = new InfoClient({ transport });
 let metadataCache: HyperliquidMetadataCache =
   new DefaultHyperliquidMetadataCache();
 
@@ -24,10 +24,6 @@ export function getMetadataCache(): HyperliquidMetadataCache {
 
 export function getTransport(): IRequestTransport {
   return transport;
-}
-
-export function getDefaultInfoClient(): InfoClient {
-  return infoClient;
 }
 
 export function replaceTransport(

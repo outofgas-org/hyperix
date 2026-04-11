@@ -1,12 +1,21 @@
 {
   "name": "@hyperix/core",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Shared core helpers for the starter workspace.",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": ["dist", "README.md"],
-  "keywords": ["bun", "monorepo", "utilities", "helpers", "typescript"],
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "keywords": [
+    "bun",
+    "monorepo",
+    "utilities",
+    "helpers",
+    "typescript"
+  ],
   "scripts": {
     "build": "tsup src/index.ts --dts --format esm,cjs --clean",
     "test": "bun test src/*.test.ts",

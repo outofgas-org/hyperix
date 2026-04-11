@@ -1,4 +1,4 @@
-import { getDefaultInfoClient, getMetadataCache } from "./config/hl";
+import { getMetadataCache, infoClient } from "./config/hl";
 import { getCoinDexName } from "./shared";
 import type {
   GetHyperliquidTickerOptions,
@@ -14,8 +14,6 @@ export async function getTickerContext(
   normalizedCoin: string;
   context: PerpAssetContext | SpotAssetContext;
 }> {
-  const infoClient = getDefaultInfoClient();
-
   if (options.marketType === "perp") {
     const dex = getCoinDexName(options.coin);
     const [meta, assetCtxs] = await infoClient.metaAndAssetCtxs({ dex });
@@ -71,7 +69,6 @@ function requireBook<T extends NonNullable<unknown>>(
 export async function getTicker(
   options: GetHyperliquidTickerOptions,
 ): Promise<HyperliquidTicker> {
-  const infoClient = getDefaultInfoClient();
   const { normalizedCoin, context } = await getTickerContext(options);
   const book = requireBook(
     await infoClient.l2Book({ coin: normalizedCoin }),

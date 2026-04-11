@@ -1,4 +1,4 @@
-import { getDefaultInfoClient } from "./config/hl";
+import { infoClient } from "./config/hl";
 import type {
   GetHyperliquidActiveAssetDataOptions,
   HyperliquidActiveAsset,
@@ -7,7 +7,6 @@ import type {
 export async function getActiveAssetData(
   options: GetHyperliquidActiveAssetDataOptions,
 ): Promise<HyperliquidActiveAsset> {
-  const infoClient = getDefaultInfoClient();
   const current = await infoClient.activeAssetData({
     user: options.user,
     coin: options.coin,

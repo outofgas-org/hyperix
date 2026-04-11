@@ -1,4 +1,4 @@
-import { getFills } from "./getFills";
+import { getFills } from "./get-fills";
 import type { GetHyperliquidUserFillsOptions, HyperliquidFill } from "./types";
 
 export async function getUserFills(

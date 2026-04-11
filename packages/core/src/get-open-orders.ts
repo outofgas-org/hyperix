@@ -1,4 +1,4 @@
-import { getDefaultInfoClient, getMetadataCache } from "./config/hl";
+import { getMetadataCache, infoClient } from "./config/hl";
 import { normalizeMarketCoin, requireByUppercase, toOrderSide } from "./shared";
 import type {
   GetHyperliquidOpenOrdersOptions,
@@ -8,7 +8,6 @@ import type {
 export async function getOpenOrders(
   options: GetHyperliquidOpenOrdersOptions,
 ): Promise<HyperliquidOpenOrder[]> {
-  const infoClient = getDefaultInfoClient();
   const orders = await infoClient.openOrders({ user: options.user });
 
   const normalizedOrders = await Promise.all(

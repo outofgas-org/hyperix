@@ -1,4 +1,4 @@
-import { getDefaultInfoClient } from "./config/hl";
+import { infoClient } from "./config/hl";
 import { getCoinDexName } from "./shared";
 import {
   type GetHyperliquidFundingOptions,
@@ -9,7 +9,6 @@ import {
 export async function getFunding(
   options: GetHyperliquidFundingOptions,
 ): Promise<HyperliquidFunding> {
-  const infoClient = getDefaultInfoClient();
   const normalizedCoin = options.coin.trim();
   const dex = getCoinDexName(normalizedCoin);
   const [[meta, assetCtxs], predictedFundings] = await Promise.all([

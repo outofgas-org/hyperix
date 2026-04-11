@@ -1,7 +1,7 @@
 import {
   DefaultHyperliquidMetadataCache,
   type HyperliquidMetadataCache,
-} from "./lib/metadataInfo";
+} from "./lib/metadata-info";
 import type {
   AllPerpMetas,
   HyperliquidMarketType,

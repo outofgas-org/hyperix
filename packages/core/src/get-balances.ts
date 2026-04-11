@@ -1,5 +1,5 @@
 import Decimal from "decimal.js";
-import { getDefaultInfoClient } from "./config/hl";
+import { infoClient } from "./config/hl";
 import {
   getDexNamesFromAllPerpMetas,
   getPerpDexName,
@@ -117,7 +117,6 @@ function buildPerpBalances(
 export async function getBalances(
   options: HyperliquidUserOptions,
 ): Promise<HyperliquidBalance[]> {
-  const infoClient = getDefaultInfoClient();
   const [abstraction, spotState, spotMetaAndAssetCtxs, allPerpMetas] =
     await Promise.all([
       infoClient.userAbstraction({ user: options.user }),
