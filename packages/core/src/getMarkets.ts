@@ -1,10 +1,10 @@
-import {
-  getPerpDexName,
-  getTokenByIndex,
-  requireByUppercase,
-} from "./shared";
 import { getMetadataCache } from "./config/hl";
-import type { GetHyperliquidMarketsOptions, HyperliquidPerpMarket, HyperliquidSpotMarket } from "./types";
+import { getPerpDexName, getTokenByIndex, requireByUppercase } from "./shared";
+import type {
+  GetHyperliquidMarketsOptions,
+  HyperliquidPerpMarket,
+  HyperliquidSpotMarket,
+} from "./types";
 
 export async function getMarkets(
   options: GetHyperliquidMarketsOptions,
@@ -16,8 +16,10 @@ export async function getMarkets(
     const markets = spotMeta.universe
       .filter((market) => market.tokens.length >= 2)
       .map((market) => {
-        const base = tokenByIndex.get(market.tokens[0])?.name ?? String(market.tokens[0]);
-        const quote = tokenByIndex.get(market.tokens[1])?.name ?? String(market.tokens[1]);
+        const base =
+          tokenByIndex.get(market.tokens[0])?.name ?? String(market.tokens[0]);
+        const quote =
+          tokenByIndex.get(market.tokens[1])?.name ?? String(market.tokens[1]);
 
         return {
           coin: `${base}/${quote}`,

@@ -1,5 +1,5 @@
-import { useSubscribe, type UseSubscribeState } from "@outofgas/react-stream";
 import type { UserNonFundingLedgerUpdatesEvent } from "@nktkas/hyperliquid/api/subscription";
+import { type UseSubscribeState, useSubscribe } from "@outofgas/react-stream";
 import { wsClient } from "./config/hl.js";
 
 export type UserNonFundingLedgerUpdate =
@@ -28,7 +28,9 @@ function mergeUserNonFundingLedgerUpdates(
 
   return {
     user: incomingEvent.user,
-    nonFundingLedgerUpdates: [...nonFundingLedgerUpdates].sort((a, b) => b.time - a.time),
+    nonFundingLedgerUpdates: [...nonFundingLedgerUpdates].sort(
+      (a, b) => b.time - a.time,
+    ),
   };
 }
 
@@ -45,22 +47,27 @@ export function useUserNonFundingLedgerUpdates(
     subscribe: async ({ onData, onError }) => {
       let data: UserNonFundingLedgerUpdatesData | undefined;
 
-      const subscription = await wsClient.userNonFundingLedgerUpdates({ user }, (event) => {
-        try {
-          if (!event.isSnapshot) {
-            onUpdate?.(event);
-          }
+      const subscription = await wsClient.userNonFundingLedgerUpdates(
+        { user },
+        (event) => {
+          try {
+            if (!event.isSnapshot) {
+              onUpdate?.(event);
+            }
 
-          data = mergeUserNonFundingLedgerUpdates(data, event);
-          onData(data);
-        } catch (error) {
-          onError(
-            error instanceof Error
-              ? error
-              : new Error("Failed to process user non-funding ledger updates event"),
-          );
-        }
-      });
+            data = mergeUserNonFundingLedgerUpdates(data, event);
+            onData(data);
+          } catch (error) {
+            onError(
+              error instanceof Error
+                ? error
+                : new Error(
+                    "Failed to process user non-funding ledger updates event",
+                  ),
+            );
+          }
+        },
+      );
 
       return {
         unsubscribe: () => subscription.unsubscribe(),

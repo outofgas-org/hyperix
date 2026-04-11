@@ -44,7 +44,9 @@ export function useMid(coin: string): UseMidResult {
   const symbolConverter = useSymbolConverter();
   const spot = isSpotCoin(coin);
   const midsState = useAllMids({ enabled: spot && Boolean(coin) });
-  const assetCtxsState = useAllDexsAssetCtxs({ enabled: !spot && Boolean(coin) });
+  const assetCtxsState = useAllDexsAssetCtxs({
+    enabled: !spot && Boolean(coin),
+  });
 
   return useMemo(() => {
     if (!coin) {
@@ -88,5 +90,17 @@ export function useMid(coin: string): UseMidResult {
       error: assetCtxsState.error,
       source: "all-dexs-asset-ctxs",
     };
-  }, [coin, spot, symbolConverter, midsState.data, midsState.loading, midsState.ready, midsState.error, assetCtxsState.data, assetCtxsState.loading, assetCtxsState.ready, assetCtxsState.error]);
+  }, [
+    coin,
+    spot,
+    symbolConverter,
+    midsState.data,
+    midsState.loading,
+    midsState.ready,
+    midsState.error,
+    assetCtxsState.data,
+    assetCtxsState.loading,
+    assetCtxsState.ready,
+    assetCtxsState.error,
+  ]);
 }

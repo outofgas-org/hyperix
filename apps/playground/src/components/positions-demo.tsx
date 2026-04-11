@@ -98,21 +98,37 @@ function PositionRow({ positionRecord }: { positionRecord: Position }) {
 
   return (
     <tr className="border-b border-[#edf3f7] last:border-b-0 odd:bg-white even:bg-[#fbfdff]">
-      <td className="px-4 py-3 font-semibold text-[#183242]">{position.coin}</td>
-      <td className={`px-4 py-3 ${getSideClass(position)}`}>{getSide(position)}</td>
+      <td className="px-4 py-3 font-semibold text-[#183242]">
+        {position.coin}
+      </td>
+      <td className={`px-4 py-3 ${getSideClass(position)}`}>
+        {getSide(position)}
+      </td>
       <td className="px-4 py-3 text-[#183242]">{formatAmount(position.szi)}</td>
       <td className="px-4 py-3 text-[#183242]">{formatLeverage(position)}</td>
-      <td className="px-4 py-3 text-[#183242]">{formatValue(position.entryPx)}</td>
-      <td className="px-4 py-3 text-[#183242]">${formatValue(position.positionValue)}</td>
-      <td className={`px-4 py-3 ${getSideClass({ ...position, szi: position.unrealizedPnl })}`}>
+      <td className="px-4 py-3 text-[#183242]">
+        {formatValue(position.entryPx)}
+      </td>
+      <td className="px-4 py-3 text-[#183242]">
+        ${formatValue(position.positionValue)}
+      </td>
+      <td
+        className={`px-4 py-3 ${getSideClass({ ...position, szi: position.unrealizedPnl })}`}
+      >
         ${formatValue(position.unrealizedPnl)}
       </td>
-      <td className="px-4 py-3 text-[#183242]">{formatPercent(position.returnOnEquity)}</td>
+      <td className="px-4 py-3 text-[#183242]">
+        {formatPercent(position.returnOnEquity)}
+      </td>
       <td className="px-4 py-3 text-[#183242]">
         {formatLiquidationPrice(position.liquidationPx)}
       </td>
-      <td className="px-4 py-3 text-[#183242]">${formatValue(position.marginUsed)}</td>
-      <td className="px-4 py-3 text-[#183242]">${formatValue(position.cumFunding.sinceOpen)}</td>
+      <td className="px-4 py-3 text-[#183242]">
+        ${formatValue(position.marginUsed)}
+      </td>
+      <td className="px-4 py-3 text-[#183242]">
+        ${formatValue(position.cumFunding.sinceOpen)}
+      </td>
     </tr>
   );
 }
@@ -130,9 +146,12 @@ function TableSkeleton() {
 export function PositionsDemo() {
   const [input, setInput] = useState(DEFAULT_ADDRESS);
   const address = isAddress(input) ? input : undefined;
-  const { data, loading, error, ready } = usePositions(address ?? DEFAULT_ADDRESS, {
-    enabled: Boolean(address),
-  });
+  const { data, loading, error, ready } = usePositions(
+    address ?? DEFAULT_ADDRESS,
+    {
+      enabled: Boolean(address),
+    },
+  );
   const positions = data ?? [];
 
   return (
@@ -140,15 +159,17 @@ export function PositionsDemo() {
       <div className="space-y-1">
         <h2 className="text-xl font-semibold">Positions</h2>
         <p className="text-sm text-gray-500">
-          Table demo for <code>usePositions</code>, aggregating open positions across all DEXs and
-          sorting by descending position value.
+          Table demo for <code>usePositions</code>, aggregating open positions
+          across all DEXs and sorting by descending position value.
         </p>
       </div>
 
       <Card className={`${DEMO_CARD_CLASS_NAME} text-[#183242]`}>
         <CardHeader className={DEMO_CARD_HEADER_CLASS_NAME}>
           <div className="space-y-2">
-            <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>Tracked Wallet</CardTitle>
+            <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>
+              Tracked Wallet
+            </CardTitle>
             <Input
               className={DEMO_CARD_INPUT_CLASS_NAME}
               onChange={(event) => {
@@ -167,7 +188,11 @@ export function PositionsDemo() {
                 : "Enter a valid 42-character hex wallet address to start the subscription."}
             </span>
             <span>
-              {ready ? `${positions.length} positions` : loading ? "Loading..." : "Idle"}
+              {ready
+                ? `${positions.length} positions`
+                : loading
+                  ? "Loading..."
+                  : "Idle"}
             </span>
           </div>
         </CardHeader>
@@ -189,7 +214,10 @@ export function PositionsDemo() {
                 <thead className="sticky top-0 z-10 bg-[#f8fbfd]">
                   <tr className="border-b border-[#edf3f7] text-left text-[11px] uppercase tracking-[0.12em] text-[#6f8797]">
                     {HEADERS.map((header) => (
-                      <th key={header} className="px-4 py-3 font-medium whitespace-nowrap">
+                      <th
+                        key={header}
+                        className="px-4 py-3 font-medium whitespace-nowrap"
+                      >
                         {header}
                       </th>
                     ))}

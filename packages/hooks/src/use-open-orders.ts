@@ -1,6 +1,6 @@
-import { useMemo } from "react";
-import { useSubscribe, type UseSubscribeState } from "@outofgas/react-stream";
 import type { OpenOrdersEvent } from "@nktkas/hyperliquid/api/subscription";
+import { type UseSubscribeState, useSubscribe } from "@outofgas/react-stream";
+import { useMemo } from "react";
 import { wsClient } from "./config/hl.js";
 import type { SymbolConverter } from "./lib/symbol-converter.js";
 import { useSymbolConverter } from "./use-symbol-converter.js";
@@ -46,7 +46,10 @@ function compareOpenOrders(left: OpenOrder, right: OpenOrder): number {
   return right.timestamp - left.timestamp;
 }
 
-function formatOpenOrderDirection(order: RawOpenOrder, isSpot: boolean): OpenOrderDirection {
+function formatOpenOrderDirection(
+  order: RawOpenOrder,
+  isSpot: boolean,
+): OpenOrderDirection {
   if (order.reduceOnly) {
     return order.side === "A" ? "Close Long" : "Close Short";
   }

@@ -2,7 +2,9 @@ import { getDefaultInfoClient } from "./config/hl";
 import { getDexNames } from "./getDexNames";
 import type { HyperliquidPosition, HyperliquidUserOptions } from "./types";
 
-export async function getPositions(options: HyperliquidUserOptions): Promise<HyperliquidPosition[]> {
+export async function getPositions(
+  options: HyperliquidUserOptions,
+): Promise<HyperliquidPosition[]> {
   const infoClient = getDefaultInfoClient();
   const dexNames = await getDexNames();
   const states = await Promise.all(

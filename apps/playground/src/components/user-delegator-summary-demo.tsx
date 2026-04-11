@@ -49,15 +49,17 @@ export function UserDelegatorSummaryDemo() {
       <div className="space-y-1">
         <h2 className="text-xl font-semibold">User Delegator Summary</h2>
         <p className="text-sm text-gray-500">
-          Query demo for <code>useUserDelegatorSummary</code>, showing staking and withdrawal
-          totals for a wallet.
+          Query demo for <code>useUserDelegatorSummary</code>, showing staking
+          and withdrawal totals for a wallet.
         </p>
       </div>
 
       <Card className={`${DEMO_CARD_CLASS_NAME} text-[#183242]`}>
         <CardHeader className={DEMO_CARD_HEADER_CLASS_NAME}>
           <div className="space-y-2">
-            <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>Tracked Wallet</CardTitle>
+            <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>
+              Tracked Wallet
+            </CardTitle>
             <Input
               className={DEMO_CARD_INPUT_CLASS_NAME}
               onChange={(event) => {
@@ -67,13 +69,17 @@ export function UserDelegatorSummaryDemo() {
               value={input}
             />
           </div>
-          <div className={`${DEMO_CARD_STATUS_CLASS_NAME} flex items-center justify-between gap-4`}>
+          <div
+            className={`${DEMO_CARD_STATUS_CLASS_NAME} flex items-center justify-between gap-4`}
+          >
             <span>
               {address
                 ? `Fetching staking summary for ${address}`
                 : "Enter a valid 42-character hex wallet address to load the staking summary."}
             </span>
-            <span>{isPending ? "Loading..." : isFetched ? "Fetched" : "Idle"}</span>
+            <span>
+              {isPending ? "Loading..." : isFetched ? "Fetched" : "Idle"}
+            </span>
           </div>
         </CardHeader>
 
@@ -83,7 +89,11 @@ export function UserDelegatorSummaryDemo() {
               Delegated
             </div>
             <div className="mt-3 text-xl font-semibold text-stone-900">
-              {isPending ? <MetricSkeleton /> : formatTokenAmount(data?.delegated)}
+              {isPending ? (
+                <MetricSkeleton />
+              ) : (
+                formatTokenAmount(data?.delegated)
+              )}
             </div>
           </div>
           <div className="rounded-[24px] border border-stone-200 bg-stone-50/80 p-4">
@@ -91,7 +101,11 @@ export function UserDelegatorSummaryDemo() {
               Undelegated
             </div>
             <div className="mt-3 text-xl font-semibold text-stone-900">
-              {isPending ? <MetricSkeleton /> : formatTokenAmount(data?.undelegated)}
+              {isPending ? (
+                <MetricSkeleton />
+              ) : (
+                formatTokenAmount(data?.undelegated)
+              )}
             </div>
           </div>
           <div className="rounded-[24px] border border-stone-200 bg-stone-50/80 p-4">
@@ -99,7 +113,11 @@ export function UserDelegatorSummaryDemo() {
               Pending Withdrawal
             </div>
             <div className="mt-3 text-xl font-semibold text-stone-900">
-              {isPending ? <MetricSkeleton /> : formatTokenAmount(data?.totalPendingWithdrawal)}
+              {isPending ? (
+                <MetricSkeleton />
+              ) : (
+                formatTokenAmount(data?.totalPendingWithdrawal)
+              )}
             </div>
           </div>
           <div className="rounded-[24px] border border-stone-200 bg-stone-50/80 p-4">
@@ -107,7 +125,11 @@ export function UserDelegatorSummaryDemo() {
               Pending Count
             </div>
             <div className="mt-3 text-xl font-semibold text-stone-900">
-              {isPending ? <MetricSkeleton /> : data?.nPendingWithdrawals ?? "--"}
+              {isPending ? (
+                <MetricSkeleton />
+              ) : (
+                (data?.nPendingWithdrawals ?? "--")
+              )}
             </div>
           </div>
 

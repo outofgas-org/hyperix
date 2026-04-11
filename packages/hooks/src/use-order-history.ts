@@ -1,10 +1,10 @@
 import { useMemo } from "react";
-import { useSymbolConverter } from "./use-symbol-converter.js";
 import {
   type HistoricalOrder,
-  useHistoricalOrders,
   type UseHistoricalOrdersOptions,
+  useHistoricalOrders,
 } from "./use-historical-orders.js";
+import { useSymbolConverter } from "./use-symbol-converter.js";
 
 export type OrderHistoryDirection =
   | "Buy"
@@ -24,7 +24,10 @@ export type OrderHistoryData = {
   orderHistory: OrderHistory[];
 };
 
-function formatOrderDirection(order: HistoricalOrder["order"], isSpot: boolean): OrderHistoryDirection {
+function formatOrderDirection(
+  order: HistoricalOrder["order"],
+  isSpot: boolean,
+): OrderHistoryDirection {
   if (order.reduceOnly) {
     return order.side === "A" ? "Close Long" : "Close Short";
   }
@@ -63,11 +66,12 @@ export function useOrderHistory(
 
     return {
       ...historicalOrdersState.data,
-      orderHistory: historicalOrdersState.data.orderHistory.map((historicalOrder) =>
-        formatOrderHistoryEntry(
-          historicalOrder,
-          symbolConverter?.getSpotByPairId(historicalOrder.order.coin),
-        ),
+      orderHistory: historicalOrdersState.data.orderHistory.map(
+        (historicalOrder) =>
+          formatOrderHistoryEntry(
+            historicalOrder,
+            symbolConverter?.getSpotByPairId(historicalOrder.order.coin),
+          ),
       ),
     };
   }, [historicalOrdersState.data, symbolConverter]);

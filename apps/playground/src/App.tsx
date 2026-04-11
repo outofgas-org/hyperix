@@ -1,29 +1,29 @@
 import { useEffect, useState } from "react";
 import { ActiveAssetDataDemo } from "./components/active-asset-data-demo";
-import { AllDexsClearingHouseStateDemo } from "./components/all-dexs-clearing-house-state-demo";
 import { AllDexsAssetCtxsDemo } from "./components/all-dexs-asset-ctxs-demo";
+import { AllDexsClearingHouseStateDemo } from "./components/all-dexs-clearing-house-state-demo";
 import { AllMidsDemo } from "./components/all-mids-demo";
+import { Footer } from "./components/footer";
 import { HistoricalOrdersDemo } from "./components/historical-orders-demo";
 import { MaxBuilderFeeDemo } from "./components/max-builder-fee-demo";
 import { MetaDemo } from "./components/meta-demo";
-import { PortfolioDemo } from "./components/portfolio-demo";
-import { PerpMarketsDemo } from "./components/perp-markets-demo";
-import { Footer } from "./components/footer";
 import { MidDemo } from "./components/mid-demo";
 import { OpenOrdersDemo } from "./components/open-orders-demo";
 import { OrderbookDemo } from "./components/orderbook-demo";
+import { PerpMarketsDemo } from "./components/perp-markets-demo";
+import { PortfolioDemo } from "./components/portfolio-demo";
 import { PositionsDemo } from "./components/positions-demo";
 import { SpotAssetCtxsDemo } from "./components/spot-asset-ctxs-demo";
 import { SpotMarketsDemo } from "./components/spot-markets-demo";
 import { SpotMetaAndAssetCtxsDemo } from "./components/spot-meta-and-asset-ctxs-demo";
 import { SpotStateDemo } from "./components/spot-state-demo";
 import { TwapStatesDemo } from "./components/twap-states-demo";
-import { UserFundingsDemo } from "./components/user-fundings-demo";
-import { UserFillsDemo } from "./components/user-fills-demo";
 import { UserDelegatorSummaryDemo } from "./components/user-delegator-summary-demo";
+import { UserFillsDemo } from "./components/user-fills-demo";
+import { UserFundingsDemo } from "./components/user-fundings-demo";
+import { UserNonFundingLedgerUpdatesDemo } from "./components/user-non-funding-ledger-updates-demo";
 import { UserTwapHistoryDemo } from "./components/user-twap-history-demo";
 import { UserTwapSliceFillsDemo } from "./components/user-twap-slice-fills-demo";
-import { UserNonFundingLedgerUpdatesDemo } from "./components/user-non-funding-ledger-updates-demo";
 import { UserVaultEquitiesDemo } from "./components/user-vault-equities-demo";
 
 const DEMOS = [
@@ -84,7 +84,8 @@ const DEMOS = [
   {
     id: "max-builder-fee",
     label: "Max Builder Fee",
-    description: "Check the approved max builder fee for a user and builder pair.",
+    description:
+      "Check the approved max builder fee for a user and builder pair.",
     component: MaxBuilderFeeDemo,
     category: "info",
   },
@@ -145,7 +146,8 @@ const DEMOS = [
   {
     id: "spot-asset-ctxs",
     label: "Spot Asset Ctxs",
-    description: "Realtime spot market context snapshots across all spot assets.",
+    description:
+      "Realtime spot market context snapshots across all spot assets.",
     component: SpotAssetCtxsDemo,
     category: "subscription",
     streamType: "spot",
@@ -153,14 +155,16 @@ const DEMOS = [
   {
     id: "spot-meta-and-asset-ctxs",
     label: "Spot Meta + Asset Ctxs",
-    description: "Combined spot metadata and spot asset context snapshot from one info query.",
+    description:
+      "Combined spot metadata and spot asset context snapshot from one info query.",
     component: SpotMetaAndAssetCtxsDemo,
     category: "info",
   },
   {
     id: "spot-state",
     label: "Spot State",
-    description: "Wallet spot balances and escrow state as a live websocket stream.",
+    description:
+      "Wallet spot balances and escrow state as a live websocket stream.",
     component: SpotStateDemo,
     category: "subscription",
     streamType: "spot",
@@ -251,7 +255,8 @@ export function App() {
     useState<(typeof DEMO_GROUPS)[number]["id"]>("subscription");
   const [selectedSubscriptionType, setSelectedSubscriptionType] =
     useState<(typeof SUBSCRIPTION_TYPES)[number]["id"]>("perps");
-  const [selectedDemoId, setSelectedDemoId] = useState<(typeof DEMOS)[number]["id"]>("orderbook");
+  const [selectedDemoId, setSelectedDemoId] =
+    useState<(typeof DEMOS)[number]["id"]>("orderbook");
   const visibleDemos = DEMOS.filter((demo) => {
     if (demo.category !== selectedCategory) {
       return false;
@@ -264,11 +269,16 @@ export function App() {
     return demo.streamType === selectedSubscriptionType;
   });
   const activeDemo =
-    DEMOS.find((demo) => demo.id === selectedDemoId) ?? visibleDemos[0] ?? DEMOS[0];
+    DEMOS.find((demo) => demo.id === selectedDemoId) ??
+    visibleDemos[0] ??
+    DEMOS[0];
   const ActiveDemoComponent = activeDemo.component;
 
   useEffect(() => {
-    if (!visibleDemos.some((demo) => demo.id === selectedDemoId) && visibleDemos[0]) {
+    if (
+      !visibleDemos.some((demo) => demo.id === selectedDemoId) &&
+      visibleDemos[0]
+    ) {
       setSelectedDemoId(visibleDemos[0].id);
     }
   }, [selectedDemoId, visibleDemos]);
@@ -282,14 +292,17 @@ export function App() {
           </div>
           <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
             <div className="space-y-2">
-              <h1 className="text-4xl font-bold tracking-tight text-stone-900">Hyperix</h1>
+              <h1 className="text-4xl font-bold tracking-tight text-stone-900">
+                Hyperix
+              </h1>
               <p className="max-w-2xl text-sm text-stone-600">
-                Browse hook demos from a single workspace. Pick a feature from the sidebar to
-                focus on one stream at a time.
+                Browse hook demos from a single workspace. Pick a feature from
+                the sidebar to focus on one stream at a time.
               </p>
             </div>
             <div className="rounded-3xl border border-stone-200 bg-white/75 px-4 py-3 text-sm text-stone-600 shadow-[0_18px_70px_-40px_rgba(20,24,12,0.35)]">
-              <span className="font-medium text-stone-900">{DEMOS.length}</span> interactive demos
+              <span className="font-medium text-stone-900">{DEMOS.length}</span>{" "}
+              interactive demos
             </div>
           </div>
         </header>
@@ -331,7 +344,10 @@ export function App() {
                   })}
                 </div>
                 <div className="mt-3 px-2 text-xs leading-5 text-stone-500">
-                  {DEMO_GROUPS.find((group) => group.id === selectedCategory)?.description}
+                  {
+                    DEMO_GROUPS.find((group) => group.id === selectedCategory)
+                      ?.description
+                  }
                 </div>
                 {selectedCategory === "subscription" ? (
                   <div className="mt-3 grid grid-cols-2 gap-2 px-2">
@@ -395,8 +411,12 @@ export function App() {
               <div className="text-xs font-medium uppercase tracking-[0.18em] text-stone-400">
                 Active Demo
               </div>
-              <div className="mt-2 text-2xl font-semibold text-stone-900">{activeDemo.label}</div>
-              <p className="mt-2 max-w-2xl text-sm text-stone-600">{activeDemo.description}</p>
+              <div className="mt-2 text-2xl font-semibold text-stone-900">
+                {activeDemo.label}
+              </div>
+              <p className="mt-2 max-w-2xl text-sm text-stone-600">
+                {activeDemo.description}
+              </p>
               <div className="mt-4 inline-flex rounded-full border border-stone-200 bg-stone-50 px-3 py-1 text-xs font-medium text-stone-600">
                 {activeDemo.category === "info"
                   ? "Info"

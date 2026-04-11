@@ -1,4 +1,9 @@
-import { IRequestTransport, MetaResponse, PerpDexsResponse, SpotMetaResponse } from "@nktkas/hyperliquid";
+import type {
+  IRequestTransport,
+  MetaResponse,
+  PerpDexsResponse,
+  SpotMetaResponse,
+} from "@nktkas/hyperliquid";
 import { meta, perpDexs, spotMeta } from "@nktkas/hyperliquid/api/info";
 
 /** Options for creating a {@link SymbolConverter} instance. */
@@ -72,7 +77,9 @@ export class SymbolConverter {
    * const converter = await SymbolConverter.create({ transport });
    * ```
    */
-  static async create(options: SymbolConverterOptions): Promise<SymbolConverter> {
+  static async create(
+    options: SymbolConverterOptions,
+  ): Promise<SymbolConverter> {
     const instance = new SymbolConverter(options);
     await instance.reload();
     return instance;
@@ -85,12 +92,14 @@ export class SymbolConverter {
    */
   async reload(): Promise<void> {
     const config = { transport: this.#transport };
-    const needDexs = this.#dexOption === true || (Array.isArray(this.#dexOption) && this.#dexOption.length > 0);
+    const needDexs =
+      this.#dexOption === true ||
+      (Array.isArray(this.#dexOption) && this.#dexOption.length > 0);
 
     const [perpMetaData, spotMetaData, perpDexsData] = await Promise.all([
       meta(config),
       spotMeta(config),
-      needDexs ? perpDexs(config) : undefined
+      needDexs ? perpDexs(config) : undefined,
     ]);
 
     if (!perpMetaData?.universe?.length) {
@@ -126,21 +135,34 @@ export class SymbolConverter {
 
     const builderDexs = perpDexsData
       .map((dex, index) => ({ dex, index }))
-      .filter((item): item is { dex: NonNullable<PerpDexsResponse[number]>; index: number } => {
-        return item.index > 0 && item.dex !== null && item.dex.name.length > 0;
-      });
+      .filter(
+        (
+          item,
+        ): item is {
+          dex: NonNullable<PerpDexsResponse[number]>;
+          index: number;
+        } => {
+          return (
+            item.index > 0 && item.dex !== null && item.dex.name.length > 0
+          );
+        },
+      );
 
     if (builderDexs.length === 0) return;
 
     // Filter dexs based on the dexOption
     const dexsToProcess = Array.isArray(this.#dexOption)
-      ? builderDexs.filter((item) => (this.#dexOption as string[]).includes(item.dex.name))
+      ? builderDexs.filter((item) =>
+          (this.#dexOption as string[]).includes(item.dex.name),
+        )
       : builderDexs; // true means process all
 
     if (dexsToProcess.length === 0) return;
 
     const config = { transport: this.#transport };
-    const results = await Promise.allSettled(dexsToProcess.map((item) => meta(config, { dex: item.dex.name })));
+    const results = await Promise.allSettled(
+      dexsToProcess.map((item) => meta(config, { dex: item.dex.name })),
+    );
 
     results.forEach((result, idx) => {
       if (result.status !== "fulfilled") return;
@@ -160,15 +182,18 @@ export class SymbolConverter {
 
   #processSpotAssets(spotMetaData: SpotMetaResponse): void {
     const tokenMap = new Map<number, { name: string; szDecimals: number }>();
-    spotMetaData.tokens.forEach((token) => {
-      tokenMap.set(token.index, { name: token.name, szDecimals: token.szDecimals });
-    });
+    for (const token of spotMetaData.tokens) {
+      tokenMap.set(token.index, {
+        name: token.name,
+        szDecimals: token.szDecimals,
+      });
+    }
 
-    spotMetaData.universe.forEach((market) => {
-      if (market.tokens.length < 2) return;
+    for (const market of spotMetaData.universe) {
+      if (market.tokens.length < 2) continue;
       const baseToken = tokenMap.get(market.tokens[0]);
       const quoteToken = tokenMap.get(market.tokens[1]);
-      if (!baseToken || !quoteToken) return;
+      if (!baseToken || !quoteToken) continue;
 
       const assetId = 10000 + market.index;
       const baseQuoteKey = `${baseToken.name}/${quoteToken.name}`;
@@ -176,7 +201,7 @@ export class SymbolConverter {
       this.#nameToSzDecimals.set(baseQuoteKey, baseToken.szDecimals);
       this.#nameToSpotPairId.set(baseQuoteKey, market.name);
       this.#SpotPairIdToName.set(market.name, baseQuoteKey);
-    });
+    }
   }
 
   /**

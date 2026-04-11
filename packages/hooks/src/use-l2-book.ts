@@ -1,6 +1,6 @@
+import type { L2BookEvent } from "@nktkas/hyperliquid/api/subscription";
+import { type UseSubscribeState, useSubscribe } from "@outofgas/react-stream";
 import Decimal from "decimal.js";
-import { useSubscribe, type UseSubscribeState } from "@outofgas/react-stream";
-import { L2BookEvent } from "@nktkas/hyperliquid/api/subscription";
 import { wsClient } from "./config/hl.js";
 
 export type L2BookLevel = [price: number, size: number, cumulativeSize: number];

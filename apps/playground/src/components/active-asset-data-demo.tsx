@@ -60,7 +60,9 @@ function MetricCard({
 }) {
   return (
     <div className="rounded-[24px] border border-stone-200 bg-[linear-gradient(180deg,#ffffff_0%,#f8f5ef_100%)] p-4">
-      <div className="text-[11px] uppercase tracking-[0.16em] text-stone-400">{label}</div>
+      <div className="text-[11px] uppercase tracking-[0.16em] text-stone-400">
+        {label}
+      </div>
       <div className="mt-2 font-mono text-lg text-stone-900">{value}</div>
       {hint ? <div className="mt-1 text-xs text-stone-500">{hint}</div> : null}
     </div>
@@ -90,17 +92,21 @@ export function ActiveAssetDataDemo() {
 
   const coin = coinInput.trim().toUpperCase();
   const address = isAddress(addressInput) ? addressInput : undefined;
-  const { data, loading, ready, error } = useActiveAssetData(coin, address ?? DEFAULT_ADDRESS, {
-    enabled: Boolean(coin) && Boolean(address),
-  });
+  const { data, loading, ready, error } = useActiveAssetData(
+    coin,
+    address ?? DEFAULT_ADDRESS,
+    {
+      enabled: Boolean(coin) && Boolean(address),
+    },
+  );
 
   return (
     <section className="space-y-4">
       <div className="space-y-1">
         <h2 className="text-xl font-semibold">Active Asset Data</h2>
         <p className="text-sm text-gray-500">
-          Live account-level trading constraints from <code>useActiveAssetData</code> for a single
-          perpetual market.
+          Live account-level trading constraints from{" "}
+          <code>useActiveAssetData</code> for a single perpetual market.
         </p>
       </div>
 
@@ -108,7 +114,9 @@ export function ActiveAssetDataDemo() {
         <CardHeader className={DEMO_CARD_HEADER_CLASS_NAME}>
           <div className="grid gap-4 md:grid-cols-2">
             <div className="space-y-2">
-              <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>Market</CardTitle>
+              <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>
+                Market
+              </CardTitle>
               <Input
                 className={DEMO_CARD_INPUT_CLASS_NAME}
                 onChange={(event) => {
@@ -119,7 +127,9 @@ export function ActiveAssetDataDemo() {
               />
             </div>
             <div className="space-y-2">
-              <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>Wallet</CardTitle>
+              <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>
+                Wallet
+              </CardTitle>
               <Input
                 className={DEMO_CARD_INPUT_CLASS_NAME}
                 onChange={(event) => {

@@ -1,5 +1,5 @@
-import { useSubscribe, type UseSubscribeState } from "@outofgas/react-stream";
 import type { AllDexsClearinghouseStateEvent } from "@nktkas/hyperliquid/api/subscription";
+import { type UseSubscribeState, useSubscribe } from "@outofgas/react-stream";
 import { wsClient } from "./config/hl.js";
 
 export type AllDexsClearingHouseStateData = AllDexsClearinghouseStateEvent;
@@ -20,18 +20,23 @@ export function useAllDexsClearingHouseState(
     key: ["all-dexs-clearing-house-state", user],
     enabled,
     subscribe: async ({ onData, onError }) => {
-      const subscription = await wsClient.allDexsClearinghouseState({ user }, (event) => {
-        try {
-          onUpdate?.(event);
-          onData(event);
-        } catch (error) {
-          onError(
-            error instanceof Error
-              ? error
-              : new Error("Failed to process all dexs clearing house state event"),
-          );
-        }
-      });
+      const subscription = await wsClient.allDexsClearinghouseState(
+        { user },
+        (event) => {
+          try {
+            onUpdate?.(event);
+            onData(event);
+          } catch (error) {
+            onError(
+              error instanceof Error
+                ? error
+                : new Error(
+                    "Failed to process all dexs clearing house state event",
+                  ),
+            );
+          }
+        },
+      );
 
       return {
         unsubscribe: () => subscription.unsubscribe(),

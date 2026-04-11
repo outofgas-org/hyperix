@@ -70,12 +70,15 @@ export function usePerpMarkets(options: UsePerpMarketsOptions = {}) {
       return [];
     }
 
-    const tokenByIndex = new Map(spotMeta.tokens.map((token) => [token.index, token]));
+    const tokenByIndex = new Map(
+      spotMeta.tokens.map((token) => [token.index, token]),
+    );
 
     return allPerpMetas
       .flatMap((dexMetadata) => {
         const dex = getDexName(dexMetadata.universe[0]?.name ?? "");
-        const collateralToken = tokenByIndex.get(dexMetadata.collateralToken)?.name ?? "USDC";
+        const collateralToken =
+          tokenByIndex.get(dexMetadata.collateralToken)?.name ?? "USDC";
         const ctxs = assetCtxsByDex.get(dex) ?? [];
 
         return dexMetadata.universe.map((meta, universeIndex) => {
@@ -103,13 +106,26 @@ export function usePerpMarkets(options: UsePerpMarketsOptions = {}) {
         });
       })
       .filter((market) => includeDelisted || !market.isDelisted);
-  }, [allPerpMetasState.data, spotMetaState.data, assetCtxsState.data, includeDelisted]);
+  }, [
+    allPerpMetasState.data,
+    spotMetaState.data,
+    assetCtxsState.data,
+    includeDelisted,
+  ]);
 
   return {
     data: markets,
-    loading: allPerpMetasState.isLoading || spotMetaState.isLoading || assetCtxsState.loading,
-    ready: allPerpMetasState.isSuccess && spotMetaState.isSuccess && assetCtxsState.ready,
+    loading:
+      allPerpMetasState.isLoading ||
+      spotMetaState.isLoading ||
+      assetCtxsState.loading,
+    ready:
+      allPerpMetasState.isSuccess &&
+      spotMetaState.isSuccess &&
+      assetCtxsState.ready,
     error:
-      allPerpMetasState.error?.message ?? spotMetaState.error?.message ?? assetCtxsState.error,
+      allPerpMetasState.error?.message ??
+      spotMetaState.error?.message ??
+      assetCtxsState.error,
   };
 }

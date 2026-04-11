@@ -53,7 +53,9 @@ function getDexCards(data: AllDexsClearingHouseStateData | undefined) {
       const maintenanceMargin = Number(state.crossMaintenanceMarginUsed);
       const crossAccountValue = Number(state.crossMarginSummary.accountValue);
       const crossLeverage =
-        crossAccountValue > 0 ? Number(state.crossMarginSummary.totalNtlPos) / crossAccountValue : 0;
+        crossAccountValue > 0
+          ? Number(state.crossMarginSummary.totalNtlPos) / crossAccountValue
+          : 0;
 
       return {
         dex: getDexName(dex),
@@ -96,27 +98,35 @@ function StateSkeleton() {
 export function AllDexsClearingHouseStateDemo() {
   const [input, setInput] = useState(DEFAULT_ADDRESS);
   const address = isAddress(input) ? input : undefined;
-  const { data, loading, error, ready } = useAllDexsClearingHouseState(address ?? DEFAULT_ADDRESS, {
-    enabled: Boolean(address),
-  });
+  const { data, loading, error, ready } = useAllDexsClearingHouseState(
+    address ?? DEFAULT_ADDRESS,
+    {
+      enabled: Boolean(address),
+    },
+  );
 
   const dexCards = useMemo(() => getDexCards(data), [data]);
-  const totalOpenPositions = dexCards.reduce((sum, card) => sum + card.positions.length, 0);
+  const totalOpenPositions = dexCards.reduce(
+    (sum, card) => sum + card.positions.length,
+    0,
+  );
 
   return (
     <section className="space-y-4">
       <div className="space-y-1">
         <h2 className="text-xl font-semibold">All DEXs Clearing House State</h2>
         <p className="text-sm text-gray-500">
-          Snapshot demo for <code>useAllDexsClearingHouseState</code>, grouped by DEX with margin
-          and position rollups.
+          Snapshot demo for <code>useAllDexsClearingHouseState</code>, grouped
+          by DEX with margin and position rollups.
         </p>
       </div>
 
       <Card className={DEMO_CARD_CLASS_NAME}>
         <CardHeader className={DEMO_CARD_HEADER_CLASS_NAME}>
           <div className="space-y-2">
-            <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>Tracked Wallet</CardTitle>
+            <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>
+              Tracked Wallet
+            </CardTitle>
             <Input
               className={DEMO_CARD_INPUT_CLASS_NAME}
               onChange={(event) => {
@@ -167,7 +177,9 @@ export function AllDexsClearingHouseStateDemo() {
                       <div className="text-xs uppercase tracking-[0.18em] text-stone-400">
                         DEX
                       </div>
-                      <div className="mt-2 text-lg font-semibold text-stone-900">{card.dex}</div>
+                      <div className="mt-2 text-lg font-semibold text-stone-900">
+                        {card.dex}
+                      </div>
                     </div>
                     <div className="rounded-2xl border border-stone-200 bg-white px-3 py-2 text-right text-xs text-stone-500">
                       <div>Open positions</div>

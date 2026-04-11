@@ -1,7 +1,11 @@
 import Decimal from "decimal.js";
 import { useMemo } from "react";
 import { useSymbolConverter } from "./use-symbol-converter.js";
-import { type UserFill, useUserFills, type UseUserFillsOptions } from "./use-user-fills.js";
+import {
+  type UseUserFillsOptions,
+  type UserFill,
+  useUserFills,
+} from "./use-user-fills.js";
 
 export type TradeHistory = UserFill & {
   displayCoin: string;
@@ -25,7 +29,9 @@ function formatTradeHistoryFill(
   const price = new Decimal(fill.px);
 
   if (!spotPair) {
-    const netPnlInQuote = new Decimal(fill.closedPnl).minus(fill.fee).toString();
+    const netPnlInQuote = new Decimal(fill.closedPnl)
+      .minus(fill.fee)
+      .toString();
 
     return {
       ...fill,
@@ -42,7 +48,9 @@ function formatTradeHistoryFill(
   const [baseCoin = fill.coin, quoteCoin = fill.feeToken] = spotPair.split("/");
   const closedPnlInQuote = new Decimal(fill.closedPnl).mul(price);
   const feeInQuote =
-    fill.feeToken === baseCoin ? new Decimal(fill.fee).mul(price) : new Decimal(fill.fee);
+    fill.feeToken === baseCoin
+      ? new Decimal(fill.fee).mul(price)
+      : new Decimal(fill.fee);
   const netPnlInQuote = closedPnlInQuote.minus(feeInQuote);
 
   return {
@@ -73,7 +81,12 @@ export function useTradeHistory(
     return {
       ...userFillsState.data,
       fills: userFillsState.data.fills
-        .map((fill) => formatTradeHistoryFill(fill, symbolConverter?.getSpotByPairId(fill.coin)))
+        .map((fill) =>
+          formatTradeHistoryFill(
+            fill,
+            symbolConverter?.getSpotByPairId(fill.coin),
+          ),
+        )
         .reverse(),
     };
   }, [symbolConverter, userFillsState.data]);

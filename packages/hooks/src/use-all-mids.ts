@@ -1,5 +1,5 @@
-import { useSubscribe, type UseSubscribeState } from "@outofgas/react-stream";
 import type { AllMidsEvent } from "@nktkas/hyperliquid/api/subscription";
+import { type UseSubscribeState, useSubscribe } from "@outofgas/react-stream";
 import { wsClient } from "./config/hl.js";
 
 export type AllMidsData = AllMidsEvent;

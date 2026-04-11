@@ -35,7 +35,9 @@ function formatPrice(value: number | null) {
 
 export function PerpMarketsDemo() {
   const { data, loading, error, ready } = usePerpMarkets();
-  const topMarkets = [...data].sort((left, right) => right.volume24h - left.volume24h).slice(0, 12);
+  const topMarkets = [...data]
+    .sort((left, right) => right.volume24h - left.volume24h)
+    .slice(0, 12);
 
   return (
     <section className="space-y-4">
@@ -49,9 +51,12 @@ export function PerpMarketsDemo() {
       <Card className={DEMO_CARD_CLASS_NAME}>
         <CardHeader className={DEMO_CARD_HEADER_CLASS_NAME}>
           <div className="space-y-2">
-            <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>Frontend Market List</CardTitle>
+            <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>
+              Frontend Market List
+            </CardTitle>
             <p className="text-sm text-stone-500">
-              Simple derived view that joins per-DEX metadata, collateral tokens, and live context.
+              Simple derived view that joins per-DEX metadata, collateral
+              tokens, and live context.
             </p>
           </div>
           <div className="rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-xs text-stone-700">
@@ -97,7 +102,9 @@ export function PerpMarketsDemo() {
                     </div>
                   </div>
                   <div>
-                    <div className="text-[11px] uppercase tracking-[0.12em] text-stone-400">Mark</div>
+                    <div className="text-[11px] uppercase tracking-[0.12em] text-stone-400">
+                      Mark
+                    </div>
                     <div className="font-mono text-sm text-stone-900">
                       {formatPrice(market.markPrice)}
                     </div>

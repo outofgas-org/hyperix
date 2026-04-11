@@ -59,7 +59,9 @@ export function useSpotMarkets(options: UseSpotMarketsOptions = {}) {
       return [];
     }
 
-    const tokenByIndex = new Map(spotMeta.tokens.map((token) => [token.index, token]));
+    const tokenByIndex = new Map(
+      spotMeta.tokens.map((token) => [token.index, token]),
+    );
 
     return spotMeta.universe.map((market) => {
       const baseToken = tokenByIndex.get(market.tokens[0]);
@@ -68,7 +70,9 @@ export function useSpotMarkets(options: UseSpotMarketsOptions = {}) {
 
       return {
         symbol:
-          baseToken && quoteToken ? `${baseToken.name}/${quoteToken.name}` : market.name,
+          baseToken && quoteToken
+            ? `${baseToken.name}/${quoteToken.name}`
+            : market.name,
         pairId: market.name,
         baseToken: baseToken?.name ?? "",
         quoteToken: quoteToken?.name ?? "",

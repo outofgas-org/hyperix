@@ -1,5 +1,5 @@
+import { getMetadataCache } from "./config/hl";
 import { getPerpDexName, getTokenByIndex } from "./shared";
-import {getMetadataCache} from "./config/hl";
 import type { HyperliquidDexQuote } from "./types";
 
 export async function getDexNames(): Promise<string[]> {

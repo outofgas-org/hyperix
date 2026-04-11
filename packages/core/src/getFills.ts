@@ -1,6 +1,10 @@
 import { getDefaultInfoClient, getMetadataCache } from "./config/hl";
 import { normalizeMarketCoin, toOrderSide } from "./shared";
-import type { GetHyperliquidFillsOptions, HyperliquidFill, HyperliquidTwapFill } from "./types";
+import type {
+  GetHyperliquidFillsOptions,
+  HyperliquidFill,
+  HyperliquidTwapFill,
+} from "./types";
 
 export async function getFills(
   options: GetHyperliquidFillsOptions,
@@ -11,18 +15,20 @@ export async function getFills(
 
   const normalizedFills = twapFills
     ? await Promise.all(
-        (
-          options.since
-            ? await infoClient.userTwapSliceFillsByTime({
-                user: options.user,
-                startTime: options.since,
-                aggregateByTime,
-              })
-            : await infoClient.userTwapSliceFills({
-                user: options.user,
-              })
+        (options.since
+          ? await infoClient.userTwapSliceFillsByTime({
+              user: options.user,
+              startTime: options.since,
+              aggregateByTime,
+            })
+          : await infoClient.userTwapSliceFills({
+              user: options.user,
+            })
         ).map(async ({ fill, twapId }) => {
-          const normalized = await normalizeMarketCoin(fill.coin, getMetadataCache());
+          const normalized = await normalizeMarketCoin(
+            fill.coin,
+            getMetadataCache(),
+          );
 
           return {
             ...fill,
@@ -35,19 +41,21 @@ export async function getFills(
         }),
       )
     : await Promise.all(
-        (
-          options.since
-            ? await infoClient.userFillsByTime({
-                user: options.user,
-                startTime: options.since,
-                aggregateByTime,
-              })
-            : await infoClient.userFills({
-                user: options.user,
-                aggregateByTime,
-              })
+        (options.since
+          ? await infoClient.userFillsByTime({
+              user: options.user,
+              startTime: options.since,
+              aggregateByTime,
+            })
+          : await infoClient.userFills({
+              user: options.user,
+              aggregateByTime,
+            })
         ).map(async (fill) => {
-          const normalized = await normalizeMarketCoin(fill.coin, getMetadataCache());
+          const normalized = await normalizeMarketCoin(
+            fill.coin,
+            getMetadataCache(),
+          );
 
           return {
             ...fill,
@@ -60,7 +68,9 @@ export async function getFills(
       );
 
   const filteredFills = options.coin
-    ? normalizedFills.filter((fill) => fill.coin.toUpperCase() === options.coin?.toUpperCase())
+    ? normalizedFills.filter(
+        (fill) => fill.coin.toUpperCase() === options.coin?.toUpperCase(),
+      )
     : normalizedFills;
   return options.limit ? filteredFills.slice(0, options.limit) : filteredFills;
 }

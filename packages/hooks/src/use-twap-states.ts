@@ -1,5 +1,5 @@
-import { useSubscribe, type UseSubscribeState } from "@outofgas/react-stream";
 import type { TwapStatesEvent } from "@nktkas/hyperliquid/api/subscription";
+import { type UseSubscribeState, useSubscribe } from "@outofgas/react-stream";
 import { wsClient } from "./config/hl.js";
 
 export type TwapStatesData = TwapStatesEvent;
@@ -29,7 +29,9 @@ export function useTwapStates(
           onData(event);
         } catch (error) {
           onError(
-            error instanceof Error ? error : new Error("Failed to process twap states event"),
+            error instanceof Error
+              ? error
+              : new Error("Failed to process twap states event"),
           );
         }
       });

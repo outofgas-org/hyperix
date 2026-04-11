@@ -65,8 +65,12 @@ export function SpotMetaAndAssetCtxsDemo() {
   const tokens = meta?.tokens ?? [];
   const markets =
     meta?.universe.map((market, index) => {
-      const baseToken = tokens.find((token) => token.index === market.tokens[0]);
-      const quoteToken = tokens.find((token) => token.index === market.tokens[1]);
+      const baseToken = tokens.find(
+        (token) => token.index === market.tokens[0],
+      );
+      const quoteToken = tokens.find(
+        (token) => token.index === market.tokens[1],
+      );
       const assetCtx = assetCtxs?.[index];
 
       return {
@@ -80,27 +84,37 @@ export function SpotMetaAndAssetCtxsDemo() {
       };
     }) ?? [];
 
-  const rankedMarkets = [...markets].sort((left, right) => right.dayNtlVlm - left.dayNtlVlm);
-  const totalVolume = rankedMarkets.reduce((sum, market) => sum + market.dayNtlVlm, 0);
-  const canonicalCount = rankedMarkets.filter((market) => market.isCanonical).length;
+  const rankedMarkets = [...markets].sort(
+    (left, right) => right.dayNtlVlm - left.dayNtlVlm,
+  );
+  const totalVolume = rankedMarkets.reduce(
+    (sum, market) => sum + market.dayNtlVlm,
+    0,
+  );
+  const canonicalCount = rankedMarkets.filter(
+    (market) => market.isCanonical,
+  ).length;
 
   return (
     <section className="space-y-4">
       <div className="space-y-1">
         <h2 className="text-xl font-semibold">Spot Meta and Asset Ctxs</h2>
         <p className="text-sm text-gray-500">
-          Query demo for <code>useSpotMetaAndAssetCtxs</code>, combining spot market metadata and
-          asset context snapshots in one request.
+          Query demo for <code>useSpotMetaAndAssetCtxs</code>, combining spot
+          market metadata and asset context snapshots in one request.
         </p>
       </div>
 
       <Card className={DEMO_CARD_CLASS_NAME}>
         <CardHeader className={DEMO_CARD_HEADER_CLASS_NAME}>
           <div className="space-y-2">
-            <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>Spot Market Snapshot</CardTitle>
+            <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>
+              Spot Market Snapshot
+            </CardTitle>
             <p className="text-sm text-stone-500">
-              Each market row joins token metadata with its latest spot asset context so we can
-              inspect pair structure, liquidity, and pricing in one place.
+              Each market row joins token metadata with its latest spot asset
+              context so we can inspect pair structure, liquidity, and pricing
+              in one place.
             </p>
           </div>
           <div className={DEMO_CARD_STATUS_CLASS_NAME}>
@@ -138,13 +152,17 @@ export function SpotMetaAndAssetCtxsDemo() {
                   <div className="text-[11px] font-medium uppercase tracking-[0.18em] text-stone-400">
                     Tokens
                   </div>
-                  <div className="mt-3 text-2xl font-semibold text-stone-900">{tokens.length}</div>
+                  <div className="mt-3 text-2xl font-semibold text-stone-900">
+                    {tokens.length}
+                  </div>
                 </div>
                 <div className="rounded-[24px] border border-stone-200 bg-stone-50/80 p-4">
                   <div className="text-[11px] font-medium uppercase tracking-[0.18em] text-stone-400">
                     Canonical Markets
                   </div>
-                  <div className="mt-3 text-2xl font-semibold text-stone-900">{canonicalCount}</div>
+                  <div className="mt-3 text-2xl font-semibold text-stone-900">
+                    {canonicalCount}
+                  </div>
                 </div>
               </div>
 
@@ -169,9 +187,12 @@ export function SpotMetaAndAssetCtxsDemo() {
                         className="border-b border-stone-100 bg-white/80 text-sm text-stone-700"
                       >
                         <td className="px-4 py-3">
-                          <div className="font-semibold text-stone-900">{market.pair}</div>
+                          <div className="font-semibold text-stone-900">
+                            {market.pair}
+                          </div>
                           <div className="text-xs text-stone-500">
-                            #{market.index} {market.isCanonical ? "canonical" : "non-canonical"}
+                            #{market.index}{" "}
+                            {market.isCanonical ? "canonical" : "non-canonical"}
                           </div>
                         </td>
                         <td className="px-4 py-3">

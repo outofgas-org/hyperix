@@ -34,7 +34,9 @@ function MetaPanel({
   return (
     <div className="space-y-4 rounded-[24px] border border-stone-200 bg-white/80 p-4">
       <div className="space-y-1">
-        <div className="text-xs uppercase tracking-[0.18em] text-stone-400">{title}</div>
+        <div className="text-xs uppercase tracking-[0.18em] text-stone-400">
+          {title}
+        </div>
         <div className="text-sm text-stone-600">{description}</div>
       </div>
       <div className="rounded-2xl border border-stone-200 bg-stone-50 px-3 py-2 text-xs text-stone-600">
@@ -64,8 +66,10 @@ export function MetaDemo() {
 
   const perpDexCount = allPerpMetasState.data?.length ?? 0;
   const perpUniverseCount =
-    allPerpMetasState.data?.reduce((total, dexMetadata) => total + dexMetadata.universe.length, 0) ??
-    0;
+    allPerpMetasState.data?.reduce(
+      (total, dexMetadata) => total + dexMetadata.universe.length,
+      0,
+    ) ?? 0;
   const spotMarketCount = spotMetaState.data?.universe.length ?? 0;
   const spotTokenCount = spotMetaState.data?.tokens.length ?? 0;
 
@@ -74,16 +78,20 @@ export function MetaDemo() {
       <div className="space-y-1">
         <h2 className="text-xl font-semibold">Perp and Spot Metadata</h2>
         <p className="text-sm text-gray-500">
-          Snapshot info fetched through <code>useAllPerpMetas</code> and <code>useSpotMeta</code>.
+          Snapshot info fetched through <code>useAllPerpMetas</code> and{" "}
+          <code>useSpotMeta</code>.
         </p>
       </div>
 
       <Card className={DEMO_CARD_CLASS_NAME}>
         <CardHeader className={DEMO_CARD_HEADER_CLASS_NAME}>
           <div className="space-y-2">
-            <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>Market Metadata</CardTitle>
+            <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>
+              Market Metadata
+            </CardTitle>
             <p className="text-sm text-stone-500">
-              Compare the perpetual universe with the spot token and market listings.
+              Compare the perpetual universe with the spot token and market
+              listings.
             </p>
           </div>
           <div className={DEMO_CARD_STATUS_CLASS_NAME}>

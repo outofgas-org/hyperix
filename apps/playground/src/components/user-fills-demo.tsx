@@ -1,5 +1,5 @@
-import Decimal from "decimal.js";
 import { type TradeHistory, useTradeHistory } from "@hyperix/hooks";
+import Decimal from "decimal.js";
 import { useState } from "react";
 import { formatDate } from "../lib/format-date";
 import {
@@ -41,26 +41,36 @@ function FillRow({ fill }: { fill: TradeHistory }) {
   return (
     <div className="grid grid-cols-8 gap-2 rounded-xl px-2 py-1 even:bg-gray-50">
       <div className="min-w-0">
-        <div className={fill.side === "B" ? "text-emerald-600" : "text-rose-600"}>
+        <div
+          className={fill.side === "B" ? "text-emerald-600" : "text-rose-600"}
+        >
           {fill.displayCoin}
         </div>
         <div className="truncate text-[11px] text-gray-400">
           {fill.baseCoin}/{fill.quoteCoin}
         </div>
       </div>
-      <span className="text-right text-gray-700">{NUMBER_FORMATTER.format(Number(fill.sz))}</span>
-      <span className="text-right text-gray-700">{NUMBER_FORMATTER.format(Number(fill.px))}</span>
-      <span className="text-right text-gray-700">{VALUE_FORMATTER.format(tradeValue)}</span>
-      <span className="text-right text-gray-700">{fill.side === "B" ? "Buy" : "Sell"}</span>
+      <span className="text-right text-gray-700">
+        {NUMBER_FORMATTER.format(Number(fill.sz))}
+      </span>
+      <span className="text-right text-gray-700">
+        {NUMBER_FORMATTER.format(Number(fill.px))}
+      </span>
+      <span className="text-right text-gray-700">
+        {VALUE_FORMATTER.format(tradeValue)}
+      </span>
+      <span className="text-right text-gray-700">
+        {fill.side === "B" ? "Buy" : "Sell"}
+      </span>
       <span className="text-right text-gray-700">
         {formatSignedValue(fill.feeInQuote)} {fill.pnlCurrency}
       </span>
-      <span className={`text-right ${pnl >= 0 ? "text-emerald-600" : "text-rose-600"}`}>
+      <span
+        className={`text-right ${pnl >= 0 ? "text-emerald-600" : "text-rose-600"}`}
+      >
         {formatSignedValue(fill.netPnlInQuote)} {fill.pnlCurrency}
       </span>
-      <span className="text-right text-gray-500">
-        {formatDate(fill.time)}
-      </span>
+      <span className="text-right text-gray-500">{formatDate(fill.time)}</span>
     </div>
   );
 }
@@ -68,9 +78,12 @@ function FillRow({ fill }: { fill: TradeHistory }) {
 export function UserFillsDemo() {
   const [input, setInput] = useState(DEFAULT_ADDRESS);
   const address = isAddress(input) ? input : undefined;
-  const { data, loading, error, ready } = useTradeHistory(address ?? DEFAULT_ADDRESS, {
-    enabled: Boolean(address),
-  });
+  const { data, loading, error, ready } = useTradeHistory(
+    address ?? DEFAULT_ADDRESS,
+    {
+      enabled: Boolean(address),
+    },
+  );
 
   return (
     <section className="space-y-4">
@@ -84,7 +97,9 @@ export function UserFillsDemo() {
       <Card className={DEMO_CARD_CLASS_NAME}>
         <CardHeader className={DEMO_CARD_HEADER_CLASS_NAME}>
           <div className="space-y-2">
-            <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>Tracked Wallet</CardTitle>
+            <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>
+              Tracked Wallet
+            </CardTitle>
             <Input
               className={DEMO_CARD_INPUT_CLASS_NAME}
               onChange={(event) => {
@@ -105,7 +120,11 @@ export function UserFillsDemo() {
           <div className="flex items-center justify-between">
             <h3 className="font-semibold text-gray-700">History</h3>
             <span className="text-gray-500">
-              {ready ? `${data?.fills.length ?? 0} trades` : loading ? "Loading..." : "Idle"}
+              {ready
+                ? `${data?.fills.length ?? 0} trades`
+                : loading
+                  ? "Loading..."
+                  : "Idle"}
             </span>
           </div>
           <div className="grid grid-cols-8 gap-2 text-gray-500">
@@ -129,7 +148,9 @@ export function UserFillsDemo() {
               <Skeleton />
             </div>
           ) : (data?.fills.length ?? 0) === 0 ? (
-            <div className="rounded-xl bg-gray-50 px-3 py-2 text-gray-500">No trades yet.</div>
+            <div className="rounded-xl bg-gray-50 px-3 py-2 text-gray-500">
+              No trades yet.
+            </div>
           ) : (
             <div className="h-72 space-y-1 overflow-y-auto">
               {(data?.fills ?? []).map((fill) => (

@@ -1,5 +1,8 @@
 import { getDefaultInfoClient } from "./config/hl";
-import type { GetHyperliquidActiveAssetDataOptions, HyperliquidActiveAsset } from "./types";
+import type {
+  GetHyperliquidActiveAssetDataOptions,
+  HyperliquidActiveAsset,
+} from "./types";
 
 export async function getActiveAssetData(
   options: GetHyperliquidActiveAssetDataOptions,

@@ -1,4 +1,4 @@
-import { useUserFundings, type UserFunding } from "@hyperix/hooks";
+import { type UserFunding, useUserFundings } from "@hyperix/hooks";
 import { useState } from "react";
 import { formatDate } from "../lib/format-date";
 import {
@@ -40,14 +40,20 @@ function FundingRow({ funding }: { funding: UserFunding }) {
   return (
     <div className="grid grid-cols-6 gap-2 rounded-xl px-2 py-1 even:bg-gray-50">
       <div className="min-w-0">
-        <div className={fundingValue >= 0 ? "text-emerald-600" : "text-rose-600"}>
+        <div
+          className={fundingValue >= 0 ? "text-emerald-600" : "text-rose-600"}
+        >
           {funding.coin}
         </div>
         <div className="truncate text-[11px] text-gray-400">
-          {funding.nSamples === null ? "Live update" : `${funding.nSamples} samples`}
+          {funding.nSamples === null
+            ? "Live update"
+            : `${funding.nSamples} samples`}
         </div>
       </div>
-      <span className={`text-right ${fundingValue >= 0 ? "text-emerald-600" : "text-rose-600"}`}>
+      <span
+        className={`text-right ${fundingValue >= 0 ? "text-emerald-600" : "text-rose-600"}`}
+      >
         {formatSignedValue(funding.usdc)} USDC
       </span>
       <span className="text-right text-gray-700">
@@ -86,7 +92,9 @@ export function UserFundingsDemo() {
       <Card className={DEMO_CARD_CLASS_NAME}>
         <CardHeader className={DEMO_CARD_HEADER_CLASS_NAME}>
           <div className="space-y-2">
-            <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>Tracked Wallet</CardTitle>
+            <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>
+              Tracked Wallet
+            </CardTitle>
             <Input
               className={DEMO_CARD_INPUT_CLASS_NAME}
               onChange={(event) => {
@@ -107,7 +115,11 @@ export function UserFundingsDemo() {
           <div className="flex items-center justify-between">
             <h3 className="font-semibold text-gray-700">Ledger</h3>
             <span className="text-gray-500">
-              {data ? `${fundings.length} entries` : loading ? "Loading..." : "Idle"}
+              {data
+                ? `${fundings.length} entries`
+                : loading
+                  ? "Loading..."
+                  : "Idle"}
             </span>
           </div>
           <div className="grid grid-cols-6 gap-2 text-gray-500">

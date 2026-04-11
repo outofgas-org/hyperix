@@ -53,9 +53,12 @@ function JsonPreview({ value }: { value: unknown }) {
 export function SpotStateDemo() {
   const [input, setInput] = useState(DEFAULT_ADDRESS);
   const address = isAddress(input) ? input : undefined;
-  const { data, loading, error, ready } = useSpotState(address ?? DEFAULT_ADDRESS, {
-    enabled: Boolean(address),
-  });
+  const { data, loading, error, ready } = useSpotState(
+    address ?? DEFAULT_ADDRESS,
+    {
+      enabled: Boolean(address),
+    },
+  );
 
   const balances = useMemo(() => {
     return [...(data?.balances ?? [])]
@@ -71,7 +74,10 @@ export function SpotStateDemo() {
     return {
       totalBalance: balances.reduce((sum, item) => sum + Number(item.total), 0),
       totalHeld: balances.reduce((sum, item) => sum + Number(item.hold), 0),
-      totalEntryNtl: balances.reduce((sum, item) => sum + Number(item.entryNtl), 0),
+      totalEntryNtl: balances.reduce(
+        (sum, item) => sum + Number(item.entryNtl),
+        0,
+      ),
       escrowCount: data?.evmEscrows?.length ?? 0,
     };
   }, [balances, data?.evmEscrows]);
@@ -81,15 +87,17 @@ export function SpotStateDemo() {
       <div className="space-y-1">
         <h2 className="text-xl font-semibold">Spot State</h2>
         <p className="text-sm text-gray-500">
-          Live wallet stream from <code>useSpotState</code>, showing token balances, held amounts,
-          and escrow entries for a tracked address.
+          Live wallet stream from <code>useSpotState</code>, showing token
+          balances, held amounts, and escrow entries for a tracked address.
         </p>
       </div>
 
       <Card className={`${DEMO_CARD_CLASS_NAME} text-[#183242]`}>
         <CardHeader className={DEMO_CARD_HEADER_CLASS_NAME}>
           <div className="space-y-2">
-            <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>Tracked Wallet</CardTitle>
+            <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>
+              Tracked Wallet
+            </CardTitle>
             <Input
               className={DEMO_CARD_INPUT_CLASS_NAME}
               onChange={(event) => {
@@ -99,7 +107,9 @@ export function SpotStateDemo() {
               value={input}
             />
           </div>
-          <div className={`${DEMO_CARD_STATUS_CLASS_NAME} flex items-center justify-between gap-4`}>
+          <div
+            className={`${DEMO_CARD_STATUS_CLASS_NAME} flex items-center justify-between gap-4`}
+          >
             <span>
               {address
                 ? `Streaming spot state for ${address}`

@@ -77,10 +77,10 @@ export function MidDemo() {
             {error
               ? "Subscription error"
               : ready
-              ? `Resolved from ${source ?? "unknown source"}`
-              : loading
-              ? "Resolving market mid..."
-              : "Enter a market symbol to start."}
+                ? `Resolved from ${source ?? "unknown source"}`
+                : loading
+                  ? "Resolving market mid..."
+                  : "Enter a market symbol to start."}
           </div>
         </CardHeader>
 

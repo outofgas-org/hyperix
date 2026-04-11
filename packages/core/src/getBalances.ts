@@ -1,14 +1,15 @@
 import Decimal from "decimal.js";
+import { getDefaultInfoClient } from "./config/hl";
 import {
   getDexNamesFromAllPerpMetas,
   getPerpDexName,
   getTokenByIndex,
 } from "./shared";
-import { getDefaultInfoClient } from "./config/hl";
-import {
+import type {
   AllPerpMetas,
   ClearinghouseState,
-  HyperliquidBalance, HyperliquidUserOptions,
+  HyperliquidBalance,
+  HyperliquidUserOptions,
   SpotAssetContexts,
   SpotClearinghouseState,
   SpotMeta,
@@ -21,7 +22,10 @@ function buildSpotBalances(
   balanceType: HyperliquidBalance["type"] = "spot",
 ): HyperliquidBalance[] {
   const tokenByIndex = getTokenByIndex(spotMeta);
-  const spotMarketsByCoin = new Map<string, { markPrice: number; tokenId: string }>();
+  const spotMarketsByCoin = new Map<
+    string,
+    { markPrice: number; tokenId: string }
+  >();
 
   for (const market of spotMeta.universe) {
     if (market.tokens.length < 2) {
@@ -54,16 +58,18 @@ function buildSpotBalances(
     const entryNtl = new Decimal(balance.entryNtl ?? 0);
     const pnl = value.minus(entryNtl);
 
-    return [{
-      asset: balance.coin,
-      type: balanceType,
-      total: total.toString(),
-      available: available.toString(),
-      value: value.toString(),
-      entryNtl: entryNtl.toString(),
-      pnl: pnl.toString(),
-      contract: tokenInfo?.tokenId ?? "0x6d1e7cde53ba9467b783cb7c530ce054",
-    }];
+    return [
+      {
+        asset: balance.coin,
+        type: balanceType,
+        total: total.toString(),
+        available: available.toString(),
+        value: value.toString(),
+        entryNtl: entryNtl.toString(),
+        pnl: pnl.toString(),
+        contract: tokenInfo?.tokenId ?? "0x6d1e7cde53ba9467b783cb7c530ce054",
+      },
+    ];
   });
 }
 
@@ -89,7 +95,10 @@ function buildPerpBalances(
     }
 
     const collateralTokenIndex = perpMetaByDex.get(dex)?.collateralToken;
-    const collateralToken = collateralTokenIndex === undefined ? undefined : tokenByIndex.get(collateralTokenIndex);
+    const collateralToken =
+      collateralTokenIndex === undefined
+        ? undefined
+        : tokenByIndex.get(collateralTokenIndex);
 
     return [
       {
@@ -105,14 +114,17 @@ function buildPerpBalances(
   });
 }
 
-export async function getBalances(options: HyperliquidUserOptions): Promise<HyperliquidBalance[]> {
+export async function getBalances(
+  options: HyperliquidUserOptions,
+): Promise<HyperliquidBalance[]> {
   const infoClient = getDefaultInfoClient();
-  const [abstraction, spotState, spotMetaAndAssetCtxs, allPerpMetas] = await Promise.all([
-    infoClient.userAbstraction({ user: options.user }),
-    infoClient.spotClearinghouseState({ user: options.user }),
-    infoClient.spotMetaAndAssetCtxs(),
-    infoClient.allPerpMetas(),
-  ]);
+  const [abstraction, spotState, spotMetaAndAssetCtxs, allPerpMetas] =
+    await Promise.all([
+      infoClient.userAbstraction({ user: options.user }),
+      infoClient.spotClearinghouseState({ user: options.user }),
+      infoClient.spotMetaAndAssetCtxs(),
+      infoClient.allPerpMetas(),
+    ]);
 
   const [spotMeta, spotAssetCtxs] = spotMetaAndAssetCtxs;
   const spotBalances = buildSpotBalances(

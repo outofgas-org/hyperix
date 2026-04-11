@@ -1,5 +1,5 @@
-import Decimal from "decimal.js";
 import { type OpenOrder, useOpenOrders } from "@hyperix/hooks";
+import Decimal from "decimal.js";
 import { useState } from "react";
 import { formatDate } from "../lib/format-date";
 import {
@@ -125,7 +125,7 @@ export function OpenOrdersDemo() {
     address ?? DEFAULT_ADDRESS,
     {
       enabled: Boolean(address),
-    }
+    },
   );
   const orders = data?.orders ?? [];
 
@@ -167,8 +167,8 @@ export function OpenOrdersDemo() {
               {ready
                 ? `${orders.length} orders`
                 : loading
-                ? "Loading..."
-                : "Idle"}
+                  ? "Loading..."
+                  : "Idle"}
             </span>
           </div>
         </CardHeader>

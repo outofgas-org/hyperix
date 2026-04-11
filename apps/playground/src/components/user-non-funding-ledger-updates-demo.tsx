@@ -1,6 +1,6 @@
 import {
-  useUserAccountActivity,
   type UserAccountActivity,
+  useUserAccountActivity,
 } from "@hyperix/hooks";
 import { ExternalLink } from "lucide-react";
 import { useState } from "react";
@@ -44,11 +44,13 @@ function truncateHash(hash: `0x${string}`) {
 }
 
 function LedgerUpdateRow({ entry }: { entry: UserAccountActivity }) {
-  const valueChange = entry.amount.displayValue === "--"
-    ? "--"
-    : entry.amount.direction === "neutral" && entry.amount.numericValue !== null
-      ? `${VALUE_FORMATTER.format(entry.amount.numericValue)} ${entry.amount.token ?? ""}`.trim()
-      : entry.amount.displayValue;
+  const valueChange =
+    entry.amount.displayValue === "--"
+      ? "--"
+      : entry.amount.direction === "neutral" &&
+          entry.amount.numericValue !== null
+        ? `${VALUE_FORMATTER.format(entry.amount.numericValue)} ${entry.amount.token ?? ""}`.trim()
+        : entry.amount.displayValue;
 
   return (
     <div className="grid min-w-[980px] grid-cols-[2.4fr_1.1fr_0.9fr_0.9fr_1.1fr_1.9fr_0.8fr] items-center gap-4 border-b border-stone-200/80 px-4 py-4 text-sm last:border-b-0 hover:bg-lime-50/40">
@@ -79,7 +81,11 @@ function LedgerUpdateRow({ entry }: { entry: UserAccountActivity }) {
       >
         {valueChange}
       </span>
-      <span className={entry.fee.displayValue === "--" ? "text-stone-400" : "text-rose-500"}>
+      <span
+        className={
+          entry.fee.displayValue === "--" ? "text-stone-400" : "text-rose-500"
+        }
+      >
         {entry.fee.displayValue === "--"
           ? "--"
           : `${VALUE_FORMATTER.format(entry.fee.numericValue ?? 0)} ${entry.fee.token ?? ""}`.trim()}
@@ -112,17 +118,23 @@ function LedgerLoading() {
 export function UserNonFundingLedgerUpdatesDemo() {
   const [input, setInput] = useState(DEFAULT_ADDRESS);
   const address = isAddress(input) ? input : undefined;
-  const { data, loading, error } = useUserAccountActivity(address ?? DEFAULT_ADDRESS, {
-    enabled: Boolean(address),
-  });
+  const { data, loading, error } = useUserAccountActivity(
+    address ?? DEFAULT_ADDRESS,
+    {
+      enabled: Boolean(address),
+    },
+  );
   const updates = data?.activity ?? [];
 
   return (
     <section className="space-y-4">
       <div className="space-y-1">
-        <h2 className="text-xl font-semibold text-stone-900">Deposits and Withdrawals</h2>
+        <h2 className="text-xl font-semibold text-stone-900">
+          Deposits and Withdrawals
+        </h2>
         <p className="text-sm text-stone-500">
-          Light-theme account activity table based on <code>useUserAccountActivity</code>.
+          Light-theme account activity table based on{" "}
+          <code>useUserAccountActivity</code>.
         </p>
       </div>
 
@@ -184,11 +196,16 @@ export function UserNonFundingLedgerUpdatesDemo() {
               ) : !address || (!data && loading) ? (
                 <LedgerLoading />
               ) : updates.length === 0 ? (
-                <div className="px-4 py-8 text-sm text-stone-500">No ledger updates yet.</div>
+                <div className="px-4 py-8 text-sm text-stone-500">
+                  No ledger updates yet.
+                </div>
               ) : (
                 <div className="max-h-[28rem] overflow-y-auto bg-white">
                   {updates.map((entry) => (
-                    <LedgerUpdateRow key={`${entry.time}-${entry.hash}`} entry={entry} />
+                    <LedgerUpdateRow
+                      key={`${entry.time}-${entry.hash}`}
+                      entry={entry}
+                    />
                   ))}
                 </div>
               )}
@@ -196,7 +213,13 @@ export function UserNonFundingLedgerUpdatesDemo() {
           </div>
           <div className="flex items-center justify-between border-t border-stone-200 bg-stone-50 px-4 py-3 font-mono text-[11px] uppercase tracking-[0.14em] text-stone-500">
             <span>Live websocket feed</span>
-            <span>{data ? `${updates.length} entries` : loading ? "Loading..." : "Idle"}</span>
+            <span>
+              {data
+                ? `${updates.length} entries`
+                : loading
+                  ? "Loading..."
+                  : "Idle"}
+            </span>
           </div>
         </CardContent>
       </Card>

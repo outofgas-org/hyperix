@@ -1,5 +1,5 @@
-import { useSubscribe, type UseSubscribeState } from "@outofgas/react-stream";
 import type { UserFundingsEvent } from "@nktkas/hyperliquid/api/subscription";
+import { type UseSubscribeState, useSubscribe } from "@outofgas/react-stream";
 import { wsClient } from "./config/hl.js";
 
 export type UserFunding = UserFundingsEvent["fundings"][number];
@@ -58,7 +58,9 @@ export function useUserFundings(
           onData(data);
         } catch (error) {
           onError(
-            error instanceof Error ? error : new Error("Failed to process user fundings event"),
+            error instanceof Error
+              ? error
+              : new Error("Failed to process user fundings event"),
           );
         }
       });

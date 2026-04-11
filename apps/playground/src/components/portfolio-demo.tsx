@@ -59,14 +59,19 @@ function SnapshotSkeleton() {
 export function PortfolioDemo() {
   const [input, setInput] = useState(DEFAULT_ADDRESS);
   const address = isAddress(input) ? input : undefined;
-  const { data, isPending, error, isFetched } = usePortfolio(address ?? DEFAULT_ADDRESS, {
-    enabled: Boolean(address),
-  });
+  const { data, isPending, error, isFetched } = usePortfolio(
+    address ?? DEFAULT_ADDRESS,
+    {
+      enabled: Boolean(address),
+    },
+  );
 
   const periods = useMemo(() => {
     return (data ?? []).map(([period, snapshot]) => {
       const latestPnl = Number(snapshot.pnlHistory.at(-1)?.[1] ?? 0);
-      const latestAccountValue = Number(snapshot.accountValueHistory.at(-1)?.[1] ?? 0);
+      const latestAccountValue = Number(
+        snapshot.accountValueHistory.at(-1)?.[1] ?? 0,
+      );
 
       return {
         period,
@@ -84,15 +89,17 @@ export function PortfolioDemo() {
       <div className="space-y-1">
         <h2 className="text-xl font-semibold">Portfolio</h2>
         <p className="text-sm text-gray-500">
-          Query demo for <code>usePortfolio</code>, loading grouped portfolio snapshots from the
-          Hyperliquid info API.
+          Query demo for <code>usePortfolio</code>, loading grouped portfolio
+          snapshots from the Hyperliquid info API.
         </p>
       </div>
 
       <Card className={`${DEMO_CARD_CLASS_NAME} text-[#183242]`}>
         <CardHeader className={DEMO_CARD_HEADER_CLASS_NAME}>
           <div className="space-y-2">
-            <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>Tracked Wallet</CardTitle>
+            <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>
+              Tracked Wallet
+            </CardTitle>
             <Input
               className={DEMO_CARD_INPUT_CLASS_NAME}
               onChange={(event) => {
@@ -102,14 +109,20 @@ export function PortfolioDemo() {
               value={input}
             />
           </div>
-          <div className={`${DEMO_CARD_STATUS_CLASS_NAME} flex items-center justify-between gap-4`}>
+          <div
+            className={`${DEMO_CARD_STATUS_CLASS_NAME} flex items-center justify-between gap-4`}
+          >
             <span>
               {address
                 ? `Fetching portfolio snapshots for ${address}`
                 : "Enter a valid 42-character hex wallet address to load the portfolio query."}
             </span>
             <span>
-              {isPending ? "Loading..." : isFetched ? `${periods.length} periods` : "Idle"}
+              {isPending
+                ? "Loading..."
+                : isFetched
+                  ? `${periods.length} periods`
+                  : "Idle"}
             </span>
           </div>
         </CardHeader>
@@ -141,7 +154,13 @@ export function PortfolioDemo() {
                     <div className="mt-3 space-y-2 text-sm">
                       <div className="flex items-center justify-between gap-4">
                         <span className="text-stone-500">Latest PnL</span>
-                        <span className={item.latestPnl >= 0 ? "text-emerald-600" : "text-rose-500"}>
+                        <span
+                          className={
+                            item.latestPnl >= 0
+                              ? "text-emerald-600"
+                              : "text-rose-500"
+                          }
+                        >
                           {formatUsd(item.latestPnl)}
                         </span>
                       </div>

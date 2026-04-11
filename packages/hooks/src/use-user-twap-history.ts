@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
-import { useSubscribe, type UseSubscribeState } from "@outofgas/react-stream";
 import type { UserTwapHistoryEvent } from "@nktkas/hyperliquid/api/subscription";
+import { type UseSubscribeState, useSubscribe } from "@outofgas/react-stream";
+import { useEffect, useMemo, useState } from "react";
 import { wsClient } from "./config/hl.js";
 
 export type UserTwapHistoryData = {
@@ -15,7 +15,7 @@ export type UseUserTwapHistoryOptions = {
 
 export function useUserTwapHistory(
   user: `0x${string}`,
-  options: UseUserTwapHistoryOptions = {}
+  options: UseUserTwapHistoryOptions = {},
 ): UseSubscribeState<UserTwapHistoryData> {
   const { enabled: enabledOverride, onUpdate } = options;
   const enabled = enabledOverride ?? Boolean(user);
@@ -31,7 +31,7 @@ export function useUserTwapHistory(
           onError(
             error instanceof Error
               ? error
-              : new Error("Failed to process user twap history event")
+              : new Error("Failed to process user twap history event"),
           );
         }
       });
@@ -80,6 +80,6 @@ export function useUserTwapHistory(
       ...rawState,
       data,
     }),
-    [data, rawState]
+    [data, rawState],
   );
 }

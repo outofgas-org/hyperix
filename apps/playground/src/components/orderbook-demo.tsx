@@ -1,6 +1,4 @@
 import { useL2Book, useTrades } from "@hyperix/hooks";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { Skeleton } from "./ui/skeleton";
 import { useState } from "react";
 import { formatDate } from "../lib/format-date";
 import {
@@ -8,6 +6,8 @@ import {
   DEMO_CARD_HEADER_CLASS_NAME,
   DEMO_CARD_TITLE_CLASS_NAME,
 } from "./demo-card-styles";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Skeleton } from "./ui/skeleton";
 
 const NUMBER_FORMATTER = new Intl.NumberFormat("en-US", {
   maximumFractionDigits: 8,
@@ -111,7 +111,9 @@ function OrderbookCard({ coin }: OrderbookCardProps) {
   return (
     <Card className={DEMO_CARD_CLASS_NAME}>
       <CardHeader className={DEMO_CARD_HEADER_CLASS_NAME}>
-        <CardTitle className={`${DEMO_CARD_TITLE_CLASS_NAME} flex items-center justify-between`}>
+        <CardTitle
+          className={`${DEMO_CARD_TITLE_CLASS_NAME} flex items-center justify-between`}
+        >
           {coin}-USDC
         </CardTitle>
         <div className="flex justify-end">
@@ -176,7 +178,9 @@ function TradesCard({ coin }: TradesCardProps) {
   return (
     <Card className={DEMO_CARD_CLASS_NAME}>
       <CardHeader className={DEMO_CARD_HEADER_CLASS_NAME}>
-        <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>{coin}-USDC Trades</CardTitle>
+        <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>
+          {coin}-USDC Trades
+        </CardTitle>
       </CardHeader>
       <CardContent className="space-y-2 p-6 font-mono text-xs">
         <div className="grid grid-cols-3 gap-2 text-gray-500">
@@ -199,7 +203,11 @@ function TradesCard({ coin }: TradesCardProps) {
                 key={trade.tid}
                 className="grid grid-cols-3 gap-2 rounded-xl px-2 py-1 even:bg-gray-50"
               >
-                <span className={trade.side === "B" ? "text-emerald-600" : "text-rose-600"}>
+                <span
+                  className={
+                    trade.side === "B" ? "text-emerald-600" : "text-rose-600"
+                  }
+                >
                   {NUMBER_FORMATTER.format(Number(trade.px))}
                 </span>
                 <span className="text-right text-gray-700">

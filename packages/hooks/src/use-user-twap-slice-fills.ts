@@ -1,6 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
-import { useSubscribe, type UseSubscribeState } from "@outofgas/react-stream";
 import type { UserTwapSliceFillsEvent } from "@nktkas/hyperliquid/api/subscription";
+import { type UseSubscribeState, useSubscribe } from "@outofgas/react-stream";
+import { useEffect, useMemo, useState } from "react";
 import { wsClient } from "./config/hl.js";
 
 export type UserTwapSliceFillsData = {
@@ -15,7 +15,7 @@ export type UseUserTwapSliceFillsOptions = {
 
 export function useUserTwapSliceFills(
   user: `0x${string}`,
-  options: UseUserTwapSliceFillsOptions = {}
+  options: UseUserTwapSliceFillsOptions = {},
 ): UseSubscribeState<UserTwapSliceFillsData> {
   const { enabled: enabledOverride, onUpdate } = options;
   const enabled = enabledOverride ?? Boolean(user);
@@ -33,10 +33,10 @@ export function useUserTwapSliceFills(
             onError(
               error instanceof Error
                 ? error
-                : new Error("Failed to process user twap slice fills event")
+                : new Error("Failed to process user twap slice fills event"),
             );
           }
-        }
+        },
       );
 
       return {
@@ -46,7 +46,7 @@ export function useUserTwapSliceFills(
   });
 
   const [data, setData] = useState<UserTwapSliceFillsData | undefined>(
-    undefined
+    undefined,
   );
 
   useEffect(() => {
@@ -88,6 +88,6 @@ export function useUserTwapSliceFills(
       ...rawState,
       data,
     }),
-    [data, rawState]
+    [data, rawState],
   );
 }

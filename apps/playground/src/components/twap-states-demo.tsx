@@ -79,15 +79,22 @@ export function TwapStatesDemo() {
   const [input, setInput] = useState(DEFAULT_ADDRESS);
   const address = isAddress(input) ? input : undefined;
   const symbolConverter = useSymbolConverter();
-  const { data, loading, error, ready } = useTwapStates(address ?? DEFAULT_ADDRESS, {
-    enabled: Boolean(address),
-  });
+  const { data, loading, error, ready } = useTwapStates(
+    address ?? DEFAULT_ADDRESS,
+    {
+      enabled: Boolean(address),
+    },
+  );
 
   const states = useMemo(() => {
     return (data?.states ?? [])
       .map(([twapId, state]) => {
-        const displayCoin = symbolConverter?.getSpotByPairId(state.coin) ?? state.coin;
-        const progress = Number(state.sz) > 0 ? Number(state.executedSz) / Number(state.sz) : 0;
+        const displayCoin =
+          symbolConverter?.getSpotByPairId(state.coin) ?? state.coin;
+        const progress =
+          Number(state.sz) > 0
+            ? Number(state.executedSz) / Number(state.sz)
+            : 0;
 
         return {
           twapId,
@@ -113,15 +120,17 @@ export function TwapStatesDemo() {
       <div className="space-y-1">
         <h2 className="text-xl font-semibold">TWAP States</h2>
         <p className="text-sm text-gray-500">
-          Table demo for <code>useTwapStates</code>, showing active TWAP execution state for a
-          wallet.
+          Table demo for <code>useTwapStates</code>, showing active TWAP
+          execution state for a wallet.
         </p>
       </div>
 
       <Card className={`${DEMO_CARD_CLASS_NAME} text-[#183242]`}>
         <CardHeader className={DEMO_CARD_HEADER_CLASS_NAME}>
           <div className="space-y-2">
-            <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>Tracked Wallet</CardTitle>
+            <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>
+              Tracked Wallet
+            </CardTitle>
             <Input
               className={DEMO_CARD_INPUT_CLASS_NAME}
               onChange={(event) => {
@@ -139,7 +148,13 @@ export function TwapStatesDemo() {
                 ? `Subscribed to TWAP states for ${address}`
                 : "Enter a valid 42-character hex wallet address to start the subscription."}
             </span>
-            <span>{ready ? `${states.length} TWAPs` : loading ? "Loading..." : "Idle"}</span>
+            <span>
+              {ready
+                ? `${states.length} TWAPs`
+                : loading
+                  ? "Loading..."
+                  : "Idle"}
+            </span>
           </div>
         </CardHeader>
 
@@ -160,7 +175,10 @@ export function TwapStatesDemo() {
                 <thead className="sticky top-0 z-10 bg-[#f8fbfd]">
                   <tr className="border-b border-[#edf3f7] text-left text-[11px] uppercase tracking-[0.12em] text-[#6f8797]">
                     {HEADERS.map((header) => (
-                      <th key={header} className="px-4 py-3 font-medium whitespace-nowrap">
+                      <th
+                        key={header}
+                        className="px-4 py-3 font-medium whitespace-nowrap"
+                      >
                         {header}
                       </th>
                     ))}
@@ -172,11 +190,15 @@ export function TwapStatesDemo() {
                       key={`${state.dex}-${state.twapId}-${state.timestamp}`}
                       className="border-b border-[#edf3f7] last:border-b-0 odd:bg-white even:bg-[#fbfdff]"
                     >
-                      <td className="px-4 py-3 text-[#183242]">{state.twapId}</td>
+                      <td className="px-4 py-3 text-[#183242]">
+                        {state.twapId}
+                      </td>
                       <td className="px-4 py-3 text-[#183242]">
                         <div className="font-semibold">{state.coin}</div>
                         {state.coin !== state.rawCoin ? (
-                          <div className="text-[11px] text-[#6f8797]">{state.rawCoin}</div>
+                          <div className="text-[11px] text-[#6f8797]">
+                            {state.rawCoin}
+                          </div>
                         ) : null}
                       </td>
                       <td className={`px-4 py-3 ${getSideClass(state.side)}`}>
@@ -185,20 +207,27 @@ export function TwapStatesDemo() {
                       <td className="px-4 py-3 text-[#183242]">
                         <div>{formatPercent(state.progress)}</div>
                         <div className="text-[11px] text-[#6f8797]">
-                          {formatAmount(state.executedSize)} / {formatAmount(state.size)}
+                          {formatAmount(state.executedSize)} /{" "}
+                          {formatAmount(state.size)}
                         </div>
                       </td>
                       <td className="px-4 py-3 text-[#183242]">
                         ${formatAmount(state.executedNotional)}
                       </td>
-                      <td className="px-4 py-3 text-[#183242]">{state.minutes} min</td>
+                      <td className="px-4 py-3 text-[#183242]">
+                        {state.minutes} min
+                      </td>
                       <td className="px-4 py-3 text-[#183242]">
                         {state.reduceOnly ? "Reduce only" : "Standard"}
                         <div className="text-[11px] text-[#6f8797]">
-                          {state.randomize ? "Randomized slices" : "Fixed slices"}
+                          {state.randomize
+                            ? "Randomized slices"
+                            : "Fixed slices"}
                         </div>
                       </td>
-                      <td className="px-4 py-3 text-[#183242]">{formatDate(state.timestamp)}</td>
+                      <td className="px-4 py-3 text-[#183242]">
+                        {formatDate(state.timestamp)}
+                      </td>
                       <td className="px-4 py-3 text-[#183242]">{state.dex}</td>
                     </tr>
                   ))}

@@ -33,8 +33,12 @@ function MidCard({
 }) {
   return (
     <div className="rounded-[24px] border border-stone-200 bg-[linear-gradient(180deg,#ffffff_0%,#f7f7ef_100%)] p-4">
-      <div className="text-xs uppercase tracking-[0.18em] text-stone-400">{coin}</div>
-      <div className="mt-2 font-mono text-xl text-stone-900">{formatMid(mid)}</div>
+      <div className="text-xs uppercase tracking-[0.18em] text-stone-400">
+        {coin}
+      </div>
+      <div className="mt-2 font-mono text-xl text-stone-900">
+        {formatMid(mid)}
+      </div>
       <div className="mt-1 text-xs text-stone-500">Mid price</div>
     </div>
   );
@@ -60,9 +64,12 @@ export function AllMidsDemo() {
       <Card className={DEMO_CARD_CLASS_NAME}>
         <CardHeader className={DEMO_CARD_HEADER_CLASS_NAME}>
           <div className="space-y-2">
-            <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>Market Snapshot</CardTitle>
+            <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>
+              Market Snapshot
+            </CardTitle>
             <p className="text-sm text-stone-500">
-              Highlights a few core markets first, then fills the grid with the latest mids.
+              Highlights a few core markets first, then fills the grid with the
+              latest mids.
             </p>
           </div>
           <div className="rounded-2xl border border-sky-200 bg-sky-50 px-4 py-3 text-xs text-stone-600">
@@ -84,7 +91,10 @@ export function AllMidsDemo() {
           ) : !ready && loading ? (
             <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
               {Array.from({ length: 10 }, (_, index) => (
-                <div key={index} className="space-y-2 rounded-2xl border border-stone-200 p-4">
+                <div
+                  key={index}
+                  className="space-y-2 rounded-2xl border border-stone-200 p-4"
+                >
                   <Skeleton className="h-4 w-16" />
                   <Skeleton className="h-6 w-24" />
                 </div>

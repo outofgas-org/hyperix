@@ -1,9 +1,9 @@
-import { useMemo } from "react";
 import type { UseSubscribeState } from "@outofgas/react-stream";
+import { useMemo } from "react";
 import {
-  useAllDexsClearingHouseState,
   type AllDexsClearingHouseStateData,
   type UseAllDexsClearingHouseStateOptions,
+  useAllDexsClearingHouseState,
 } from "./use-all-dexs-clearing-house-state.js";
 
 export type Position =
@@ -19,7 +19,10 @@ export function usePositions(
     return positionsState.data?.clearinghouseStates
       .flatMap(([, state]) => state.assetPositions)
       .sort((left, right) =>
-        Number(left.position.positionValue) < Number(right.position.positionValue) ? 1 : -1,
+        Number(left.position.positionValue) <
+        Number(right.position.positionValue)
+          ? 1
+          : -1,
       );
   }, [positionsState.data]);
 

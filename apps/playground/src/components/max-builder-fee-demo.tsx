@@ -65,8 +65,8 @@ export function MaxBuilderFeeDemo() {
       <div className="space-y-1">
         <h2 className="text-xl font-semibold">Max Builder Fee</h2>
         <p className="text-sm text-gray-500">
-          Query demo for <code>useMaxBuilderFee</code>, checking the max approved builder fee
-          between a user wallet and builder wallet.
+          Query demo for <code>useMaxBuilderFee</code>, checking the max
+          approved builder fee between a user wallet and builder wallet.
         </p>
       </div>
 
@@ -74,7 +74,9 @@ export function MaxBuilderFeeDemo() {
         <CardHeader className={DEMO_CARD_HEADER_CLASS_NAME}>
           <div className="space-y-4">
             <div className="space-y-2">
-              <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>User Address</CardTitle>
+              <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>
+                User Address
+              </CardTitle>
               <Input
                 className={DEMO_CARD_INPUT_CLASS_NAME}
                 onChange={(event) => {
@@ -85,7 +87,9 @@ export function MaxBuilderFeeDemo() {
               />
             </div>
             <div className="space-y-2">
-              <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>Builder Address</CardTitle>
+              <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>
+                Builder Address
+              </CardTitle>
               <Input
                 className={DEMO_CARD_INPUT_CLASS_NAME}
                 onChange={(event) => {
@@ -112,13 +116,17 @@ export function MaxBuilderFeeDemo() {
               ))}
             </div>
           </div>
-          <div className={`${DEMO_CARD_STATUS_CLASS_NAME} flex items-center justify-between gap-4`}>
+          <div
+            className={`${DEMO_CARD_STATUS_CLASS_NAME} flex items-center justify-between gap-4`}
+          >
             <span>
               {user && builder
                 ? "Checking approved max builder fee for this wallet pair."
                 : "Enter valid 42-character hex addresses for both user and builder wallets."}
             </span>
-            <span>{isPending ? "Loading..." : isFetched ? "Fetched" : "Idle"}</span>
+            <span>
+              {isPending ? "Loading..." : isFetched ? "Fetched" : "Idle"}
+            </span>
           </div>
         </CardHeader>
 

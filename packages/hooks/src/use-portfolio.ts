@@ -1,10 +1,19 @@
-import { useQuery, type UseQueryOptions, type UseQueryResult } from "@tanstack/react-query";
 import type { PortfolioResponse } from "@nktkas/hyperliquid/api/info";
+import {
+  type UseQueryOptions,
+  type UseQueryResult,
+  useQuery,
+} from "@tanstack/react-query";
 import { infoClient } from "./config/hl.js";
 
 export type PortfolioData = PortfolioResponse;
 export type UsePortfolioOptions = Omit<
-  UseQueryOptions<PortfolioData, Error, PortfolioData, ["portfolio", `0x${string}`]>,
+  UseQueryOptions<
+    PortfolioData,
+    Error,
+    PortfolioData,
+    ["portfolio", `0x${string}`]
+  >,
   "queryKey" | "queryFn"
 >;
 

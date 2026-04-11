@@ -41,7 +41,7 @@ export type UserAccountActivityData = {
 
 function isSameAddress(
   left: `0x${string}` | undefined,
-  right: `0x${string}` | undefined
+  right: `0x${string}` | undefined,
 ): boolean {
   return Boolean(left && right && left.toLowerCase() === right.toLowerCase());
 }
@@ -69,7 +69,7 @@ function isSystemAddress(address: string): boolean {
 function formatDisplayValue(
   value: string | null,
   token: string | null,
-  direction: UserAccountActivityDirection = "neutral"
+  direction: UserAccountActivityDirection = "neutral",
 ): string {
   if (!value || Number(value) === 0) {
     return "--";
@@ -86,7 +86,7 @@ function getExplorerUrl(entry: UserNonFundingLedgerUpdate): string {
 }
 
 function getStatus(
-  entry: UserNonFundingLedgerUpdate
+  entry: UserNonFundingLedgerUpdate,
 ): UserAccountActivityStatus {
   return entry.delta.type === "liquidation" ? "Triggered" : "Completed";
 }
@@ -100,17 +100,27 @@ function getAction(entry: UserNonFundingLedgerUpdate): string {
     case "internalTransfer":
       return "Send";
     case "spotTransfer":
-      return isSystemAddress(entry.delta.destination) || isSystemAddress(entry.delta.user)
+      return isSystemAddress(entry.delta.destination) ||
+        isSystemAddress(entry.delta.user)
         ? "Transfer"
         : "Send";
     case "send":
-      if (isSystemAddress(entry.delta.destination) || isSystemAddress(entry.delta.user)) {
+      if (
+        isSystemAddress(entry.delta.destination) ||
+        isSystemAddress(entry.delta.user)
+      ) {
         return "Transfer";
       }
-      if (entry.delta.sourceDex === "spot" && entry.delta.destinationDex === "spot") {
+      if (
+        entry.delta.sourceDex === "spot" &&
+        entry.delta.destinationDex === "spot"
+      ) {
         return "Send";
       }
-      if (entry.delta.sourceDex === "spot" || entry.delta.destinationDex === "spot") {
+      if (
+        entry.delta.sourceDex === "spot" ||
+        entry.delta.destinationDex === "spot"
+      ) {
         return "Transfer";
       }
       return "Send";
@@ -136,10 +146,10 @@ function getAction(entry: UserNonFundingLedgerUpdate): string {
       return entry.delta.operation === "supply"
         ? "Supply"
         : entry.delta.operation === "withdraw"
-        ? "Withdraw"
-        : entry.delta.operation === "borrow"
-        ? "Borrow"
-        : "Repay";
+          ? "Withdraw"
+          : entry.delta.operation === "borrow"
+            ? "Borrow"
+            : "Repay";
     case "spotGenesis":
       return "Genesis";
     case "activateDexAbstraction":
@@ -209,7 +219,9 @@ function getDestination(entry: UserNonFundingLedgerUpdate): string {
     case "subAccountTransfer":
       return "Perps";
     case "send":
-      return isSystemAddress(entry.delta.destination) ? "HyperEVM" : formatDexLabel(entry.delta.destinationDex);
+      return isSystemAddress(entry.delta.destination)
+        ? "HyperEVM"
+        : formatDexLabel(entry.delta.destinationDex);
     case "internalTransfer":
       return "Perps";
     case "cStakingTransfer":
@@ -239,7 +251,7 @@ function getDestination(entry: UserNonFundingLedgerUpdate): string {
 
 function getAmount(
   entry: UserNonFundingLedgerUpdate,
-  user: `0x${string}`
+  user: `0x${string}`,
 ): UserAccountActivityAmount {
   switch (entry.delta.type) {
     case "deposit":
@@ -289,7 +301,7 @@ function getAmount(
             ? entry.delta.usdc
             : (gross - Number(entry.delta.fee || "0")).toString(),
           "USDC",
-          direction
+          direction,
         ),
       };
     }
@@ -327,7 +339,7 @@ function getAmount(
         displayValue: formatDisplayValue(
           entry.delta.usdcValue,
           "USDC",
-          direction
+          direction,
         ),
       };
     }
@@ -342,7 +354,7 @@ function getAmount(
         displayValue: formatDisplayValue(
           entry.delta.amount,
           entry.delta.token,
-          direction
+          direction,
         ),
       };
     }
@@ -382,7 +394,7 @@ function getAmount(
         displayValue: formatDisplayValue(
           entry.delta.netWithdrawnUsd,
           "USDC",
-          "in"
+          "in",
         ),
       };
     case "rewardsClaim":
@@ -394,7 +406,7 @@ function getAmount(
         displayValue: formatDisplayValue(
           entry.delta.amount,
           entry.delta.token,
-          "in"
+          "in",
         ),
       };
     case "liquidation":
@@ -406,7 +418,7 @@ function getAmount(
         displayValue: formatDisplayValue(
           entry.delta.accountValue,
           "USDC",
-          "neutral"
+          "neutral",
         ),
       };
     case "deployGasAuction":
@@ -418,7 +430,7 @@ function getAmount(
         displayValue: formatDisplayValue(
           entry.delta.amount,
           entry.delta.token,
-          "out"
+          "out",
         ),
       };
     case "borrowLend": {
@@ -435,7 +447,7 @@ function getAmount(
         displayValue: formatDisplayValue(
           entry.delta.amount,
           entry.delta.token,
-          direction
+          direction,
         ),
       };
     }
@@ -450,7 +462,7 @@ function getAmount(
         displayValue: formatDisplayValue(
           entry.delta.amount.replace(/^-/, ""),
           entry.delta.token,
-          direction
+          direction,
         ),
       };
     }
@@ -463,7 +475,7 @@ function getAmount(
         displayValue: formatDisplayValue(
           entry.delta.amount,
           entry.delta.token,
-          "out"
+          "out",
         ),
       };
   }
@@ -486,7 +498,7 @@ function getFee(entry: UserNonFundingLedgerUpdate): UserAccountActivityFee {
           token: entry.delta.feeToken,
           displayValue: formatDisplayValue(
             entry.delta.fee,
-            entry.delta.feeToken
+            entry.delta.feeToken,
           ),
         };
       }
@@ -514,7 +526,7 @@ function getFee(entry: UserNonFundingLedgerUpdate): UserAccountActivityFee {
           token: entry.delta.feeToken,
           displayValue: formatDisplayValue(
             entry.delta.fee,
-            entry.delta.feeToken
+            entry.delta.feeToken,
           ),
         };
       }
@@ -584,7 +596,7 @@ function getFee(entry: UserNonFundingLedgerUpdate): UserAccountActivityFee {
 
 function formatUserAccountActivity(
   entry: UserNonFundingLedgerUpdate,
-  user: `0x${string}`
+  user: `0x${string}`,
 ): UserAccountActivity {
   return {
     ...entry,
@@ -600,11 +612,11 @@ function formatUserAccountActivity(
 
 export function useUserAccountActivity(
   user: `0x${string}`,
-  options: UseUserNonFundingLedgerUpdatesOptions = {}
+  options: UseUserNonFundingLedgerUpdatesOptions = {},
 ) {
   const userNonFundingLedgerUpdatesState = useUserNonFundingLedgerUpdates(
     user,
-    options
+    options,
   );
 
   const data = useMemo<UserAccountActivityData | undefined>(() => {
@@ -618,7 +630,7 @@ export function useUserAccountActivity(
         userNonFundingLedgerUpdatesState.data.nonFundingLedgerUpdates,
       activity:
         userNonFundingLedgerUpdatesState.data.nonFundingLedgerUpdates.map(
-          (entry) => formatUserAccountActivity(entry, user)
+          (entry) => formatUserAccountActivity(entry, user),
         ),
     };
   }, [user, userNonFundingLedgerUpdatesState.data]);

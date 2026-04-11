@@ -1,5 +1,5 @@
-import { useSubscribe, type UseSubscribeState } from "@outofgas/react-stream";
 import type { TradesEvent } from "@nktkas/hyperliquid/api/subscription";
+import { type UseSubscribeState, useSubscribe } from "@outofgas/react-stream";
 import { wsClient } from "./config/hl.js";
 
 export type Trade = TradesEvent[number];
@@ -17,7 +17,9 @@ function formatTrades(
   limit: number,
 ): Trade[] {
   const uniqueTrades = Array.from(
-    new Map([...incomingTrades, ...previousTrades].map((trade) => [trade.tid, trade])).values(),
+    new Map(
+      [...incomingTrades, ...previousTrades].map((trade) => [trade.tid, trade]),
+    ).values(),
   );
 
   return uniqueTrades.sort((a, b) => b.time - a.time).slice(0, limit);

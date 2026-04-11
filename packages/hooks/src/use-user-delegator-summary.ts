@@ -1,5 +1,9 @@
-import { useQuery, type UseQueryOptions, type UseQueryResult } from "@tanstack/react-query";
 import type { DelegatorSummaryResponse } from "@nktkas/hyperliquid/api/info";
+import {
+  type UseQueryOptions,
+  type UseQueryResult,
+  useQuery,
+} from "@tanstack/react-query";
 import { infoClient } from "./config/hl.js";
 
 export type UserDelegatorSummaryData = DelegatorSummaryResponse;

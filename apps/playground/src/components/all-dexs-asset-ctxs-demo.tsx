@@ -60,7 +60,10 @@ function getDexSummaries(
       }))
       .sort((left, right) => right.dayNtlVlm - left.dayNtlVlm);
 
-    const totalDayNtlVlm = rankedAssets.reduce((sum, asset) => sum + asset.dayNtlVlm, 0);
+    const totalDayNtlVlm = rankedAssets.reduce(
+      (sum, asset) => sum + asset.dayNtlVlm,
+      0,
+    );
     const averageFunding =
       rankedAssets.reduce((sum, asset) => sum + Number(asset.ctx.funding), 0) /
       Math.max(rankedAssets.length, 1);
@@ -106,25 +109,30 @@ function DexSkeleton() {
 export function AllDexsAssetCtxsDemo() {
   const { data, loading, error, ready } = useAllDexsAssetCtxs();
   const summaries = data ? getDexSummaries(data) : [];
-  const totalAssetCount = summaries.reduce((sum, summary) => sum + summary.assetCount, 0);
+  const totalAssetCount = summaries.reduce(
+    (sum, summary) => sum + summary.assetCount,
+    0,
+  );
 
   return (
     <section className="space-y-4">
       <div className="space-y-1">
         <h2 className="text-xl font-semibold">All DEXs Asset Ctxs</h2>
         <p className="text-sm text-gray-500">
-          Live stream from <code>useAllDexsAssetCtxs</code>, grouped by DEX and ranked by daily
-          notional volume.
+          Live stream from <code>useAllDexsAssetCtxs</code>, grouped by DEX and
+          ranked by daily notional volume.
         </p>
       </div>
 
       <Card className={DEMO_CARD_CLASS_NAME}>
         <CardHeader className={DEMO_CARD_HEADER_CLASS_NAME}>
           <div className="space-y-2">
-            <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>DEX Context Snapshot</CardTitle>
+            <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>
+              DEX Context Snapshot
+            </CardTitle>
             <p className="text-sm text-stone-500">
-              The payload does not include market symbols, so the demo labels each perpetual as
-              its streamed asset index within that DEX.
+              The payload does not include market symbols, so the demo labels
+              each perpetual as its streamed asset index within that DEX.
             </p>
           </div>
           <div className="rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3 text-xs text-stone-700">
@@ -195,7 +203,9 @@ export function AllDexsAssetCtxsDemo() {
                         Top Asset
                       </div>
                       <div className="mt-2 font-mono text-lg text-stone-900">
-                        {summary.topAssets[0] ? `#${summary.topAssets[0].assetIndex}` : "--"}
+                        {summary.topAssets[0]
+                          ? `#${summary.topAssets[0].assetIndex}`
+                          : "--"}
                       </div>
                     </div>
                   </div>

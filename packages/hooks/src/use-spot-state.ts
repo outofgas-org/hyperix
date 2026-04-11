@@ -1,9 +1,11 @@
-import { useSubscribe, type UseSubscribeState } from "@outofgas/react-stream";
 import type { SpotStateEvent } from "@nktkas/hyperliquid/api/subscription";
+import { type UseSubscribeState, useSubscribe } from "@outofgas/react-stream";
 import { wsClient } from "./config/hl.js";
 
 export type SpotBalance = SpotStateEvent["spotState"]["balances"][number];
-export type SpotEscrow = NonNullable<SpotStateEvent["spotState"]["evmEscrows"]>[number];
+export type SpotEscrow = NonNullable<
+  SpotStateEvent["spotState"]["evmEscrows"]
+>[number];
 
 export type SpotStateData = SpotStateEvent["spotState"] & {
   user: `0x${string}`;
@@ -37,7 +39,9 @@ export function useSpotState(
             });
           } catch (error) {
             onError(
-              error instanceof Error ? error : new Error("Failed to process spot state event"),
+              error instanceof Error
+                ? error
+                : new Error("Failed to process spot state event"),
             );
           }
         },

@@ -1,11 +1,20 @@
-import { useQuery, type UseQueryOptions, type UseQueryResult } from "@tanstack/react-query";
 import type { UserVaultEquitiesResponse } from "@nktkas/hyperliquid/api/info";
+import {
+  type UseQueryOptions,
+  type UseQueryResult,
+  useQuery,
+} from "@tanstack/react-query";
 import { infoClient } from "./config/hl.js";
 
 export type UserVaultEquity = UserVaultEquitiesResponse[number];
 export type UserVaultEquitiesData = UserVaultEquitiesResponse;
 export type UseUserVaultEquitiesOptions = Omit<
-  UseQueryOptions<UserVaultEquitiesData, Error, UserVaultEquitiesData, ["userVaultEquities", `0x${string}`]>,
+  UseQueryOptions<
+    UserVaultEquitiesData,
+    Error,
+    UserVaultEquitiesData,
+    ["userVaultEquities", `0x${string}`]
+  >,
   "queryKey" | "queryFn"
 >;
 

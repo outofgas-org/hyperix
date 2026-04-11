@@ -75,25 +75,31 @@ export function SpotAssetCtxsDemo() {
   const assets = [...(data ?? [])].sort(
     (left, right) => Number(right.dayNtlVlm) - Number(left.dayNtlVlm),
   );
-  const totalSpotVolume = (data ?? []).reduce((sum, asset) => sum + Number(asset.dayNtlVlm), 0);
+  const totalSpotVolume = (data ?? []).reduce(
+    (sum, asset) => sum + Number(asset.dayNtlVlm),
+    0,
+  );
 
   return (
     <section className="space-y-4">
       <div className="space-y-1">
         <h2 className="text-xl font-semibold">Spot Asset Ctxs</h2>
         <p className="text-sm text-gray-500">
-          Live stream from <code>useSpotAssetCtxs</code>, listed in a table and resolved through
-          the symbol converter when possible.
+          Live stream from <code>useSpotAssetCtxs</code>, listed in a table and
+          resolved through the symbol converter when possible.
         </p>
       </div>
 
       <Card className={DEMO_CARD_CLASS_NAME}>
         <CardHeader className={DEMO_CARD_HEADER_CLASS_NAME}>
           <div className="space-y-2">
-            <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>Spot Context Snapshot</CardTitle>
+            <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>
+              Spot Context Snapshot
+            </CardTitle>
             <p className="text-sm text-stone-500">
-              Each row is a streamed spot asset context with a converter-resolved market name,
-              live prices, turnover, and supply metrics.
+              Each row is a streamed spot asset context with a
+              converter-resolved market name, live prices, turnover, and supply
+              metrics.
             </p>
           </div>
           <div className={DEMO_CARD_STATUS_CLASS_NAME}>
@@ -124,7 +130,10 @@ export function SpotAssetCtxsDemo() {
                 <thead className="sticky top-0 z-10 bg-[#f8fbfd]">
                   <tr className="border-b border-[#edf3f7] text-left text-[11px] uppercase tracking-[0.12em] text-[#6f8797]">
                     {HEADERS.map((header) => (
-                      <th key={header} className="px-4 py-3 font-medium whitespace-nowrap">
+                      <th
+                        key={header}
+                        className="px-4 py-3 font-medium whitespace-nowrap"
+                      >
                         {header}
                       </th>
                     ))}
@@ -132,7 +141,9 @@ export function SpotAssetCtxsDemo() {
                 </thead>
                 <tbody>
                   {assets.map((asset) => {
-                    const displayCoin = symbolConverter?.getSpotByPairId(asset.coin) ?? asset.coin;
+                    const displayCoin =
+                      symbolConverter?.getSpotByPairId(asset.coin) ??
+                      asset.coin;
 
                     return (
                       <tr
@@ -142,7 +153,9 @@ export function SpotAssetCtxsDemo() {
                         <td className="px-4 py-3 font-semibold whitespace-nowrap text-stone-900">
                           {displayCoin}
                         </td>
-                        <td className="px-4 py-3 whitespace-nowrap text-stone-500">{asset.coin}</td>
+                        <td className="px-4 py-3 whitespace-nowrap text-stone-500">
+                          {asset.coin}
+                        </td>
                         <td className="px-4 py-3 whitespace-nowrap text-stone-900">
                           ${formatPrice(asset.markPx)}
                         </td>
@@ -156,7 +169,8 @@ export function SpotAssetCtxsDemo() {
                           {formatNumber(asset.dayBaseVlm)}
                         </td>
                         <td className="px-4 py-3 whitespace-nowrap text-stone-900">
-                          {formatNumber(asset.circulatingSupply)} / {formatNumber(asset.totalSupply)}
+                          {formatNumber(asset.circulatingSupply)} /{" "}
+                          {formatNumber(asset.totalSupply)}
                         </td>
                       </tr>
                     );

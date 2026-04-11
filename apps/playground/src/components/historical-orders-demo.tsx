@@ -1,5 +1,5 @@
-import Decimal from "decimal.js";
 import { type OrderHistory, useOrderHistory } from "@hyperix/hooks";
+import Decimal from "decimal.js";
 import { useState } from "react";
 import { formatDate } from "../lib/format-date";
 import {
@@ -60,7 +60,9 @@ function getCoinClass(side: OrderHistory["order"]["side"]) {
 
 function formatSize(historicalOrder: OrderHistory) {
   const { order, status } = historicalOrder;
-  return status === "filled" || Number(order.sz) === 0 ? "--" : formatAmount(order.origSz);
+  return status === "filled" || Number(order.sz) === 0
+    ? "--"
+    : formatAmount(order.origSz);
 }
 
 function formatFilledSize(historicalOrder: OrderHistory) {
@@ -68,7 +70,9 @@ function formatFilledSize(historicalOrder: OrderHistory) {
     return "--";
   }
 
-  const filledSize = new Decimal(historicalOrder.order.origSz).minus(historicalOrder.order.sz);
+  const filledSize = new Decimal(historicalOrder.order.origSz).minus(
+    historicalOrder.order.sz,
+  );
   return formatAmount(filledSize.toString());
 }
 
@@ -82,7 +86,9 @@ function formatOrderValue(historicalOrder: OrderHistory) {
   }
 
   return formatAmount(
-    new Decimal(historicalOrder.order.origSz).mul(historicalOrder.order.limitPx).toString(),
+    new Decimal(historicalOrder.order.origSz)
+      .mul(historicalOrder.order.limitPx)
+      .toString(),
   );
 }
 
@@ -109,25 +115,51 @@ function formatTpSl(historicalOrder: OrderHistory) {
   return historicalOrder.order.isPositionTpsl ? "Yes" : "--";
 }
 
-function HistoricalOrderRow({ historicalOrder }: { historicalOrder: OrderHistory }) {
+function HistoricalOrderRow({
+  historicalOrder,
+}: { historicalOrder: OrderHistory }) {
   return (
     <tr className="border-b border-[#edf3f7] last:border-b-0 odd:bg-white even:bg-[#fbfdff]">
-      <td className="px-4 py-3 text-[#183242]">{formatDate(historicalOrder.statusTimestamp)}</td>
-      <td className="px-4 py-3 text-[#183242]">{historicalOrder.order.orderType}</td>
-      <td className={`px-4 py-3 font-semibold ${getCoinClass(historicalOrder.order.side)}`}>
+      <td className="px-4 py-3 text-[#183242]">
+        {formatDate(historicalOrder.statusTimestamp)}
+      </td>
+      <td className="px-4 py-3 text-[#183242]">
+        {historicalOrder.order.orderType}
+      </td>
+      <td
+        className={`px-4 py-3 font-semibold ${getCoinClass(historicalOrder.order.side)}`}
+      >
         {historicalOrder.displayCoin}
       </td>
-      <td className={`px-4 py-3 ${getDirectionClass(historicalOrder.direction)}`}>
+      <td
+        className={`px-4 py-3 ${getDirectionClass(historicalOrder.direction)}`}
+      >
         {historicalOrder.direction}
       </td>
-      <td className="px-4 py-3 text-[#183242]">{formatSize(historicalOrder)}</td>
-      <td className="px-4 py-3 text-[#183242]">{formatFilledSize(historicalOrder)}</td>
-      <td className="px-4 py-3 text-[#183242]">{formatOrderValue(historicalOrder)}</td>
-      <td className="px-4 py-3 text-[#183242]">{formatPrice(historicalOrder)}</td>
-      <td className="px-4 py-3 text-[#183242]">{formatReduceOnly(historicalOrder)}</td>
-      <td className="px-4 py-3 text-[#183242]">{formatTriggerCondition(historicalOrder)}</td>
-      <td className="px-4 py-3 text-[#183242]">{formatTpSl(historicalOrder)}</td>
-      <td className="px-4 py-3 text-[#183242]">{formatStatus(historicalOrder.status)}</td>
+      <td className="px-4 py-3 text-[#183242]">
+        {formatSize(historicalOrder)}
+      </td>
+      <td className="px-4 py-3 text-[#183242]">
+        {formatFilledSize(historicalOrder)}
+      </td>
+      <td className="px-4 py-3 text-[#183242]">
+        {formatOrderValue(historicalOrder)}
+      </td>
+      <td className="px-4 py-3 text-[#183242]">
+        {formatPrice(historicalOrder)}
+      </td>
+      <td className="px-4 py-3 text-[#183242]">
+        {formatReduceOnly(historicalOrder)}
+      </td>
+      <td className="px-4 py-3 text-[#183242]">
+        {formatTriggerCondition(historicalOrder)}
+      </td>
+      <td className="px-4 py-3 text-[#183242]">
+        {formatTpSl(historicalOrder)}
+      </td>
+      <td className="px-4 py-3 text-[#183242]">
+        {formatStatus(historicalOrder.status)}
+      </td>
       <td className="px-4 py-3 text-[#183242]">{historicalOrder.order.oid}</td>
     </tr>
   );
@@ -156,8 +188,8 @@ export function HistoricalOrdersDemo() {
       <div className="space-y-1">
         <h2 className="text-xl font-semibold">Order History</h2>
         <p className="text-sm text-gray-500">
-          Table demo for <code>useOrderHistory</code> with the same display coin and direction
-          normalization used in the hook.
+          Table demo for <code>useOrderHistory</code> with the same display coin
+          and direction normalization used in the hook.
         </p>
       </div>
 
@@ -184,7 +216,13 @@ export function HistoricalOrdersDemo() {
                 ? `Subscribed to ${address}`
                 : "Enter a valid 42-character hex wallet address to start the subscription."}
             </span>
-            <span>{data ? `${orderHistory.length} entries` : loading ? "Loading..." : "Idle"}</span>
+            <span>
+              {data
+                ? `${orderHistory.length} entries`
+                : loading
+                  ? "Loading..."
+                  : "Idle"}
+            </span>
           </div>
         </CardHeader>
 
@@ -205,7 +243,10 @@ export function HistoricalOrdersDemo() {
                 <thead className="sticky top-0 z-10 bg-[#f8fbfd]">
                   <tr className="border-b border-[#edf3f7] text-left text-[11px] uppercase tracking-[0.12em] text-[#6f8797]">
                     {HEADERS.map((header) => (
-                      <th key={header} className="px-4 py-3 font-medium whitespace-nowrap">
+                      <th
+                        key={header}
+                        className="px-4 py-3 font-medium whitespace-nowrap"
+                      >
                         {header}
                       </th>
                     ))}

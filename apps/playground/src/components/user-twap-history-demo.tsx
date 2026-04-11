@@ -86,14 +86,19 @@ export function UserTwapHistoryDemo() {
   const [input, setInput] = useState(DEFAULT_ADDRESS);
   const address = isAddress(input) ? input : undefined;
   const symbolConverter = useSymbolConverter();
-  const { data, loading, error, ready } = useUserTwapHistory(address ?? DEFAULT_ADDRESS, {
-    enabled: Boolean(address),
-  });
+  const { data, loading, error, ready } = useUserTwapHistory(
+    address ?? DEFAULT_ADDRESS,
+    {
+      enabled: Boolean(address),
+    },
+  );
 
   const history = useMemo(() => {
     return [...(data?.history ?? [])]
       .map((entry) => {
-        const displayCoin = symbolConverter?.getSpotByPairId(entry.state.coin) ?? entry.state.coin;
+        const displayCoin =
+          symbolConverter?.getSpotByPairId(entry.state.coin) ??
+          entry.state.coin;
 
         return {
           time: entry.time,
@@ -118,15 +123,17 @@ export function UserTwapHistoryDemo() {
       <div className="space-y-1">
         <h2 className="text-xl font-semibold">User TWAP History</h2>
         <p className="text-sm text-gray-500">
-          Table demo for <code>useUserTwapHistory</code>, merging snapshot and incremental TWAP
-          history events for a wallet.
+          Table demo for <code>useUserTwapHistory</code>, merging snapshot and
+          incremental TWAP history events for a wallet.
         </p>
       </div>
 
       <Card className={`${DEMO_CARD_CLASS_NAME} text-[#183242]`}>
         <CardHeader className={DEMO_CARD_HEADER_CLASS_NAME}>
           <div className="space-y-2">
-            <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>Tracked Wallet</CardTitle>
+            <CardTitle className={DEMO_CARD_TITLE_CLASS_NAME}>
+              Tracked Wallet
+            </CardTitle>
             <Input
               className={DEMO_CARD_INPUT_CLASS_NAME}
               onChange={(event) => {
@@ -144,7 +151,13 @@ export function UserTwapHistoryDemo() {
                 ? `Subscribed to TWAP history for ${address}`
                 : "Enter a valid 42-character hex wallet address to start the subscription."}
             </span>
-            <span>{ready ? `${history.length} entries` : loading ? "Loading..." : "Idle"}</span>
+            <span>
+              {ready
+                ? `${history.length} entries`
+                : loading
+                  ? "Loading..."
+                  : "Idle"}
+            </span>
           </div>
         </CardHeader>
 
@@ -165,7 +178,10 @@ export function UserTwapHistoryDemo() {
                 <thead className="sticky top-0 z-10 bg-[#f8fbfd]">
                   <tr className="border-b border-[#edf3f7] text-left text-[11px] uppercase tracking-[0.12em] text-[#6f8797]">
                     {HEADERS.map((header) => (
-                      <th key={header} className="px-4 py-3 font-medium whitespace-nowrap">
+                      <th
+                        key={header}
+                        className="px-4 py-3 font-medium whitespace-nowrap"
+                      >
                         {header}
                       </th>
                     ))}
@@ -177,32 +193,47 @@ export function UserTwapHistoryDemo() {
                       key={`${entry.time}-${entry.twapId ?? "na"}-${index}`}
                       className="border-b border-[#edf3f7] last:border-b-0 odd:bg-white even:bg-[#fbfdff]"
                     >
-                      <td className="px-4 py-3 text-[#183242]">{formatDate(entry.time)}</td>
-                      <td className="px-4 py-3 text-[#183242]">{entry.twapId ?? "--"}</td>
+                      <td className="px-4 py-3 text-[#183242]">
+                        {formatDate(entry.time)}
+                      </td>
+                      <td className="px-4 py-3 text-[#183242]">
+                        {entry.twapId ?? "--"}
+                      </td>
                       <td className="px-4 py-3 text-[#183242]">
                         <div className="font-semibold">{entry.coin}</div>
                         {entry.coin !== entry.rawCoin ? (
-                          <div className="text-[11px] text-[#6f8797]">{entry.rawCoin}</div>
+                          <div className="text-[11px] text-[#6f8797]">
+                            {entry.rawCoin}
+                          </div>
                         ) : null}
                       </td>
                       <td className="px-4 py-3 text-[#183242]">
                         <div>{getStatusLabel(entry.status)}</div>
                         {"description" in entry.status ? (
-                          <div className="text-[11px] text-rose-500">{entry.status.description}</div>
+                          <div className="text-[11px] text-rose-500">
+                            {entry.status.description}
+                          </div>
                         ) : null}
                       </td>
                       <td className={`px-4 py-3 ${getSideClass(entry.side)}`}>
                         {getSideLabel(entry.side)}
                       </td>
                       <td className="px-4 py-3 text-[#183242]">
-                        {formatAmount(entry.executedSz)} / {formatAmount(entry.sz)}
+                        {formatAmount(entry.executedSz)} /{" "}
+                        {formatAmount(entry.sz)}
                       </td>
-                      <td className="px-4 py-3 text-[#183242]">${formatAmount(entry.executedNtl)}</td>
-                      <td className="px-4 py-3 text-[#183242]">{entry.minutes} min</td>
+                      <td className="px-4 py-3 text-[#183242]">
+                        ${formatAmount(entry.executedNtl)}
+                      </td>
+                      <td className="px-4 py-3 text-[#183242]">
+                        {entry.minutes} min
+                      </td>
                       <td className="px-4 py-3 text-[#183242]">
                         {entry.reduceOnly ? "Reduce only" : "Standard"}
                         <div className="text-[11px] text-[#6f8797]">
-                          {entry.randomize ? "Randomized slices" : "Fixed slices"}
+                          {entry.randomize
+                            ? "Randomized slices"
+                            : "Fixed slices"}
                         </div>
                       </td>
                     </tr>

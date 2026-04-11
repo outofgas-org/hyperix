@@ -1,6 +1,6 @@
 import { getDefaultInfoClient, getTransport } from "../config/hl";
-import { SymbolConverter } from "./symbol-converter";
 import type { AllPerpMetas, SpotMeta } from "../types";
+import { SymbolConverter } from "./symbol-converter";
 
 const METADATA_CACHE_TTL_MS = 24 * 60 * 60 * 1000;
 
@@ -20,7 +20,9 @@ export type HyperliquidMetadataCache = {
   clear(): void;
 };
 
-export class DefaultHyperliquidMetadataCache implements HyperliquidMetadataCache {
+export class DefaultHyperliquidMetadataCache
+  implements HyperliquidMetadataCache
+{
   private readonly ttlMs: number;
   private spotMetaEntry?: MetadataCacheEntry<SpotMeta>;
   private allPerpMetasEntry?: MetadataCacheEntry<AllPerpMetas>;
@@ -63,7 +65,10 @@ export class DefaultHyperliquidMetadataCache implements HyperliquidMetadataCache
 
   async getSymbolConverter(): Promise<SymbolConverter> {
     const now = Date.now();
-    if (this.symbolConverterEntry && this.symbolConverterEntry.expiresAt > now) {
+    if (
+      this.symbolConverterEntry &&
+      this.symbolConverterEntry.expiresAt > now
+    ) {
       return this.symbolConverterEntry.data;
     }
 
