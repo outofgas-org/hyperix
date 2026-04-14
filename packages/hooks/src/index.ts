@@ -21,6 +21,7 @@ export * from "./use-spot-markets.js";
 export * from "./use-spot-meta-and-asset-ctxs.js";
 export * from "./use-spot-meta.js";
 export * from "./use-spot-state.js";
+export * from "./use-subscribe-status.js";
 export * from "./lib/symbol-converter.js";
 export * from "./use-symbol-converter.js";
 export * from "./use-twap-states.js";
