@@ -34,12 +34,15 @@ const HEADERS = [
   "Size",
   "Leverage",
   "Entry",
+  "Mark",
   "Position Value",
   "Unrealized PnL",
   "ROE",
   "Liquidation",
   "Margin Used",
   "Funding Since Open",
+  "TP",
+  "SL",
 ] as const;
 
 function isAddress(value: string): value is `0x${string}` {
@@ -62,26 +65,13 @@ function formatLiquidationPrice(value: string | null) {
   return value === null ? "--" : formatValue(value);
 }
 
-function getSide(position: Position["position"]) {
-  const size = Number(position.szi);
-  if (size > 0) {
-    return "Long";
-  }
-
-  if (size < 0) {
-    return "Short";
-  }
-
-  return "Flat";
-}
-
-function getSideClass(position: Position["position"]) {
-  const size = Number(position.szi);
-  if (size > 0) {
+function getSideClass(size: string) {
+  const numericSize = Number(size);
+  if (numericSize > 0) {
     return "text-[#27d3b2]";
   }
 
-  if (size < 0) {
+  if (numericSize < 0) {
     return "text-[#ff6b8f]";
   }
 
@@ -101,8 +91,8 @@ function PositionRow({ positionRecord }: { positionRecord: Position }) {
       <td className="px-4 py-3 font-semibold text-[#183242]">
         {position.coin}
       </td>
-      <td className={`px-4 py-3 ${getSideClass(position)}`}>
-        {getSide(position)}
+      <td className={`px-4 py-3 ${getSideClass(position.szi)}`}>
+        {positionRecord.side}
       </td>
       <td className="px-4 py-3 text-[#183242]">{formatAmount(position.szi)}</td>
       <td className="px-4 py-3 text-[#183242]">{formatLeverage(position)}</td>
@@ -110,10 +100,15 @@ function PositionRow({ positionRecord }: { positionRecord: Position }) {
         {formatValue(position.entryPx)}
       </td>
       <td className="px-4 py-3 text-[#183242]">
+        {positionRecord.markPrice === undefined
+          ? "--"
+          : formatValue(positionRecord.markPrice)}
+      </td>
+      <td className="px-4 py-3 text-[#183242]">
         ${formatValue(position.positionValue)}
       </td>
       <td
-        className={`px-4 py-3 ${getSideClass({ ...position, szi: position.unrealizedPnl })}`}
+        className={`px-4 py-3 ${getSideClass(position.unrealizedPnl)}`}
       >
         ${formatValue(position.unrealizedPnl)}
       </td>
@@ -127,7 +122,17 @@ function PositionRow({ positionRecord }: { positionRecord: Position }) {
         ${formatValue(position.marginUsed)}
       </td>
       <td className="px-4 py-3 text-[#183242]">
-        ${formatValue(position.cumFunding.sinceOpen)}
+        ${formatValue(positionRecord.fundingSinceOpen)}
+      </td>
+      <td className="px-4 py-3 text-[#183242]">
+        {positionRecord.takeProfitTriggerPx
+          ? formatValue(positionRecord.takeProfitTriggerPx)
+          : "--"}
+      </td>
+      <td className="px-4 py-3 text-[#183242]">
+        {positionRecord.stopLossTriggerPx
+          ? formatValue(positionRecord.stopLossTriggerPx)
+          : "--"}
       </td>
     </tr>
   );
@@ -159,8 +164,8 @@ export function PositionsDemo() {
       <div className="space-y-1">
         <h2 className="text-xl font-semibold">Positions</h2>
         <p className="text-sm text-gray-500">
-          Table demo for <code>usePositions</code>, aggregating open positions
-          across all DEXs and sorting by descending position value.
+          Table demo for <code>usePositions</code>, returning enriched positions
+          with mark price and TP/SL trigger data across all DEXs.
         </p>
       </div>
 
@@ -189,7 +194,7 @@ export function PositionsDemo() {
             </span>
             <span>
               {ready
-                ? `${positions.length} positions`
+                ? `${positions.length} enriched positions`
                 : loading
                   ? "Loading..."
                   : "Idle"}
@@ -210,7 +215,7 @@ export function PositionsDemo() {
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="min-w-[1320px] table-auto border-separate border-spacing-0">
+              <table className="min-w-[1560px] table-auto border-separate border-spacing-0">
                 <thead className="sticky top-0 z-10 bg-[#f8fbfd]">
                   <tr className="border-b border-[#edf3f7] text-left text-[11px] uppercase tracking-[0.12em] text-[#6f8797]">
                     {HEADERS.map((header) => (
