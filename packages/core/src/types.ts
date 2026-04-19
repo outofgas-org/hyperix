@@ -31,6 +31,8 @@ export type UserTwapFill = Awaited<
 export type ActiveAssetData = Awaited<
   ReturnType<InfoClient["activeAssetData"]>
 >;
+export type PerpCategories = Awaited<ReturnType<InfoClient["perpCategories"]>>;
+export type PerpCategory = PerpCategories[number];
 export type TokenInfo = SpotMeta["tokens"][number];
 
 export class HyperliquidCoreError extends Error {

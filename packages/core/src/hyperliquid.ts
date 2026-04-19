@@ -10,6 +10,7 @@ export * from "./get-funding";
 export * from "./get-markets";
 export * from "./get-open-orders";
 export * from "./get-orderbook";
+export * from "./get-perp-categories";
 export * from "./get-portfolio";
 export * from "./get-positions";
 export * from "./get-ticker";
