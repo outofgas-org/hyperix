@@ -155,6 +155,8 @@ function getAction(entry: UserNonFundingLedgerUpdate): string {
     case "activateDexAbstraction":
       return "Activate";
   }
+
+  return "Unknown";
 }
 
 function formatDexLabel(dex: string): string {
@@ -204,6 +206,8 @@ function getSource(entry: UserNonFundingLedgerUpdate): string {
     case "activateDexAbstraction":
       return "Wallet";
   }
+
+  return "--";
 }
 
 function getDestination(entry: UserNonFundingLedgerUpdate): string {
@@ -247,6 +251,18 @@ function getDestination(entry: UserNonFundingLedgerUpdate): string {
     case "activateDexAbstraction":
       return entry.delta.dex;
   }
+
+  return "--";
+}
+
+function getUnknownAmount(): UserAccountActivityAmount {
+  return {
+    value: null,
+    numericValue: null,
+    token: null,
+    direction: "neutral",
+    displayValue: "--",
+  };
 }
 
 function getAmount(
@@ -479,6 +495,8 @@ function getAmount(
         ),
       };
   }
+
+  return getUnknownAmount();
 }
 
 function getFee(entry: UserNonFundingLedgerUpdate): UserAccountActivityFee {

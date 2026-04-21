@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.2",
-    "@bunstack/core": "workspace:*",
+    "@hyperix/core": "workspace:*",
     "@bunstack/utils": "workspace:*",
     "@hyperix/hooks": "workspace:*",
     "bignumber.js": "^10.0.2",
