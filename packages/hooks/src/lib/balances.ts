@@ -304,7 +304,9 @@ export function buildBalancesData(input: BuildBalancesDataInput): BalancesData {
   const perpBalances = input.isUnifiedAccount
     ? []
     : buildPerpBalances(input.clearinghouseState, input.perpMarkets);
-  const balances = [...perpBalances, ...spotBalances];
+  const balances = [...perpBalances, ...spotBalances].filter(
+    (balance) => balance.value !== 0,
+  );
 
   const rawSpotEquity = sumBy(
     balances.filter((balance) => balance.type === "spot"),

@@ -48,8 +48,8 @@ function formatFee(value: number | undefined) {
 }
 
 export function MaxBuilderFeeDemo() {
-  const [userInput, setUserInput] = useState(EXAMPLES[0].user);
-  const [builderInput, setBuilderInput] = useState(EXAMPLES[0].builder);
+  const [userInput, setUserInput] = useState<string>(EXAMPLES[0].user);
+  const [builderInput, setBuilderInput] = useState<string>(EXAMPLES[0].builder);
   const user = isAddress(userInput) ? userInput : undefined;
   const builder = isAddress(builderInput) ? builderInput : undefined;
   const { data, isPending, error, isFetched } = useMaxBuilderFee(

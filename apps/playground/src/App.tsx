@@ -3,6 +3,7 @@ import { ActiveAssetDataDemo } from "./components/active-asset-data-demo";
 import { AllDexsAssetCtxsDemo } from "./components/all-dexs-asset-ctxs-demo";
 import { AllDexsClearingHouseStateDemo } from "./components/all-dexs-clearing-house-state-demo";
 import { AllMidsDemo } from "./components/all-mids-demo";
+import { BalancesDemo } from "./components/balances-demo";
 import { Footer } from "./components/footer";
 import { HistoricalOrdersDemo } from "./components/historical-orders-demo";
 import { MaxBuilderFeeDemo } from "./components/max-builder-fee-demo";
@@ -58,6 +59,13 @@ const DEMOS = [
     component: AllDexsClearingHouseStateDemo,
     category: "subscription",
     streamType: "perps",
+  },
+  {
+    id: "balances",
+    label: "Balances",
+    description: "Wallet-level balance breakdown across spot, perps, vaults, and staking.",
+    component: BalancesDemo,
+    category: "info",
   },
   {
     id: "market-meta",
@@ -266,7 +274,7 @@ export function App() {
       return true;
     }
 
-    return demo.streamType === selectedSubscriptionType;
+    return "streamType" in demo && demo.streamType === selectedSubscriptionType;
   });
   const activeDemo =
     DEMOS.find((demo) => demo.id === selectedDemoId) ??

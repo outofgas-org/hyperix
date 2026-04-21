@@ -92,9 +92,10 @@ function OrderbookCard({ coin }: OrderbookCardProps) {
     : defaultTick;
   const selectedLevel =
     levels.find((level) => level.tick === selectedTick) ?? levels[0];
+  const selectedSigFigs = selectedLevel?.nSigFigs as 2 | 3 | 4 | 5 | undefined;
   const { data: levelData } = useL2Book(coin, {
     depth: 11,
-    nSigFigs: selectedLevel?.nSigFigs,
+    nSigFigs: selectedSigFigs,
   });
   const data = levelData ?? baseData;
 
