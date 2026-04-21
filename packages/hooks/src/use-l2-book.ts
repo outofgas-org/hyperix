@@ -16,7 +16,7 @@ export type L2Book = {
 
 export type UseL2BookOptions = {
   depth?: number;
-  nSigFigs?: number;
+  nSigFigs?: 2 | 3 | 4 | 5 | null;
 };
 
 export const EMPTY_L2_BOOK: L2Book = {

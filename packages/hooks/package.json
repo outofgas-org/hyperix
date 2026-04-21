@@ -17,6 +17,7 @@
     "@tanstack/react-query": "^5.90.2",
     "@nktkas/hyperliquid": "^0.32.1",
     "@outofgas/react-stream": "^0.1.4",
+    "decimal.js": "^10.6.0",
     "react": "^19.1.1"
   },
   "devDependencies": {
