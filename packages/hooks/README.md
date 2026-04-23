@@ -40,6 +40,26 @@ export function App() {
 }
 ```
 
+## Shared websocket client
+
+When you need imperative websocket access outside React hooks, reuse the
+package singleton instead of creating a second socket connection.
+
+```ts
+import { infoClient, wsClient, wsTransport } from "@hyperix/hooks";
+
+const meta = await infoClient.meta();
+console.log(meta.universe.length);
+
+const subscription = await wsClient.allMids((event) => {
+  console.log(event);
+});
+
+console.log(wsTransport.socket.readyState);
+
+await subscription.unsubscribe();
+```
+
 ## Tests
 
 ```bash
