@@ -16,4 +16,7 @@ export * from "./get-positions";
 export * from "./get-ticker";
 export * from "./get-transfers";
 export * from "./get-user-fills";
+export * from "./get-historical-orders";
 export * from "./shared";
+export * from "./get-user-funding";
+export * from "./get-user-non-funding-ledger-updates";
