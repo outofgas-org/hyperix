@@ -2,7 +2,6 @@ import type { ClearinghouseStateResponse } from "@nktkas/hyperliquid/api/info";
 import Decimal from "decimal.js";
 import { HYCORE_USDC_ADDRESS } from "../config/hl.js";
 import type { AllDexsClearingHouseStateData } from "../use-all-dexs-clearing-house-state.js";
-import type { PerpMarket } from "../use-perp-markets.js";
 import type { Position } from "../use-positions.js";
 import type { SpotMarket } from "../use-spot-markets.js";
 import type { SpotBalance } from "../use-spot-state.js";
@@ -54,7 +53,7 @@ export type BuildBalancesDataInput = {
   spotBalances: SpotBalance[];
   spotMarkets: SpotMarket[];
   clearinghouseState?: AllDexsClearingHouseStateData;
-  perpMarkets?: PerpMarket[];
+  perpDexInfos?: PerpDexInfo[];
   isUnifiedAccount: boolean;
   vaultEquities?: UserVaultEquitiesData;
   delegatorSummary?: UserDelegatorSummaryData;
@@ -109,18 +108,16 @@ function sumBy<T>(items: T[], getValue: (item: T) => number): number {
   return items.reduce((acc, item) => acc + getValue(item), 0);
 }
 
-function buildPerpDexInfos(
-  perpMarkets: PerpMarket[] | undefined,
-): PerpDexInfo[] {
+function buildPerpDexInfos(perpDexInfos: PerpDexInfo[] | undefined) {
   const dexInfos = new Map<string, PerpDexInfo>();
 
-  for (const market of perpMarkets ?? []) {
-    const dexName = normalizeDexName(market.dex);
+  for (const perpDexInfo of perpDexInfos ?? []) {
+    const dexName = normalizeDexName(perpDexInfo.dexName);
     if (dexInfos.has(dexName)) continue;
 
     dexInfos.set(dexName, {
       dexName,
-      quoteCoin: market.collateralToken,
+      quoteCoin: perpDexInfo.quoteCoin,
     });
   }
 
@@ -159,14 +156,14 @@ function buildSpotBalances(
 
 function buildPerpBalances(
   clearinghouseState: AllDexsClearingHouseStateData | undefined,
-  perpMarkets: PerpMarket[] | undefined,
+  perpDexInfos: PerpDexInfo[] | undefined,
 ): Balance[] {
   const perpBalances: Balance[] = [];
   const clearinghouseStatesMap = coverClearinghouseStates(
     clearinghouseState?.clearinghouseStates,
   );
 
-  for (const dexInfo of buildPerpDexInfos(perpMarkets)) {
+  for (const dexInfo of buildPerpDexInfos(perpDexInfos)) {
     const dexState = clearinghouseStatesMap.get(dexInfo.dexName);
     if (!dexState) continue;
 
@@ -190,7 +187,7 @@ function buildPerpBalances(
 function buildPerpsOverviewInfo(
   clearinghouseState: AllDexsClearingHouseStateData | undefined,
   spotBalances: SpotBalance[],
-  perpMarkets: PerpMarket[] | undefined,
+  perpDexInfos: PerpDexInfo[] | undefined,
   isUnifiedAccount: boolean,
 ): PerpsOverviewInfo | undefined {
   if (!clearinghouseState) {
@@ -211,7 +208,7 @@ function buildPerpsOverviewInfo(
   );
   const isolatedMarginByCoin = new Map<string, Decimal>();
   const collateralCoins = new Set<string>();
-  const dexInfos = buildPerpDexInfos(perpMarkets);
+  const dexInfos = buildPerpDexInfos(perpDexInfos);
 
   if (isUnifiedAccount) {
     for (const [dexName, state] of clearinghouseStatesMap) {
@@ -303,7 +300,7 @@ export function buildBalancesData(input: BuildBalancesDataInput): BalancesData {
   );
   const perpBalances = input.isUnifiedAccount
     ? []
-    : buildPerpBalances(input.clearinghouseState, input.perpMarkets);
+    : buildPerpBalances(input.clearinghouseState, input.perpDexInfos);
   const balances = [...perpBalances, ...spotBalances];
 
   const rawSpotEquity = sumBy(
@@ -337,7 +334,7 @@ export function buildBalancesData(input: BuildBalancesDataInput): BalancesData {
   const perpsOverviewInfo = buildPerpsOverviewInfo(
     input.clearinghouseState,
     input.spotBalances,
-    input.perpMarkets,
+    input.perpDexInfos,
     input.isUnifiedAccount,
   );
 

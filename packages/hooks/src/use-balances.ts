@@ -9,7 +9,7 @@ import {
   buildBalancesData,
 } from "./lib/balances.js";
 import { useAllDexsClearingHouseState } from "./use-all-dexs-clearing-house-state.js";
-import { usePerpMarkets } from "./use-perp-markets.js";
+import { usePerpAllDex } from "./use-perp-all-dex.js";
 import { usePositions } from "./use-positions.js";
 import { useSpotMarkets } from "./use-spot-markets.js";
 import { useSpotState } from "./use-spot-state.js";
@@ -39,7 +39,7 @@ export function useBalances(
   const spotMarketsState = useSpotMarkets({ enabled });
   const clearinghouseState = useAllDexsClearingHouseState(user, { enabled });
   const spotState = useSpotState(user, { enabled });
-  const perpMarketsState = usePerpMarkets({ enabled });
+  const perpAllDexState = usePerpAllDex({ enabled });
   const vaultEquitiesState = useUserVaultEquities(user, { enabled });
   const delegatorSummaryState = useUserDelegatorSummary(user, { enabled });
   const userAbstractionState = useUserAbstraction(user, { enabled });
@@ -59,7 +59,7 @@ export function useBalances(
       spotBalances: spotState.data.balances,
       spotMarkets: spotMarketsState.data,
       clearinghouseState: clearinghouseState.data,
-      perpMarkets: perpMarketsState.data,
+      perpDexInfos: perpAllDexState.data,
       isUnifiedAccount: userAbstractionState.data === "unifiedAccount",
       vaultEquities: vaultEquitiesState.data,
       delegatorSummary: delegatorSummaryState.data,
@@ -69,7 +69,7 @@ export function useBalances(
     clearinghouseState.data,
     delegatorSummaryState.data,
     enabled,
-    perpMarketsState.data,
+    perpAllDexState.data,
     positionsState.data,
     spotState.data,
     spotMarketsState.data,
@@ -85,7 +85,7 @@ export function useBalances(
       (spotMarketsState.loading ||
         clearinghouseState.loading ||
         spotState.loading ||
-        perpMarketsState.loading ||
+        perpAllDexState.isLoading ||
         vaultEquitiesState.isLoading ||
         delegatorSummaryState.isLoading ||
         userAbstractionState.isLoading ||
@@ -94,7 +94,7 @@ export function useBalances(
       spotMarketsState.error,
       clearinghouseState.error,
       spotState.error,
-      perpMarketsState.error,
+      perpAllDexState.error,
       vaultEquitiesState.error,
       delegatorSummaryState.error,
       userAbstractionState.error,

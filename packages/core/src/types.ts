@@ -24,9 +24,18 @@ export type SpotAssetContext = SpotAssetContexts[number];
 export type L2Book = Awaited<ReturnType<InfoClient["l2Book"]>>;
 export type L2BookParameters = Parameters<InfoClient["l2Book"]>[0];
 export type OpenOrder = Awaited<ReturnType<InfoClient["openOrders"]>>[number];
+export type HistoricalOrder = Awaited<
+  ReturnType<InfoClient["historicalOrders"]>
+>[number];
 export type UserFill = Awaited<ReturnType<InfoClient["userFills"]>>[number];
 export type UserTwapFill = Awaited<
   ReturnType<InfoClient["userTwapSliceFills"]>
+>[number];
+export type UserFunding = Awaited<
+  ReturnType<InfoClient["userFunding"]>
+>[number];
+export type UserNonFundingLedgerUpdate = Awaited<
+  ReturnType<InfoClient["userNonFundingLedgerUpdates"]>
 >[number];
 export type ActiveAssetData = Awaited<
   ReturnType<InfoClient["activeAssetData"]>
@@ -61,12 +70,26 @@ export type GetHyperliquidFillsOptions = HyperliquidUserOptions & {
   limit?: number;
   since?: number;
   twapFills?: boolean;
+  until?: number;
 };
 
 export type GetHyperliquidUserFillsOptions = Omit<
   GetHyperliquidFillsOptions,
   "twapFills"
 >;
+
+export type GetHyperliquidHistoricalOrdersOptions = HyperliquidUserOptions;
+
+export type GetHyperliquidUserFundingOptions = HyperliquidUserOptions & {
+  endTime?: number;
+  startTime?: number;
+};
+
+export type GetHyperliquidUserNonFundingLedgerUpdatesOptions =
+  HyperliquidUserOptions & {
+    endTime?: number;
+    startTime?: number;
+  };
 
 export type GetHyperliquidTickerOptions = {
   coin: string;
@@ -148,6 +171,13 @@ export type HyperliquidOpenOrder = Omit<OpenOrder, "coin" | "side"> & {
   coin: string;
   side: "BUY" | "SELL";
   marketType: HyperliquidMarketType;
+};
+
+export type HyperliquidHistoricalOrder = Omit<HistoricalOrder, "order"> & {
+  order: HistoricalOrder["order"] & {
+    displayCoin: string;
+    marketType: HyperliquidMarketType;
+  };
 };
 
 export type HyperliquidFill = Omit<UserFill, "coin" | "side"> & {

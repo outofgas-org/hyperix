@@ -10,14 +10,16 @@ export async function getFills(
   options: GetHyperliquidFillsOptions,
 ): Promise<Array<HyperliquidFill | HyperliquidTwapFill>> {
   const aggregateByTime = options.aggregateByTime ?? true;
+  const hasTimeRange = options.since !== undefined || options.until !== undefined;
   const twapFills = options.twapFills ?? false;
 
   const normalizedFills = twapFills
     ? await Promise.all(
-        (options.since
+        (hasTimeRange
           ? await infoClient.userTwapSliceFillsByTime({
               user: options.user,
-              startTime: options.since,
+              startTime: options.since ?? 0,
+              endTime: options.until,
               aggregateByTime,
             })
           : await infoClient.userTwapSliceFills({
@@ -40,10 +42,11 @@ export async function getFills(
         }),
       )
     : await Promise.all(
-        (options.since
+        (hasTimeRange
           ? await infoClient.userFillsByTime({
               user: options.user,
-              startTime: options.since,
+              startTime: options.since ?? 0,
+              endTime: options.until,
               aggregateByTime,
             })
           : await infoClient.userFills({

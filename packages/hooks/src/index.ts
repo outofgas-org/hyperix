@@ -14,6 +14,7 @@ export * from "./use-trades.js";
 export * from "./use-order-history.js";
 export * from "./use-perp-market.js";
 export * from "./use-perp-markets.js";
+export * from "./use-perp-all-dex.js";
 export * from "./use-perp-meta.js";
 export * from "./use-portfolio.js";
 export * from "./use-positions.js";
