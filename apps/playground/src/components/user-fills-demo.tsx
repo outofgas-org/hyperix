@@ -1,6 +1,6 @@
-import { type TradeHistory, useTradeHistory } from "@hyperix/hooks";
+import { type TradeHistory, useInfiniteTradeHistory } from "@hyperix/hooks";
 import Decimal from "decimal.js";
-import { useState } from "react";
+import { type UIEvent, useState } from "react";
 import { formatDate } from "../lib/format-date";
 import {
   DEMO_CARD_CLASS_NAME,
@@ -78,12 +78,28 @@ function FillRow({ fill }: { fill: TradeHistory }) {
 export function UserFillsDemo() {
   const [input, setInput] = useState(DEFAULT_ADDRESS);
   const address = isAddress(input) ? input : undefined;
-  const { data, loading, error, ready } = useTradeHistory(
-    address ?? DEFAULT_ADDRESS,
-    {
-      enabled: Boolean(address),
-    },
-  );
+  const {
+    data,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isPending,
+    isSuccess,
+  } = useInfiniteTradeHistory(address ?? DEFAULT_ADDRESS, {
+    enabled: Boolean(address),
+  });
+  const fills = data?.fills ?? [];
+
+  function handleHistoryScroll(event: UIEvent<HTMLDivElement>) {
+    const target = event.currentTarget;
+    const remaining =
+      target.scrollHeight - target.scrollTop - target.clientHeight;
+
+    if (remaining < 120 && hasNextPage && !isFetchingNextPage) {
+      void fetchNextPage();
+    }
+  }
 
   return (
     <section className="space-y-4">
@@ -120,9 +136,9 @@ export function UserFillsDemo() {
           <div className="flex items-center justify-between">
             <h3 className="font-semibold text-gray-700">History</h3>
             <span className="text-gray-500">
-              {ready
-                ? `${data?.fills.length ?? 0} trades`
-                : loading
+              {isSuccess
+                ? `${fills.length} trades`
+                : isPending
                   ? "Loading..."
                   : "Idle"}
             </span>
@@ -139,26 +155,36 @@ export function UserFillsDemo() {
           </div>
           {error ? (
             <div className="rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-rose-700">
-              {error}
+              {error.message}
             </div>
-          ) : !address || (!ready && !data) ? (
+          ) : !address || (isPending && !data) ? (
             <div className="space-y-1">
               <Skeleton />
               <Skeleton />
               <Skeleton />
             </div>
-          ) : (data?.fills.length ?? 0) === 0 ? (
+          ) : fills.length === 0 ? (
             <div className="rounded-xl bg-gray-50 px-3 py-2 text-gray-500">
               No trades yet.
             </div>
           ) : (
-            <div className="h-72 space-y-1 overflow-y-auto">
-              {(data?.fills ?? []).map((fill) => (
+            <div
+              className="h-72 space-y-1 overflow-y-auto"
+              onScroll={handleHistoryScroll}
+            >
+              {fills.map((fill) => (
                 <FillRow
                   key={`${fill.hash}-${fill.tid}-${fill.time}-${fill.startPosition}`}
                   fill={fill}
                 />
               ))}
+              {hasNextPage ? (
+                <div className="rounded-xl bg-gray-50 px-3 py-2 text-center text-gray-500">
+                  {isFetchingNextPage
+                    ? "Loading older trades..."
+                    : "Scroll for older trades"}
+                </div>
+              ) : null}
             </div>
           )}
         </CardContent>
