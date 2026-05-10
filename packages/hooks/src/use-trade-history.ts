@@ -41,6 +41,7 @@ export type InfiniteTradeHistoryData = {
 };
 
 export type InfiniteTradeHistoryPageParam = {
+  latest?: boolean;
   startTime: number;
   endTime: number;
 };
@@ -205,28 +206,37 @@ export function useInfiniteTradeHistory(
       endTime,
     ],
     queryFn: async ({ pageParam }) => {
-      const fills = await infoClient.userFillsByTime({
-        user,
-        startTime: pageParam.startTime,
-        endTime: pageParam.endTime,
-        aggregateByTime,
-      });
+      const rawFills = pageParam.latest
+        ? await infoClient.userFills({
+            user,
+            aggregateByTime,
+          })
+        : await infoClient.userFillsByTime({
+            user,
+            startTime: pageParam.startTime,
+            endTime: pageParam.endTime,
+            aggregateByTime,
+          });
+      const fills = sortTradeHistory(
+        rawFills.map((fill) =>
+          formatTradeHistoryFill(
+            fill,
+            symbolConverter?.getSpotByPairId(fill.coin),
+          ),
+        ),
+      );
+      const newestFillTime = fills[0]?.time;
+      const oldestFillTime = fills.at(-1)?.time;
 
       return {
         user,
-        startTime: pageParam.startTime,
-        endTime: pageParam.endTime,
-        fills: sortTradeHistory(
-          fills.map((fill) =>
-            formatTradeHistoryFill(
-              fill,
-              symbolConverter?.getSpotByPairId(fill.coin),
-            ),
-          ),
-        ),
+        startTime: oldestFillTime ?? pageParam.startTime,
+        endTime: newestFillTime ?? pageParam.endTime,
+        fills,
       };
     },
     initialPageParam: {
+      latest: endTime === undefined,
       startTime: Math.max(0, (endTime ?? Date.now()) - pageDurationMs),
       endTime: endTime ?? Date.now(),
     },
