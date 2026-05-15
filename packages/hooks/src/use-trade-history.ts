@@ -3,6 +3,7 @@ import {
   type UseInfiniteQueryOptions,
   type UseInfiniteQueryResult,
   useInfiniteQuery,
+  useQueryClient,
 } from "@tanstack/react-query";
 import Decimal from "decimal.js";
 import { useMemo } from "react";
@@ -46,18 +47,20 @@ export type InfiniteTradeHistoryPageParam = {
   endTime: number;
 };
 
+type InfiniteTradeHistoryQueryKey = [
+  "infinite-trade-history",
+  `0x${string}`,
+  boolean,
+  number,
+  number | undefined,
+];
+
 export type UseInfiniteTradeHistoryOptions = Omit<
   UseInfiniteQueryOptions<
     TradeHistoryPage,
     Error,
     InfiniteTradeHistoryData,
-    [
-      "infinite-trade-history",
-      `0x${string}`,
-      boolean,
-      number,
-      number | undefined,
-    ],
+    InfiniteTradeHistoryQueryKey,
     InfiniteTradeHistoryPageParam
   >,
   "queryKey" | "queryFn" | "initialPageParam" | "getNextPageParam" | "select"
@@ -147,6 +150,25 @@ function mergeTradeHistoryFills(
   return sortTradeHistory([...fillsByKey.values()]);
 }
 
+function getLatestPageFromFills(
+  user: `0x${string}`,
+  fills: TradeHistory[],
+  fallbackEndTime: number,
+  pageDurationMs: number,
+): TradeHistoryPage {
+  const endTime = fills[0]?.time ?? fallbackEndTime;
+  const startTime = Math.max(0, endTime - pageDurationMs);
+
+  return {
+    user,
+    startTime,
+    endTime,
+    fills: fills.filter(
+      (fill) => fill.time >= startTime && fill.time <= endTime,
+    ),
+  };
+}
+
 export function useTradeHistory(
   user: `0x${string}`,
   options: UseUserFillsOptions = {},
@@ -187,24 +209,73 @@ export function useInfiniteTradeHistory(
     enabled: enabledOverride,
     endTime,
     pageDurationMs = DEFAULT_TRADE_HISTORY_PAGE_DURATION_MS,
-    realtime = true,
+    realtime = false,
     ...queryOptions
   } = options;
   const enabled = enabledOverride ?? Boolean(user);
   const symbolConverter = useSymbolConverter();
-  const realtimeState = useTradeHistory(user, {
+  const queryClient = useQueryClient();
+  const queryKey: InfiniteTradeHistoryQueryKey = [
+    "infinite-trade-history",
+    user,
+    aggregateByTime,
+    pageDurationMs,
+    endTime,
+  ];
+  const selectTradeHistoryData = useMemo(
+    () => (data: InfiniteData<TradeHistoryPage>) => ({
+      pages: data.pages,
+      user,
+      fills: mergeTradeHistoryFills(data.pages, []),
+    }),
+    [user],
+  );
+
+  useUserFills(user, {
     aggregateByTime,
     enabled: enabled && realtime,
+    onUpdate: (event) => {
+      const realtimeFills = sortTradeHistory(
+        event.fills.map((fill) =>
+          formatTradeHistoryFill(
+            fill,
+            symbolConverter?.getSpotByPairId(fill.coin),
+          ),
+        ),
+      );
+
+      if (realtimeFills.length === 0) {
+        return;
+      }
+
+      queryClient.setQueryData<
+        InfiniteData<TradeHistoryPage, InfiniteTradeHistoryPageParam>
+      >(queryKey, (previousData) => {
+        const [latestPage, ...olderPages] = previousData?.pages ?? [];
+
+        if (!previousData || !latestPage) {
+          return previousData;
+        }
+
+        const fills = mergeTradeHistoryFills([latestPage], realtimeFills);
+
+        return {
+          ...previousData,
+          pages: [
+            {
+              ...latestPage,
+              endTime: Math.max(latestPage.endTime, fills[0]?.time ?? 0),
+              fills,
+            },
+            ...olderPages,
+          ],
+        };
+      });
+    },
   });
 
   return useInfiniteQuery({
-    queryKey: [
-      "infinite-trade-history",
-      user,
-      aggregateByTime,
-      pageDurationMs,
-      endTime,
-    ],
+    queryKey,
     queryFn: async ({ pageParam }) => {
       const rawFills = pageParam.latest
         ? await infoClient.userFills({
@@ -225,13 +296,20 @@ export function useInfiniteTradeHistory(
           ),
         ),
       );
-      const newestFillTime = fills[0]?.time;
-      const oldestFillTime = fills.at(-1)?.time;
+
+      if (pageParam.latest) {
+        return getLatestPageFromFills(
+          user,
+          fills,
+          pageParam.endTime,
+          pageDurationMs,
+        );
+      }
 
       return {
         user,
-        startTime: oldestFillTime ?? pageParam.startTime,
-        endTime: newestFillTime ?? pageParam.endTime,
+        startTime: pageParam.startTime,
+        endTime: pageParam.endTime,
         fills,
       };
     },
@@ -256,16 +334,7 @@ export function useInfiniteTradeHistory(
         endTime: nextEndTime,
       };
     },
-    select: (data: InfiniteData<TradeHistoryPage>) => {
-      const realtimeFills = realtimeState.data?.fills ?? [];
-
-      return {
-        pages: data.pages,
-        pageParams: data.pageParams,
-        user,
-        fills: mergeTradeHistoryFills(data.pages, realtimeFills),
-      };
-    },
+    select: selectTradeHistoryData,
     ...queryOptions,
     enabled,
   });
