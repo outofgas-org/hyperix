@@ -150,6 +150,16 @@ function mergeTradeHistoryFills(
   return sortTradeHistory([...fillsByKey.values()]);
 }
 
+function flattenTradeHistoryPages(pages: TradeHistoryPage[]): TradeHistory[] {
+  const fills: TradeHistory[] = [];
+
+  for (const page of pages) {
+    fills.push(...page.fills);
+  }
+
+  return fills;
+}
+
 function getLatestPageFromFills(
   user: `0x${string}`,
   fills: TradeHistory[],
@@ -226,7 +236,7 @@ export function useInfiniteTradeHistory(
     () => (data: InfiniteData<TradeHistoryPage>) => ({
       pages: data.pages,
       user,
-      fills: mergeTradeHistoryFills(data.pages, []),
+      fills: flattenTradeHistoryPages(data.pages),
     }),
     [user],
   );

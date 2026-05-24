@@ -8,6 +8,7 @@ export * from "./use-max-builder-fee.js";
 export * from "./use-mid.js";
 export * from "./use-all-dexs-clearing-house-state.js";
 export * from "./use-balances.js";
+export * from "./use-funding-history.js";
 export * from "./use-historical-orders.js";
 export * from "./use-open-orders.js";
 export * from "./use-trade-history.js";

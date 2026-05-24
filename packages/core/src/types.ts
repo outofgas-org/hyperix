@@ -77,6 +77,12 @@ export type GetHyperliquidFundingOptions = {
   coin: string;
 };
 
+export type GetHyperliquidFundingHistoryOptions = {
+  coin: string;
+  startTime: number;
+  endTime?: number;
+};
+
 export type GetHyperliquidOrderbookOptions = {
   coin: string;
   limit?: number;
@@ -190,6 +196,13 @@ export type HyperliquidFunding = {
   nextFundingTimestamp: number | null;
   markPrice: number;
   indexPrice: number;
+};
+
+export type HyperliquidFundingHistoryRecord = {
+  coin: string;
+  fundingRate: number;
+  premium: number;
+  time: number;
 };
 
 export type HyperliquidDexQuote = {

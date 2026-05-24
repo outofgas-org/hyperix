@@ -7,6 +7,7 @@ export * from "./get-active-asset-data";
 export * from "./get-dex-names";
 export * from "./get-fills";
 export * from "./get-funding";
+export * from "./get-funding-history";
 export * from "./get-markets";
 export * from "./get-open-orders";
 export * from "./get-orderbook";

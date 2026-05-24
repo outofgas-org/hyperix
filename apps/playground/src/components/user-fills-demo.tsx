@@ -1,6 +1,6 @@
 import { type TradeHistory, useInfiniteTradeHistory } from "@hyperix/hooks";
 import Decimal from "decimal.js";
-import { type UIEvent, useState } from "react";
+import { type UIEvent, memo, useMemo, useState } from "react";
 import { formatDate } from "../lib/format-date";
 import {
   DEMO_CARD_CLASS_NAME,
@@ -23,6 +23,9 @@ const VALUE_FORMATTER = new Intl.NumberFormat("en-US", {
 });
 
 const DEFAULT_ADDRESS = "0x0000000000000000000000000000000000000000";
+const HISTORY_CONTAINER_HEIGHT = 288;
+const HISTORY_ROW_HEIGHT = 44;
+const HISTORY_OVERSCAN_ROWS = 6;
 
 function isAddress(value: string): value is `0x${string}` {
   return /^0x[a-fA-F0-9]{40}$/.test(value);
@@ -34,12 +37,12 @@ function formatSignedValue(value: string) {
   return `${prefix}${VALUE_FORMATTER.format(numericValue)}`;
 }
 
-function FillRow({ fill }: { fill: TradeHistory }) {
+const FillRow = memo(function FillRow({ fill }: { fill: TradeHistory }) {
   const tradeValue = new Decimal(fill.px).mul(fill.sz).toNumber();
   const pnl = Number(fill.netPnlInQuote);
 
   return (
-    <div className="grid grid-cols-8 gap-2 rounded-xl px-2 py-1 even:bg-gray-50">
+    <div className="grid h-10 grid-cols-8 items-center gap-2 rounded-xl px-2 even:bg-gray-50">
       <div className="min-w-0">
         <div
           className={fill.side === "B" ? "text-emerald-600" : "text-rose-600"}
@@ -73,10 +76,11 @@ function FillRow({ fill }: { fill: TradeHistory }) {
       <span className="text-right text-gray-500">{formatDate(fill.time)}</span>
     </div>
   );
-}
+});
 
 export function UserFillsDemo() {
   const [input, setInput] = useState(DEFAULT_ADDRESS);
+  const [historyScrollTop, setHistoryScrollTop] = useState(0);
   const address = isAddress(input) ? input : undefined;
   const {
     data,
@@ -90,9 +94,30 @@ export function UserFillsDemo() {
     enabled: Boolean(address),
   });
   const fills = data?.fills ?? [];
+  const totalHistoryItems = fills.length + (hasNextPage ? 1 : 0);
+  const visibleHistoryRange = useMemo(() => {
+    const startIndex = Math.max(
+      0,
+      Math.floor(historyScrollTop / HISTORY_ROW_HEIGHT) - HISTORY_OVERSCAN_ROWS,
+    );
+    const endIndex = Math.min(
+      totalHistoryItems,
+      Math.ceil(
+        (historyScrollTop + HISTORY_CONTAINER_HEIGHT) / HISTORY_ROW_HEIGHT,
+      ) + HISTORY_OVERSCAN_ROWS,
+    );
+
+    return { endIndex, startIndex };
+  }, [historyScrollTop, totalHistoryItems]);
+  const visibleFills = fills.slice(
+    visibleHistoryRange.startIndex,
+    Math.min(visibleHistoryRange.endIndex, fills.length),
+  );
 
   function handleHistoryScroll(event: UIEvent<HTMLDivElement>) {
     const target = event.currentTarget;
+    setHistoryScrollTop(target.scrollTop);
+
     const remaining =
       target.scrollHeight - target.scrollTop - target.clientHeight;
 
@@ -169,22 +194,43 @@ export function UserFillsDemo() {
             </div>
           ) : (
             <div
-              className="h-72 space-y-1 overflow-y-auto"
+              className="h-72 overflow-y-auto"
               onScroll={handleHistoryScroll}
             >
-              {fills.map((fill) => (
-                <FillRow
-                  key={`${fill.hash}-${fill.tid}-${fill.time}-${fill.startPosition}`}
-                  fill={fill}
-                />
-              ))}
-              {hasNextPage ? (
-                <div className="rounded-xl bg-gray-50 px-3 py-2 text-center text-gray-500">
-                  {isFetchingNextPage
-                    ? "Loading older trades..."
-                    : "Scroll for older trades"}
-                </div>
-              ) : null}
+              <div
+                className="relative"
+                style={{
+                  height: totalHistoryItems * HISTORY_ROW_HEIGHT,
+                }}
+              >
+                {visibleFills.map((fill, index) => {
+                  const itemIndex = visibleHistoryRange.startIndex + index;
+
+                  return (
+                    <div
+                      className="absolute inset-x-0"
+                      key={`${fill.hash}-${fill.tid}-${fill.time}-${fill.startPosition}`}
+                      style={{
+                        transform: `translateY(${itemIndex * HISTORY_ROW_HEIGHT}px)`,
+                      }}
+                    >
+                      <FillRow fill={fill} />
+                    </div>
+                  );
+                })}
+                {hasNextPage && visibleHistoryRange.endIndex > fills.length ? (
+                  <div
+                    className="absolute inset-x-0 rounded-xl bg-gray-50 px-3 py-2 text-center text-gray-500"
+                    style={{
+                      transform: `translateY(${fills.length * HISTORY_ROW_HEIGHT}px)`,
+                    }}
+                  >
+                    {isFetchingNextPage
+                      ? "Loading older trades..."
+                      : "Scroll for older trades"}
+                  </div>
+                ) : null}
+              </div>
             </div>
           )}
         </CardContent>

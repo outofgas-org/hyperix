@@ -5,6 +5,7 @@ import { AllDexsClearingHouseStateDemo } from "./components/all-dexs-clearing-ho
 import { AllMidsDemo } from "./components/all-mids-demo";
 import { BalancesDemo } from "./components/balances-demo";
 import { Footer } from "./components/footer";
+import { FundingHistoryDemo } from "./components/funding-history-demo";
 import { HistoricalOrdersDemo } from "./components/historical-orders-demo";
 import { MaxBuilderFeeDemo } from "./components/max-builder-fee-demo";
 import { MetaDemo } from "./components/meta-demo";
@@ -95,6 +96,13 @@ const DEMOS = [
     description:
       "Check the approved max builder fee for a user and builder pair.",
     component: MaxBuilderFeeDemo,
+    category: "info",
+  },
+  {
+    id: "funding-history",
+    label: "Funding History",
+    description: "Historical funding rates for a perp market.",
+    component: FundingHistoryDemo,
     category: "info",
   },
   {
