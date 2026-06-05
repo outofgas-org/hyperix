@@ -10,6 +10,7 @@ import { useMemo } from "react";
 import { infoClient } from "./config/hl.js";
 import { useSymbolConverter } from "./use-symbol-converter.js";
 import {
+  type UserFillsData,
   type UseUserFillsOptions,
   type UserFill,
   useUserFills,
@@ -47,6 +48,11 @@ export type InfiniteTradeHistoryPageParam = {
   endTime: number;
 };
 
+type RawTradeHistoryPage = UserFillsData & {
+  startTime: number;
+  endTime: number;
+};
+
 type InfiniteTradeHistoryQueryKey = [
   "infinite-trade-history",
   `0x${string}`,
@@ -57,7 +63,7 @@ type InfiniteTradeHistoryQueryKey = [
 
 export type UseInfiniteTradeHistoryOptions = Omit<
   UseInfiniteQueryOptions<
-    TradeHistoryPage,
+    RawTradeHistoryPage,
     Error,
     InfiniteTradeHistoryData,
     InfiniteTradeHistoryQueryKey,
@@ -75,6 +81,18 @@ const DEFAULT_TRADE_HISTORY_PAGE_DURATION_MS = 7 * 24 * 60 * 60 * 1000;
 
 function getFillKey(fill: Pick<UserFill, "hash" | "tid" | "time">) {
   return `${fill.hash}-${fill.tid}-${fill.time}`;
+}
+
+function sortFills<T extends Pick<UserFill, "tid" | "time">>(
+  fills: T[],
+): T[] {
+  return [...fills].sort((a, b) => {
+    if (a.time !== b.time) {
+      return b.time - a.time;
+    }
+
+    return b.tid - a.tid;
+  });
 }
 
 function formatTradeHistoryFill(
@@ -122,20 +140,14 @@ function formatTradeHistoryFill(
 }
 
 function sortTradeHistory(fills: TradeHistory[]): TradeHistory[] {
-  return [...fills].sort((a, b) => {
-    if (a.time !== b.time) {
-      return b.time - a.time;
-    }
-
-    return b.tid - a.tid;
-  });
+  return sortFills(fills);
 }
 
-function mergeTradeHistoryFills(
-  pages: TradeHistoryPage[],
-  realtimeFills: TradeHistory[],
-): TradeHistory[] {
-  const fillsByKey = new Map<string, TradeHistory>();
+function mergeFills<T extends Pick<UserFill, "hash" | "tid" | "time">>(
+  pages: { fills: T[] }[],
+  realtimeFills: T[],
+): T[] {
+  const fillsByKey = new Map<string, T>();
 
   for (const page of pages) {
     for (const fill of page.fills) {
@@ -147,7 +159,24 @@ function mergeTradeHistoryFills(
     fillsByKey.set(getFillKey(fill), fill);
   }
 
-  return sortTradeHistory([...fillsByKey.values()]);
+  return sortFills([...fillsByKey.values()]);
+}
+
+function formatTradeHistoryPage(
+  page: RawTradeHistoryPage,
+  symbolConverter: ReturnType<typeof useSymbolConverter>,
+): TradeHistoryPage {
+  return {
+    ...page,
+    fills: sortTradeHistory(
+      page.fills.map((fill) =>
+        formatTradeHistoryFill(
+          fill,
+          symbolConverter?.getSpotByPairId(fill.coin),
+        ),
+      ),
+    ),
+  };
 }
 
 function flattenTradeHistoryPages(pages: TradeHistoryPage[]): TradeHistory[] {
@@ -162,10 +191,10 @@ function flattenTradeHistoryPages(pages: TradeHistoryPage[]): TradeHistory[] {
 
 function getLatestPageFromFills(
   user: `0x${string}`,
-  fills: TradeHistory[],
+  fills: UserFill[],
   fallbackEndTime: number,
   pageDurationMs: number,
-): TradeHistoryPage {
+): RawTradeHistoryPage {
   const endTime = fills[0]?.time ?? fallbackEndTime;
   const startTime = Math.max(0, endTime - pageDurationMs);
 
@@ -233,33 +262,32 @@ export function useInfiniteTradeHistory(
     endTime,
   ];
   const selectTradeHistoryData = useMemo(
-    () => (data: InfiniteData<TradeHistoryPage>) => ({
-      pages: data.pages,
-      user,
-      fills: flattenTradeHistoryPages(data.pages),
-    }),
-    [user],
+    () => (data: InfiniteData<RawTradeHistoryPage>) => {
+      const pages = data.pages.map((page) =>
+        formatTradeHistoryPage(page, symbolConverter),
+      );
+
+      return {
+        pages,
+        user,
+        fills: flattenTradeHistoryPages(pages),
+      };
+    },
+    [symbolConverter, user],
   );
 
   useUserFills(user, {
     aggregateByTime,
     enabled: enabled && realtime,
     onUpdate: (event) => {
-      const realtimeFills = sortTradeHistory(
-        event.fills.map((fill) =>
-          formatTradeHistoryFill(
-            fill,
-            symbolConverter?.getSpotByPairId(fill.coin),
-          ),
-        ),
-      );
+      const realtimeFills = sortFills(event.fills);
 
       if (realtimeFills.length === 0) {
         return;
       }
 
       queryClient.setQueryData<
-        InfiniteData<TradeHistoryPage, InfiniteTradeHistoryPageParam>
+        InfiniteData<RawTradeHistoryPage, InfiniteTradeHistoryPageParam>
       >(queryKey, (previousData) => {
         const [latestPage, ...olderPages] = previousData?.pages ?? [];
 
@@ -267,7 +295,7 @@ export function useInfiniteTradeHistory(
           return previousData;
         }
 
-        const fills = mergeTradeHistoryFills([latestPage], realtimeFills);
+        const fills = mergeFills([latestPage], realtimeFills);
 
         return {
           ...previousData,
@@ -298,14 +326,7 @@ export function useInfiniteTradeHistory(
             endTime: pageParam.endTime,
             aggregateByTime,
           });
-      const fills = sortTradeHistory(
-        rawFills.map((fill) =>
-          formatTradeHistoryFill(
-            fill,
-            symbolConverter?.getSpotByPairId(fill.coin),
-          ),
-        ),
-      );
+      const fills = sortFills(rawFills);
 
       if (pageParam.latest) {
         return getLatestPageFromFills(
